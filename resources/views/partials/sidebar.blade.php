@@ -25,5 +25,15 @@
 
             </ul>
         </li>
+        <li class="dropdown {{ request()->routeIs('kpi.*') ? 'active' : ''  }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-chart-line"></i></i> <span>KPI</span></a>
+            <ul class="dropdown-menu">
+                    @if (auth()->user()->level == 'hr')
+                    <li class="{{ request()->routeIs('kpi.index') ? 'active' : ''  }}"><a class="nav-link" href="{{ route('kpi.index') }}">List KPI Karyawan</a></li>
+                    @endif
+                    <li class="{{ request()->routeIs('kpi.index') ? 'active' : ''  }}"><a class="nav-link" href="{{ route('kpi.index') }}">KPI Saya</a></li>
+
+            </ul>
+        </li>
     </ul>
 </aside>

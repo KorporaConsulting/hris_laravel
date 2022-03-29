@@ -36,10 +36,8 @@
                             <td>
                                 <button class="btn btn-primary" onclick="confirmAccept({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}')">Setujui</button>  
                                 <button class="btn btn-danger" onclick="confirmReject({{ $value->id }}, '{{ $value->user->name }}')">Tolak</button>  
-                                <button class="btn btn-danger" onclick="confirmDelete({{ $value->id }})"><i class="fas fa-trash"></i></button>  
                             </td>
-                            <form action="{{ route('cuti.destroy', $value->id) }}" method="post" id="delete-cuti{{ $value->id }}">@csrf @method('delete')</form>
-                        </tr>
+                                </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -89,21 +87,45 @@
           })
         }
 
-        confirmReject = function (id, name){
+        confirmReject = function (id, name, userId){
+            let url = '{{ route("cuti.update", ":id") }}'
             Swal.fire({
             title: 'Are you sure?',
-            text: "Yakin ingin menolak cuti "+name+"?",
-            icon: 'warning',
+            text: "Yakin menolak cuti "+name+"?",
+            input: 'textarea',
+            inputPlaceholder: 'Keterangan',
+            inputAttributes: {
+                required: 'true'
+            },
+            icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Hapus!'
+            confirmButtonText: 'Ya, Setujui!'
         }).then((result) => {
-              if (result.isConfirmed) {
-                $('#delete-cuti'+id).submit()
-              }
+            url = url.replace(':id', id)
+            $.ajax({
+                url,
+                method: 'patch',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    status: 'reject',
+                    keterangan: result.value,
+                    userId
+                },
+                success: function (res){
+                    if(res.success){
+                        location.reload();
+                    }
+                },
+                error: function (err){
+                    Swal.fire('Error', 'err', 'error');
+                }
+            })
           })
         }
+
+
         confirmDelete = function (id){
             Swal.fire({
             title: 'Are you sure?',

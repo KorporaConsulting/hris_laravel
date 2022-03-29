@@ -19,14 +19,16 @@ class CutiController extends Controller
             };
         }else if(auth()->user()->level == 'direktur'){
             $callback = function($q){
-                $q->where('parent_id', auth()->id());
+                $q->where('parent_id', auth()->id())->whereIn('level', ['manager', 'hr']);
             };    
         }else{
             return abort(404);
         }
 
         return view('cuti.index',[
-            'cuti' => Cuti::whereHas('user', $callback)->with('user')->where('status', 'waiting')->get()
+            'cuti' => Cuti::whereHas('user', $callback)->with('user')
+            ->where('status', 'waiting')
+            ->get()
         ]);
     }
  
@@ -74,12 +76,12 @@ class CutiController extends Controller
 
     public function update ($id)
     {
-        // Cuti::where('id', $id)->update([
-        //     'nama_manager' => auth()->user()->name,
-        //     'keterangan_manager' => request('keterangan'),
-        //     'status' => request('status'),
-        //     'updated_at' => date('Y-m-d h:i:s')
-        // ]);
+        Cuti::where('id', $id)->update([
+            'nama_manager' => auth()->user()->name,
+            'keterangan_manager' => request('keterangan'),
+            'status' => request('status'),
+            'updated_at' => date('Y-m-d h:i:s')
+        ]);
 
         $message = request('status') == 'accept' ? 'menyetujui' : 'menolak';
 

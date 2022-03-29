@@ -37,8 +37,8 @@
 
 <body>
     <div id="preloader"></div>
+    @stack('modals')
     <div id="app">
-        @stack('modals')
         <div class="main-wrapper">
             <div class="navbar-bg"></div>
                 @include('partials.nav')
@@ -168,7 +168,7 @@
         const channel = window.Echo.channel('notifications'+userId);
         
         channel.listen('NotificationsEvent', function(data) {
-            Swal.fire('Message', JSON.stringify(data.message));
+            Swal.fire('Message', JSON.stringify(data.message), 'warning');
         });
         const logout = function (){
             document.getElementById('form-logout').submit()

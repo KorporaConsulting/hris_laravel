@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KPIController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +54,12 @@ Route::middleware('auth')->group(function(){
     Route::post('/cuti', [CutiController::class, 'store'])->name('cuti.store');
     Route::patch('/cuti/{cutiId}', [CutiController::class, 'update'])->name('cuti.update');
     Route::delete('/cuti/{cutiId}', [CutiController::class, 'destroy'])->name('cuti.destroy');
+
+    // KPI
+    Route::get('/kpi', [KPIController::class, 'index'])->name('kpi.index')->middleware('hr');
+    Route::get('/kpi/{kpi:user_id}', [KPIController::class, 'show'])->name('kpi.show')->middleware('hr');
+    Route::post('/kpi/', [KPIController::class, 'store'])->name('kpi.store')->middleware('hr');
+
 });
 
 Route::get('/', function () {
