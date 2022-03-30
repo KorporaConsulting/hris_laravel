@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function(){
 
     // KPI
     Route::get('/kpi', [KPIController::class, 'index'])->name('kpi.index')->middleware('hr');
+    Route::post('/kpi', [KPIController::class, 'store'])->name('kpi.store')->middleware('hr');
     Route::get('/kpi/kpi-saya', [KPIController::class, 'myKPI'])->name('kpi.mykpi');
     Route::get('/kpi/{user_id}', [KPIController::class, 'show'])->name('kpi.show')->middleware('hr');
 

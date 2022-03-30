@@ -30,11 +30,13 @@
                             <td>{{ $key+1 }}</td>
                             <td>{{ $value->jenis_cuti }}</td>
                             <td>{{  date_format($date, 'Y-m-d') }}</td>
-                            <td>{{ $value->jenis_cuti }}</td>
-                            <td>
-                                <button class="btn btn-danger" onclick="confirmDelete({{ $value->id }})"><i class="fas fa-trash"></i></button>  
-                            </td>
-                            <form action="{{ route('cuti.destroy', $value->id) }}" method="post" id="delete-cuti{{ $value->id }}">@csrf @method('delete')</form>
+                            <td><span class="text-capitalize badge {{ ($value->status == 'waiting') ? 'badge-warning' : (($value->status == 'accept') ? 'badge-success' :'badge-danger')}}">{{ $value->status }}</span></td>
+                                @if ($value->status == 'waiting')
+                                <td>
+                                    <button class="btn btn-danger" onclick="confirmDelete({{ $value->id }})"><i class="fas fa-trash"></i></button>  
+                                </td>
+                                <form action="{{ route('cuti.destroy', $value->id) }}" method="post" id="delete-cuti{{ $value->id }}">@csrf @method('delete')</form>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

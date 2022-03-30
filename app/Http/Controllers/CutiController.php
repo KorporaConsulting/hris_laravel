@@ -37,7 +37,7 @@ class CutiController extends Controller
 
     
         return view('cuti.show', [
-            'cuti' => Cuti::where('user_id', auth()->id())->get()
+            'cuti' => Cuti::where('user_id', auth()->id())->latest()->get()
         ]);
     }
 

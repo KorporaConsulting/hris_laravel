@@ -3,7 +3,7 @@
       <a href="index.html">HRIS</a>
     </div>
     <div class="sidebar-brand sidebar-brand-sm">
-      <a href="index.html">St</a>
+      <a href="index.html">HR</a>
     </div>
     <ul class="sidebar-menu">
         <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">

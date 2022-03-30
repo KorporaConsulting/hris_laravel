@@ -32,7 +32,7 @@
                             <td>{{ $value->user->name }}</td>
                             <td>{{ $value->jenis_cuti }}</td>
                             <td>{{  date_format($date, 'Y-m-d') }}</td>
-                            <td>{{ $value->jenis_cuti }}</td>
+                            <td class="badge {{ $value->status == 'waiting' ? 'badge-warning' : $value->status == 'accept' ? 'badge-success' : 'badge-danger'}}">{{ $value->status }}</td>
                             <td>
                                 <button class="btn btn-primary" onclick="confirmAccept({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}')">Setujui</button>  
                                 <button class="btn btn-danger" onclick="confirmReject({{ $value->id }}, '{{ $value->user->name }}')">Tolak</button>  

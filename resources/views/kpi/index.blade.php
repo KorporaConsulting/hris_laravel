@@ -29,7 +29,7 @@
                             <td>
                                 <a href="{{ route('kpi.show', $user->id) }}" class="btn btn-primary">Lihat KPI</a>
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addkpi{{$key}}">
-                                    Beri KPI
+                                    Input KPI
                                 </button>
                                 @push('modals')
                                     @component('components.modal_form',[
