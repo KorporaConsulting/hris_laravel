@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KPIController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/account', [AccountController::class, 'index'])->name('account.index');
     Route::get('/account/edit', [AccountController::class, 'edit'])->name('account.edit');
     Route::patch('/account/update', [AccountController::class, 'update'])->name('account.update');
+    Route::get('/account/create', [AccountController::class, 'create'])->name('karyawan.create')->middleware('hr');
+    Route::post('/account', [AccountController::class, 'store'])->name('account.store');
 
 
     // Cuti 
@@ -57,8 +60,15 @@ Route::middleware('auth')->group(function(){
 
     // KPI
     Route::get('/kpi', [KPIController::class, 'index'])->name('kpi.index')->middleware('hr');
-    Route::get('/kpi/{kpi:user_id}', [KPIController::class, 'show'])->name('kpi.show')->middleware('hr');
-    Route::post('/kpi/', [KPIController::class, 'store'])->name('kpi.store')->middleware('hr');
+    Route::get('/kpi/kpi-saya', [KPIController::class, 'myKPI'])->name('kpi.mykpi');
+    Route::get('/kpi/{user_id}', [KPIController::class, 'show'])->name('kpi.show')->middleware('hr');
+
+    // Karyawan
+    // Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
+    // Route::post('/karyawan', [KaryawanController::class, 'store'])->name('karyawan.store');
+
+
+
 
 });
 

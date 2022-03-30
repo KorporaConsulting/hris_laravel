@@ -15,14 +15,22 @@ class KPIController extends Controller
         ]);
     }
 
-    public function show (KPI $kpi)
+    public function show ($userId)
     {
-        return view('kpi.show', compact('kpi'));
+        return view('kpi.show', [
+            'kpi' => KPI::where('user_id', $userId)->whereYear('created_at', date('Y'))->orderBy('bulan')->take(12)->get()
+        ]);
+    }
+    
+    public function myKPI ()
+    {
+        return view('kpi.show', [
+            'kpi' => KPI::where('user_id', auth()->id())->whereYear('created_at', date('Y'))->orderBy('bulan')->take(12)->get()
+        ]);
     }
 
     public function store ()
     {
-
         $date = date_create(request('month'));
 
         KPI::create([

@@ -5,7 +5,7 @@
         {{-- <div class="card-header"></div> --}}
         <div class="card-body">
             <div class="row mb-5">
-                <div class="col-9">
+                <div class="col-12 col-lg-9">
                     <div class="row mb-3">
                         <div class="col-3">Nama</div>
                         <div class="col-9">: {{ auth()->user()->name }}</div>

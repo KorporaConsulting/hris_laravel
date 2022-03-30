@@ -15,11 +15,11 @@ class CutiController extends Controller
 
         if(auth()->user()->level == 'manager'){
             $callback = function($q){
-                $q->where('parent_id', '!=', auth()->id());
+                $q->where('parent_id', auth()->id());
             };
         }else if(auth()->user()->level == 'direktur'){
             $callback = function($q){
-                $q->where('parent_id', auth()->id())->whereIn('level', ['manager', 'hr']);
+                $q->where('parent_id', '!=', auth()->id())->whereIn('level', ['manager', 'hr']);
             };    
         }else{
             return abort(404);

@@ -23,7 +23,7 @@
                     @csrf
                     @method('patch')
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12 col-lg-6">
                             <div class="form-group">
                                 <label for="email">Nama</label>
                                 <input type="text" class="form-control" name="name" id="name" value="{{ auth()->user()->name }}">

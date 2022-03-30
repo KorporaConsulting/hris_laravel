@@ -45,7 +45,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="point{{$key}}">Point</label>
-                                                <input type="number" class="form-control" name="point" id="point{{$key}}" min="0">
+                                                <input type="number" class="form-control" name="point" id="point{{$key}}" min="0" step="any">
                                             </div>
                                             <div class="form-group">
                                                 <label for="month{{$key}}">Bulan Ke</label>
