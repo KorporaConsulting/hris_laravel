@@ -8,25 +8,26 @@ use Illuminate\Support\Facades\DB;
 
 class AccountController extends Controller
 {
-    public function index ()
+    public function index()
     {
         return view('account.index', [
             'user' => Karyawan::where('user_id', auth()->id())->first()
         ]);
     }
 
-    public function edit ()
+    public function edit()
     {
         return view('account.edit', [
             'user' => Karyawan::where('user_id', auth()->id())->first(),
+            'divisi' => DB::table('divisi')->get()
         ]);
     }
 
     public function update()
     {
-        if(request()->has('profile')){
+        if (request()->has('profile')) {
             $profile = request('profile')->store('profiles');
-        }else{
+        } else {
             $profile = auth()->user()->img;
         }
 
@@ -36,43 +37,63 @@ class AccountController extends Controller
             'divisi' => request('divisi'),
             'img' => $profile
         ]);
-        
-        Karyawan::where('user_id', auth()->id())->update([
-            'jabatan' => request('jabatan'),
-            'alamat_ktp' => request('alamat_ktp'),
-            'alamat_domisili' => request('alamat_domisili'),
-            'no_hp' => request('no_hp'),
-            'no_hp_darurat' => request('no_hp_darurat'),
-            
-        ]);
+
+        Karyawan::where('user_id', auth()->id())->update(request()->only([
+            'jabatan', 'alamat_ktp', 'alamat_domisili', 'no_hp', 'no_hp_darurat'
+        ]));
 
         session()->flash('success', 'Berhasil Mengaupdate data akun');
 
         return redirect()->route('account.index');
     }
 
-    public function create ()
+    public function create()
     {
-        return view('account.create',[
+
+        return view('account.create', [
             'divisions' => DB::table('divisi')->get(),
-            'levels' => DB::table('level')->get(),
-            'users' => User::whereIn('level', ['manager', 'direktur'])->get() 
+            'users' => User::get()
         ]);
     }
 
-    public function store ()
+    public function store()
     {
 
-        $user = User::create(request()->only(['name', 'email', 'password', 'divisi', 'level', 'parent_id']));
 
-        Karyawan::create(array_merge(request()->only([
-            'jabatan', 'gaji', 'status_user', 'alamat_ktp', 'alamat_domisili', 'mulai_kerja', 'tmpt_lahir', 'tgl_lahir'
-        ]), ['user_id' => $user->id]));
+        // return request()->all();
+
+        $user = [
+            'name'          => request('name'),
+            'email'         => request('email'),
+            'password'      => bcrypt(request('password')),
+        ];
+
+        $user = User::create($user);
+
+        if(request('level') == 'manager'){
+            $user->givePermissionTo(['manage_cuti']);
+        }
+
+        $karyawan = Karyawan::create([
+            'user_id'           => $user->id,
+            'nip'           => request('nip'),
+            'jabatan'           => request('jabatan'),
+            'gaji'              => str_replace(',', '',request('gaji')),
+            'status_user'       => request('status_user'),
+            'alamat_ktp'        => request('alamat_ktp'),
+            'alamat_domisili'   => request('alamat_domisili'),
+            'mulai_kerja'       => request('mulai_kerja'),
+            'tmpt_lahir'        => request('tmpt_lahir'),
+            'tgl_lahir'         => request('tgl_lahir'),
+            'sisa_cuti'         => 0,
+            'no_hp'             => request('no_hp'),
+            'no_hp_darurat'     => request('no_hp_darurat')
+        ]);
+
+        $user->divisions()->attach(request('divisi'), ['status' => request('level')]);
 
         session()->flash('success', 'Berhasil menambahkan Karyawan');
 
         return back();
     }
-
-
 }

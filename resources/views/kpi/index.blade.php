@@ -1,87 +1,46 @@
 @extends('layouts.app', [
-    'page' => 'Data Kpi'
+'page' => 'Data Kpi'
 ])
 
 
 
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <h4>List Karyawan</h4>
+    <div class="card-header d-flex justify-content-between">
+        <div><h4>List KPI {{ $user->name }}</h4></div>
+        <div class=>
+            <a href="{{ route('karyawan.kpi.create', $user->id) }}" class="btn btn-primary">Input KPI</a>
+        </div>
     </div>
     <div class="card-body">
-        <div class="">
-            <table class="table datatable">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($users as $key => $user)
-                        <tr>
-                            <td>{{ $key+1 }}</td>
-                            <td>{{ $user->name}}</td>
-                            <td>{{ $user->email}}</td>
-                            <td>
-                                <a href="{{ route('kpi.show', $user->id) }}" class="btn btn-primary">Lihat KPI</a>
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addkpi{{$key}}">
-                                    Input KPI
-                                </button>
-                                @push('modals')
-                                    @component('components.modal_form',[
-                                        'name' => 'addkpi'.$key,
-                                        'title' => 'Tambah KPI',
-                                        'url' => route('kpi.index')
-                                    ])
-                                        @slot('content')
-                                            <input type="hidden" name="user_id" value="{{ $user->id }}">
-                                            <div class="form-group">
-                                                <label for="karyawan{{$key}}">Nama Karyawan</label>
-                                                <input type="text" class="form-control" id="karyawan{{$key}}" value="{{$user->name}}" disabled>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="point{{$key}}">Point</label>
-                                                <input type="number" class="form-control" name="point" id="point{{$key}}" min="0" step="any">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="month{{$key}}">Bulan Ke</label>
-                                                <input type="month" class="form-control" name="month" id="month{{$key}}" value="{{ date('Y-m') }}">
-                                            </div>
-                                        @endslot
-                                    @endcomponent
-                                @endpush
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    
+                    <table class="table datatable">
+                        <thead>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Total Point</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody>
+                            @foreach ($user->kpi as $key => $kpi)
+                                @php
+                                    $totalPoint = $kpi->proaktif+$kpi->achivement+$kpi->service_excellent+$kpi->spiritual+$kpi->teamwork+$kpi->inovatif;
+                                @endphp
+                                <tr>
+                                    <td>{{ $key+1 }}</td>
+                                    <td>{{ date("d F, Y", strtotime($kpi->created_at)) }}</td>
+                                    <td>{{ $totalPoint }}</td>
+                                    <td><a href="{{ route('karyawan.kpi.show', [$user->id, $kpi->id]) }}" class="btn btn-success">Detail</a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $('form').submit(function(e){
-            event.preventDefault();
-            $.ajax({
-                url:$(this).attr('action'),
-                method: 'POST',
-                data: $(this).serialize(),
-                success: function(res){
-                    if(res.success){
-                        location.reload();
-                    }
-                },
-                error: function(err){
-                    Swal.fire('Error', 'Server Error', 'error');
-                }
-            })
-        })
-    </script>
-@endpush
-

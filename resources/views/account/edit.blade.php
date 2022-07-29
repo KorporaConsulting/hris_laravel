@@ -58,7 +58,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="divisi">Divisi</label>
-                                <select name="divisi" id="divisi" class="form-control">
+                                <select name="divisi" id="divisi" class="form-control" disabled>
                                     @foreach ($divisi as $value)
                                         <option value="{{ $value->divisi }}" {{ $value->divisi == auth()->user()->divisi ? 'selected' : '' }}>{{ $value->divisi }}</option>
                                     @endforeach
@@ -66,7 +66,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="jabatan">Jabatan</label>
-                                <input type="text" class="form-control" name="jabatan" id="jabatan" value="{{ $user->jabatan }}">
+                                <input type="text" class="form-control" name="jabatan" id="jabatan" value="{{ $user->jabatan }}" disabled>
                             </div>
                         </div>
                     </div>

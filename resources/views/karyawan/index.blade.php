@@ -1,39 +1,47 @@
 @extends('layouts.app')
 
+
+
 @section('content')
-    <div class="row">
-        <div class="col-12 col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-lg-3">
-                            <figure class="avatar mr-2 avatar-xl">
-                                <img src="/img/avatar/avatar-1.png" alt="...">
-                            </figure>
-                        </div>
-                        <div class="col-12 col-lg-9">
-                            <div class="row">
-                                <div class="col-6 mb-3">
-                                        <div class="font-weight-bold">Name</div>
-                                        <div>{{ auth()->user()->name }}</div>
-                                    </div>
-                                <div class="col-6 mb-3">
-                                    <div class="font-weight-bold">Nomor Telepon</div>
-                                    <div>{{ $user->no_hp }}</div>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <div class="font-weight-bold">Divisi</div>
-                                    <div>{{ auth()->user()->divisi }}</div>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <div class="font-weight-bold">Status</div>
-                                    <div>{{ $user->status_user }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table class="table datatable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Status Pekerja</th>
+                            <th>Jabatan</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($users as $key => $user)
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>
+                                @if ($user->karyawan->is_active > 0)
+                                    <span class="badge badge-success">Aktif</span>
+                                @else
+                                    <span class="badge badge-danger">Tidak Aktif</span>
+                                @endif
+                            </td>
+                            <td>{{ $user->karyawan->jabatan}}</td>
+                            <td>
+                                <a href="{{ route('karyawan.edit', $user->id) }}" class="btn btn-success">Edit</a>
+                                <a href="{{ route('karyawan.kpi.index', $user->id) }}" class="btn btn-primary">Lihat KPI</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 @endsection
+
+

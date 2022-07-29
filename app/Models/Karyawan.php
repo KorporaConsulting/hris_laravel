@@ -11,4 +11,7 @@ class Karyawan extends Model
 
     protected $table = 'karyawan';
     protected $guarded = ['id'];
+
+
+    
 }

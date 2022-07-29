@@ -1,13 +1,13 @@
 @extends('layouts.app', [
-    'page' => 'Ajukan Cuti'
+'page' => 'Ajukan Cuti'
 ])
 
 
 @section('content')
-    <div class="card">
-        <div class="card-header"></div>
-        <div class="card-body">
-            <form action="{{ route('cuti.store') }}" method="post">
+<div class="card">
+    <div class="card-header"></div>
+    <div class="card-body">
+        <form action="{{ route('cuti.store') }}" method="post">
             @csrf
             <div class="row">
                 <div class="col-6">
@@ -15,31 +15,50 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="jenis_cuti">Jenis Cuti</label>
-                                <input type="text" class="form-control" name="jenis_cuti" id="jenis_cuti" placeholder="Jenis Cuti">
+                                <select name="jenis_cuti" id="jenis_cuti" class="form-control">
+                                    <option selected disabled>Pilh Jenis Cuti</option>
+                                    <option value="Cuti Sakit">Cuti Sakit</option>
+                                    <option value="Cuti Tahunan">Cuti Tahunan</option>
+                                    <option value="Cuti Haid">Cuti Haid</option>
+                                    <option value="Cuti Bersalin">Cuti Bersalin</option>
+                                    <option value="Cuti Besar">Cuti Besar</option>
+                                    <option value="Cuti Bersama">Cuti Bersama</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="lama_cuti">Lama Cuti (hari)</label>
-                                <input type="number" class="form-control" name="lama_cuti" id="lama_cuti" placeholder="Lama Cuti" min="0">
+                                <input type="number" class="form-control disable" name="lama_cuti" id="lama_cuti"
+                                    placeholder="Lama Cuti"  min="0" readonly>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="jenis_cuti">Mulai Cuti (tanggal</label>
-                                <input type="date" class="form-control" name="mulai_tanggal"  value="{{ date('Y-m-d') }}">
+                                <label>Tanggal Cuti</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-calendar"></i>
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control daterange-cus" name="tanggal_cuti" id="tanggal_cuti">
+                                </div>
                             </div>
                         </div>
+
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="cuti_sekarang">Sisa Cuti (Sekarang)</label>
-                                <input type="number" class="form-control" name="cuti_sekarang" id="cuti_sekarang" value="{{ auth()->user()->sisa_cuti }}" placeholder="Lama Cuti" min="0" disabled>
+                                <input type="number" class="form-control" name="sisa_cuti" id="sisa_cuti"
+                                    value="{{ $user->sisa_cuti }}" placeholder="Lama Cuti" min="0" readonly>
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="lama_cuti">Keterangan</label>
-                                <textarea name="keterangan" class="form-control" id="" cols="30" rows="10" style="height: 150px;"></textarea>
+                                <textarea name="keterangan" class="form-control" id="" cols="30" rows="10"
+                                    style="height: 150px;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -48,7 +67,43 @@
             <div class="text-right">
                 <button class="btn btn-primary" type="submit">Ajukan</button>
             </div>
-            </form> 
-        </div>
+        </form>
     </div>
+</div>
 @endsection
+
+
+@push('scripts')
+<script>
+    
+    
+
+    $('#tanggal_cuti').change(function(){
+        const split = $(this).val().split(' - ');
+        const date_start = moment(split[0]);
+        const date_end = moment(split[1]);
+        const lama_cuti = date_end.diff(date_start, 'days') + 1;
+        const prevLamaCuti = $('#lama_cuti').val()
+        const prevTanggalCuti = $(this).val()
+        console.log(prevTanggalCuti)
+
+
+        $('#lama_cuti').val(lama_cuti)
+        if(lama_cuti > $('#sisa_cuti').val()){
+            Swal.fire('Pemberitahuan', 'Lama cuti melewati sisa cuti', 'warning');
+            $('#lama_cuti').val(prevLamaCuti)
+            $('#tanggal_cuti').val(prevTanggalCuti)
+        }
+        
+    })
+    
+    $('.daterange-cus').daterangepicker({
+        locale: {format: 'YYYY-MM-DD'},
+        drops: 'down',
+        opens: 'right'
+    });
+        
+
+    
+</script>
+@endpush

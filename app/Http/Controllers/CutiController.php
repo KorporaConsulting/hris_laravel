@@ -3,33 +3,65 @@
 namespace App\Http\Controllers;
 
 use App\Events\NotificationsEvent;
+use App\Jobs\SendEmail;
+use App\Mail\NotifMail;
 use Illuminate\Http\Request;
-use App\Models\Cuti;
+use App\Models\{Cuti, Karyawan, User};
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 
 class CutiController extends Controller
 {
 
-    public function index ()
+    public function staff ()
     {
 
-        if(auth()->user()->level == 'manager'){
-            $callback = function($q){
-                $q->where('parent_id', auth()->id());
-            };
-        }else if(auth()->user()->level == 'direktur'){
-            $callback = function($q){
-                $q->where('parent_id', '!=', auth()->id())->whereIn('level', ['manager', 'hr']);
-            };    
-        }else{
-            return abort(404);
-        }
-
-        return view('cuti.index',[
-            'cuti' => Cuti::whereHas('user', $callback)->with('user')
-            ->where('status', 'waiting')
+        $divisi_id = DB::table('divisi_user')
+            ->where('user_id', auth()->id())
+            ->first()
+            ->divisi_id;
+    
+        $list_staff = DB::table('divisi_user')
+            ->join('users', 'users.id', '=', 'divisi_user.user_id')
+            ->where('divisi_user.divisi_id', $divisi_id)
             ->get()
-        ]);
+            ->map(function($item, $key){
+                if($item->status == 'staff'){
+                    return $item->id;
+                }else{
+                    return 0;
+                }
+            });
+          
+        $cuti = Cuti::with('user')
+            ->whereIn('user_id', $list_staff)
+            ->orderBy('status', 'desc')
+            ->get();
+
+        return view('cuti.index', compact('cuti'));
+    }
+
+    public function manager ()
+    {
+    
+        $list_staff = DB::table('divisi_user')
+            ->join('users', 'users.id', '=', 'divisi_user.user_id')
+            ->get()
+            ->map(function($item, $key){
+                if($item->status == 'manager'){
+                    return $item->id;
+                }else{
+                    return 0;
+                }
+            });
+          
+        $cuti = Cuti::with('user')
+            ->whereIn('user_id', $list_staff)
+            ->orderBy('status', 'desc')
+            ->get();
+
+        return view('cuti.index', compact('cuti'));
     }
  
 
@@ -43,31 +75,35 @@ class CutiController extends Controller
 
     public function create ()
     {
-
-        return view('cuti.create');
+        return view('cuti.create', [
+            'user' => Karyawan::where('user_id', auth()->id())->first()
+        ]);
     }
     
     public function store ()
     {
+        $split = explode(' - ', request('tanggal_cuti'));
+        
 
-        // dd(request()->all());
+        // return $split;
 
-        $sampai_tanggal = date('Y-m-d', strtotime(request('mulai_tanggal') .' + '. request('lama_cuti').' day'));
 
-        // dd($sampai_tanggal);
+
         Cuti::create([
             'user_id' => auth()->id(),
-            'divisi' => auth()->user()->divisi,
             'jenis_cuti' => request('jenis_cuti'),
-            'mulai_tanggal' => request('mulai_tanggal'),
-            'sampai_tanggal' => $sampai_tanggal,
+            'mulai_tanggal' => $split[0],
+            'sampai_tanggal' => $split[0],
             'lama_cuti' => request('lama_cuti'),
-            'sisa_cuti' => auth()->user()->sisa_cuti - request('lama_cuti'),
-            'cuti_awal' => auth()->user()->sisa_cuti,
             'is_approve' => '0',
             'keterangan_cuti' => request('keterangan') 
         ]);
-    
+        
+        // $user = User::find(auth()->user()->parent_id);
+        // SendEmail::dispatch($user->email, auth()->user()->name .'Mengajukan Cuti');
+
+        // Mail::to($user->email)->send(new NotifMail(auth()->user()->name .'Mengajukan Cuti'));
+        // return 'ok';
         session()->flash('success', 'Berhasil mengajukan cuti');
 
         return redirect()->route('cuti.show');
@@ -77,8 +113,8 @@ class CutiController extends Controller
     public function update ($id)
     {
         Cuti::where('id', $id)->update([
-            'nama_manager' => auth()->user()->name,
-            'keterangan_manager' => request('keterangan'),
+            'nama_atasan' => auth()->user()->name,
+            'keterangan_atasan' => request('keterangan'),
             'status' => request('status'),
             'updated_at' => date('Y-m-d h:i:s')
         ]);

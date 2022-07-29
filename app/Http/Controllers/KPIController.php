@@ -5,44 +5,65 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\KPI;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class KPIController extends Controller
 {
-    public function index ()
+    public function index($userId)
     {
         return view('kpi.index', [
-            'users' => User::get()
+            'user' => User::with(['kpi'])->where('id', $userId)->first()
         ]);
     }
 
-    public function show ($userId)
+    public function show($userId, $kpiId)
     {
-        return view('kpi.show', [
-            'kpi' => KPI::where('user_id', $userId)->whereYear('created_at', date('Y'))->orderBy('bulan')->take(12)->get()
-        ]);
+        $where = [
+            'users.id' => $userId,
+            'kpi.id' => $kpiId
+        ];
+
+        $kpi = DB::table('users')
+            ->where($where)
+            ->leftJoin('kpi', 'kpi.user_id', '=', 'users.id')
+            ->first();
+        
+        return view('kpi.show', compact('kpi'));
     }
-    
-    public function myKPI ()
+
+    public function create($userId)
     {
-        return view('kpi.show', [
-            'kpi' => KPI::where('user_id', auth()->id())->whereYear('created_at', date('Y'))->orderBy('bulan')->take(12)->get()
-        ]);
+        return view('kpi.create', compact('userId'));
     }
 
-    public function store ()
+    public function myKPI()
     {
-        $date = date_create(request('month'));
+        $kpi = KPI::where('user_id', auth()->id())
+            ->whereYear('created_at', date('Y'))
+            ->orderBy('bulan')
+            ->take(12)
+            ->get();
 
-        KPI::create([
-            'user_id' => request('user_id'),
-            'point' => request('point'),
-            'bulan' => date_format($date, 'Y-m-d')
-        ]);
+        $bulan = $kpi->map(function ($item, $i) {
 
-        session()->flash('success', "Berhasil menambahkan KPI");
+            $date = date_create($item->bulan);
+            return date_format($date, 'F Y');
+            
+        });
 
-        return response()->json([
-            'success' => true
-        ]);
+        $point = $kpi->pluck('point');
+
+        return view('kpi.show', compact('bulan', 'point'));
+    }
+
+    public function store()
+    {
+        $data = request()->except(['_token', 'bulan']);
+        $data['bulan'] = date_create(request('bulan'));
+
+        KPI::create($data);
+
+        return redirect()->route('karyawan.kpi.index', request('user_id'))->with('success', "Berhasil menambahkan KPI");
     }
 }

@@ -32,7 +32,7 @@
                             <td>{{ $value->user->name }}</td>
                             <td>{{ $value->jenis_cuti }}</td>
                             <td>{{  date_format($date, 'Y-m-d') }}</td>
-                            <td class="badge {{ $value->status == 'waiting' ? 'badge-warning' : $value->status == 'accept' ? 'badge-success' : 'badge-danger'}}">{{ $value->status }}</td>
+                            <td><span class="text-capitalize badge {{ ($value->status == 'waiting') ? 'badge-warning' : (($value->status == 'accept') ? 'badge-success' : 'badge-danger')}}">{{ $value->status }}</span>  </td>
                             <td>
                                 <button class="btn btn-primary" onclick="confirmAccept({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}')">Setujui</button>  
                                 <button class="btn btn-danger" onclick="confirmReject({{ $value->id }}, '{{ $value->user->name }}')">Tolak</button>  
@@ -65,25 +65,27 @@
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, Setujui!'
         }).then((result) => {
-            url = url.replace(':id', id)
-            $.ajax({
-                url,
-                method: 'patch',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    status: 'accept',
-                    keterangan: result.value,
-                    userId
-                },
-                success: function (res){
-                    if(res.success){
-                        location.reload();
+            if(result.isConfirmed){
+                url = url.replace(':id', id)
+                $.ajax({
+                    url,
+                    method: 'patch',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: 'accept',
+                        keterangan: result.value,
+                        userId
+                    },
+                    success: function (res){
+                        if(res.success){
+                            location.reload();
+                        }
+                    },
+                    error: function (err){
+                        Swal.fire('Error', 'err', 'error');
                     }
-                },
-                error: function (err){
-                    Swal.fire('Error', 'err', 'error');
-                }
-            })
+                })
+            }
           })
         }
 
@@ -103,25 +105,27 @@
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya, Setujui!'
         }).then((result) => {
-            url = url.replace(':id', id)
-            $.ajax({
-                url,
-                method: 'patch',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    status: 'reject',
-                    keterangan: result.value,
-                    userId
-                },
-                success: function (res){
-                    if(res.success){
-                        location.reload();
+            if (result.isConfirmed) {
+                url = url.replace(':id', id)
+                $.ajax({
+                    url,
+                    method: 'patch',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        status: 'reject',
+                        keterangan: result.value,
+                        userId
+                    },
+                    success: function (res){
+                        if(res.success){
+                            location.reload();
+                        }
+                    },
+                    error: function (err){
+                        Swal.fire('Error', 'err', 'error');
                     }
-                },
-                error: function (err){
-                    Swal.fire('Error', 'err', 'error');
-                }
-            })
+                })
+            }
           })
         }
 
