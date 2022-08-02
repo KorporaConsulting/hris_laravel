@@ -9,7 +9,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h3 class="mb-3">Selamat Datang {{ auth()->user()->name }}</h3>
+                        <h3 class="mb-3">Selamat Datang {{ auth()->user()->name }} ({{ auth()->user()->getRoleNames()[0] }})</h3>
 
                         <ul>
                             <li><a href="#pengumuman">Pengumuman</a></li>

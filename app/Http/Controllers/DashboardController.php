@@ -29,6 +29,8 @@ class DashboardController extends Controller
         $announcements = $announcements->announcements;
 
         $pollings = Polling::with(['options', 'created_by', 'answer'])
+            ->where('date_start', '<=', date('Y-m-d'))
+            ->where('date_end', '>=', date('Y-m-d'))
             ->withCount('answers')
             ->get();
 

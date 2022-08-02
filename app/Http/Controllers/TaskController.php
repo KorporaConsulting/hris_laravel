@@ -18,8 +18,9 @@ class TaskController extends Controller
             return response()->json($data);
         }
 
+        $defaultTemplate = Board::where('project_id', $projectId)->get()->count();
 
-        return view('task.index', compact('projectId'));
+        return view('task.index', compact('projectId', 'defaultTemplate'));
     }
 
     public function update($taskId){

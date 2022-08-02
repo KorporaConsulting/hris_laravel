@@ -17,13 +17,31 @@ class role_permission extends Seeder
     public function run()
     {
 
-        Permission::create([
-            'name' => 'index_karyawan',
-            'guard_name' => 'web'
-        ]);
+        $permission = Permission::upsert([
+            [
+                'name' => 'polling.create',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'polling.read',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'polling.update',
+                'guard_name' => 'web',
+            ],
+            [
+                'name' => 'polling.delete',
+                'guard_name' => 'web',
+            ],
+        ], ['name', 'guard_name']);
 
-        $role = Role::find(3);
-             
-        $role->givePermissionTo(['index_karyawan']);
+
+        $role = Role::find(1);
+        $role->givePermissionTo(['polling.create', 'polling.read', 'polling.update', 'polling.delete']);
+        
+        // $role = Role::find(3);
+        // $role->givePermissionTo('pengumuman.create');
+
     }
 }

@@ -45,6 +45,12 @@
 	<div class="mb-3">
 		<button type="button" data-toggle="modal" data-target="#createBoard" class="btn btn-primary">Tambah Board</button>
 		<button type="button" data-toggle="modal" data-target="#createTask" class="btn btn-primary" id="tambah">Tambah Task</button>
+		@empty($defaultTemplate)
+		<button type="button" class="btn btn-success " id="generateDefault">Generate Default Template</button>
+		@endempty
+		<form action="{{ route('project.board.storeDefault', $projectId) }}" method="post" id="generateDefaultForm">
+			@csrf
+		</form>
 	</div>
 	<div id="kanban-canvas">
 	<!-- ここにカンバンが表示される -->
@@ -92,9 +98,13 @@
 			return Array[Array.length - 1];
 		}
 
+		$('#generateDefault').click(function(){
+			$('#generateDefaultForm').submit();
+		})
 		$.ajax({
 			url: window.location.href,
 			method: 'GET',
+			cache: false,
 			success: function(res){
 				let dataContent = [];
 
@@ -154,6 +164,7 @@
 								_token: '{{ csrf_token() }}',
 								board_id: splitEnd(targetId, '-')
 							},
+							cache: false,
 							success: function(res){
 								console.log(res);
 							},

@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 class KehadiranController extends Controller
 {
+
+
     public function index ()
     {
-
+        
         return view('kehadiran.index', [
             'presents' => Kehadiran::with('user')->latest()->get()
         ]);

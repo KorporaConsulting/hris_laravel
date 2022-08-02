@@ -1,7 +1,8 @@
 <?php
 
 use App\Events\NotificationsEvent;
-use App\Http\Controllers\{AccountController, KehadiranController, AuthController, CutiController, DashboardController, PengumumanController, PollingController, TaskController};
+use App\Http\Controllers\{AccountController, KehadiranController, AuthController, BoardController, CutiController};
+use App\Http\Controllers\{DashboardController, PengumumanController, PollingController, TaskController};
 use App\Http\Controllers\{DivisiController, KaryawanController, KPIController, UserController, ProjectController};
 use App\Mail\NotifMail;
 use Illuminate\Support\Facades\Mail;
@@ -91,9 +92,12 @@ Route::middleware('auth')->group(function(){
 
     // Pengumuman
     Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
-    Route::get('pengumuman/{pengumumanId}', [PengumumanController::class, 'index'])->name('pengumuman.show');
     Route::get('pengumuman/create', [PengumumanController::class, 'create'])->name('pengumuman.create');
     Route::post('pengumuman/store', [PengumumanController::class, 'store'])->name('pengumuman.store');
+    Route::get('pengumuman/{pengumuman:id}', [PengumumanController::class, 'show'])->name('pengumuman.show');
+    Route::get('pengumuman/{pengumuman:id}/edit', [PengumumanController::class, 'edit'])->name('pengumuman.edit');
+    Route::patch('pengumuman/{pengumuman:id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
+    Route::delete('pengumuman/{pengumuman:id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
     
     // Polling
     Route::get('polling', [PollingController::class, 'index'])->name('polling.index');
@@ -106,6 +110,8 @@ Route::middleware('auth')->group(function(){
     Route::get('project/create', [ProjectController::class, 'create'])->name('project.create');
     Route::post('project/store', [ProjectController::class, 'store'])->name('project.store');
 
+
+        Route::post('project/{projectId}/store/default', [BoardController::class, 'storeDefault'])->name('project.board.storeDefault');
         // Task
         Route::get('project/{projectId}/task', [TaskController::class, 'index'])->name('project.task.index');
         Route::get('project/{projectId}/task/create', [TaskController::class, 'create'])->name('project.task.create');
