@@ -26,13 +26,13 @@
                         <div class="form-group col-6">
                             <label for="judul" class="form-label">Tanggal Mulai</label>
                             <div>
-                                {!! $pengumuman->date_start !!}
+                                {{ $pengumuman->date_start }}
                             </div>
                         </div>
                         <div class="form-group col-6">
                             <label for="judul" class="form-label">Tanggal Berakhir</label>
                             <div>
-                                {!! $pengumuman->date_end !!}
+                                {{ $pengumuman->date_end }}
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                 <div class="form-group text-right">
                     <label for="judul" class="form-label">Dibuat Oleh</label>
                     <div>
-                        {!! $pengumuman->created_by->name !!}
+                        {{ $pengumuman->created_by->name }}
                     </div>
                 </div>
             </div>

@@ -93,8 +93,8 @@ Route::middleware('auth')->group(function(){
     // Pengumuman
     Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
     Route::get('pengumuman/create', [PengumumanController::class, 'create'])->name('pengumuman.create');
-    Route::post('pengumuman/store', [PengumumanController::class, 'store'])->name('pengumuman.store');
     Route::get('pengumuman/{pengumuman:id}', [PengumumanController::class, 'show'])->name('pengumuman.show');
+    Route::post('pengumuman/store', [PengumumanController::class, 'store'])->name('pengumuman.store');
     Route::get('pengumuman/{pengumuman:id}/edit', [PengumumanController::class, 'edit'])->name('pengumuman.edit');
     Route::patch('pengumuman/{pengumuman:id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
     Route::delete('pengumuman/{pengumuman:id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
@@ -103,6 +103,7 @@ Route::middleware('auth')->group(function(){
     Route::get('polling', [PollingController::class, 'index'])->name('polling.index');
     Route::get('polling/create', [PollingController::class, 'create'])->name('polling.create');
     Route::post('polling/store', [PollingController::class, 'store'])->name('polling.store');
+    Route::get('polling/{polling:id}', [PollingController::class, 'show'])->name('polling.show');
     Route::put('polling/vote', [PollingController::class, 'vote'])->name('polling.vote');
     
     // Project
@@ -110,12 +111,16 @@ Route::middleware('auth')->group(function(){
     Route::get('project/create', [ProjectController::class, 'create'])->name('project.create');
     Route::post('project/store', [ProjectController::class, 'store'])->name('project.store');
 
-
+        // Board
         Route::post('project/{projectId}/store/default', [BoardController::class, 'storeDefault'])->name('project.board.storeDefault');
+        Route::patch('project/{projectId}/board/{boardId}', [BoardController::class, 'update'])->name('project.board.update');
+        
         // Task
         Route::get('project/{projectId}/task', [TaskController::class, 'index'])->name('project.task.index');
         Route::get('project/{projectId}/task/create', [TaskController::class, 'create'])->name('project.task.create');
         Route::post('project/{projectId}/task/store', [TaskController::class, 'store'])->name('project.task.store');
+
+    Route::post('task/store', [TaskController::class, 'store'])->name('task.store');
     Route::patch('task/{taskId}/update', [TaskController::class, 'update'])->name('task.update');
 
 });

@@ -125,25 +125,20 @@
 					})
 					dataContent.push(obj);
 				})
+				console.log(dataContent)
 				const kanban = new jKanban({
 					
 					element: '#kanban-canvas', // カンバンを表示する場所のID
 					boards: dataContent, // カンバンに表示されるカラムやカードのデータ
 					gutter: '16px', // カンバンの余白
-					widthBoard: '275px', // カラムの幅 (responsivePercentageの「true」設定により無視される)
-					responsivePercentage: true, // trueを選択時はカラム幅は％で指定され、gutterとwidthBoardの設定は不要
+					widthBoard: '500px', // カラムの幅 (responsivePercentageの「true」設定により無視される)
+					// responsivePercentage: true, // trueを選択時はカラム幅は％で指定され、gutterとwidthBoardの設定は不要
 					dragItems: true, // trueを選択時はカードをドラッグ可能
 					dragBoards: true, // カラムをドラッグ可能にするかどうか
-					itemAddOptions: {
-						enabled: true, // add a button to board for easy item creation
-						content: '+', // text or html content of the board button
-						class: 'kanban-title-button btn btn-default btn-xs', // default class of the button
-						footer: true // position the button on footer
-					},
-
-
 					click : function (el) {}, // callback when any board's item are clicked
-					context : function (el, event) {}, // callback when any board's item are right clicked
+					context : function (el, event) {
+						console.log([el, event]);
+					}, // callback when any board's item are right clicked
 					dragEl : function (el, source) {}, // callback when any board's item are dragged
 					dragendEl : function (el) {}, // callback when any board's item stop drag
 					dropEl : function (el, target, source, sibling) {
@@ -173,14 +168,94 @@
 							}
 						})
 					}, // callback when any board's item drop in a board
-					dragBoard : function (el, source) {}, // callback when any board stop drag
-					dragendBoard : function (el) {}, // callback when any board stop drag
+					dragBoard : function (el, source) {
+						localStorage.setItem('lastOrder', $(el).attr('data-order'));
+					}, // callback when any board stop drag
+					dragendBoard : function (el) {
+						const lastOrder = localStorage.getItem('lastOrder');
+						const order = $(el).attr('data-order')
+						var type;
+						const boardId = splitEnd($(el).attr('data-id'), '-');
+
+						if(lastOrder > order){
+							type = 'increment';
+						}else if(lastOrder < order){
+							type = 'decrement';
+						}else{
+							type = false;
+						}
+						
+
+						let url = '{{ route("project.board.update", [$projectId, ":id"]) }}'
+						url = url.replace(':id', boardId);
+						console.log(url)
+						$.ajax({
+							url,
+							method: 'PATCH',
+							data: {
+								_token: '{{ csrf_token() }}',
+								order,
+								lastOrder,
+								type,
+							},
+							cache: false,
+							success: function(res){
+								console.log(res);
+							},
+							error: function(err){
+								console.log(err)
+							}
+						})
+
+						
+					}, // callback when any board stop drag
 					buttonClick : function(el, boardId) {}, // callback when the board's button is clicked
 					propagationHandlers: [],
 				});
 				
 				$('#tambah').click(function(){
-					console.log(kanban.addElement('column-id-1', {'title':'Test Add'}, 0))
+					const index = $($('.kanban-board')[0]).find('.kanban-item').length
+					const targetId = $($('.kanban-board')[0]).attr('data-id');
+					
+					Swal.fire({
+					title: 'Nama Task',
+					input: 'text',
+					showCancelButton: true,
+					confirmButtonText: `Tambah`,
+					}).then((result) => {
+						if (result.isConfirmed) {
+							console.log(targetId)
+							kanban.addElement(targetId, {'title': result.value}, index)
+							$.ajax({
+								url: '{{ route("task.store") }}',
+								method: 'POST',
+								data: {
+									_token: '{{ csrf_token() }}',
+									board_id: splitEnd(targetId, '-'),
+									name: result.value
+								},
+								cache: false,
+								success: function(res){
+									iziToast.success({
+									title: 'success',
+										message: 'Berhasil Menambahkan Task',
+										position: 'topRight'
+									});
+									console.log(res);
+								},
+								error: function(err){
+									console.log(err)
+								}
+							})
+						} 
+					});
+					
+
+
+
+
+
+					
 				}) 
 
 				document.querySelectorAll('.kanban-item').forEach(item => {

@@ -74,7 +74,7 @@
             </div>
 
         <!-- Main Content -->
-            <div class="main-content">
+            <div class="main-content" style="overflow-x: scroll;">
                     <section class="section">
                         {{-- <div class="section-header">
                             <h1>{{ $page ?? config('app.name') }}</h1>
@@ -148,7 +148,7 @@
             </div>
             <footer class="main-footer">
                 <div class="footer-left">
-                    Copyright &copy; 2018 <div class="bullet"></div> Design By <a href="https://nauval.in/">Muhamad Nauval Azhar</a>
+                    Copyright &copy; {{ date('Y') }} Korpora Consulting</a>
                 </div>
                 <div class="footer-right">
                     2.3.0

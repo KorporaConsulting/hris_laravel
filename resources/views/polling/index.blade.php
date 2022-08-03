@@ -22,7 +22,7 @@
                     <td>{{ $polling->judul }}</td>
                     <td>{{ $polling->created_by->name }}</td>
                     <td>
-                        <a href="{{ route('pengumuman.show', $polling->id) }}" class="btn btn-primary">Detail</a>
+                        <a href="{{ route('polling.show', $polling->id) }}" class="btn btn-primary">Detail</a>
                     </td>
                 </tr>
                 @endforeach

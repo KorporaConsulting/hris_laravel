@@ -22,12 +22,9 @@ class KehadiranController extends Controller
 
             $divisi = DB::table('divisi_user')->where('user_id', auth()->id())->first();
 
-            $presents = Kehadiran::where('divisi_user.status', 'staff')
-                ->where('divisi_user.divisi_id', $divisi->divisi_id)
-                ->leftJoin('divisi_user', 'kehadiran.user_id', '=', 'divisi_user.user_id')
-                ->leftJoin('users', 'divisi_user.user_id', '=', 'users.id')
-                ->get();          
+            $presents = Kehadiran::with('user')->latest()->get();     
 
+            
             return view('kehadiran.kehadiranStaff', compact('presents'));
     }
 

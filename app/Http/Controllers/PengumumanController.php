@@ -20,7 +20,7 @@ class PengumumanController extends Controller
     public function show (Pengumuman $pengumuman)
     {
         $pengumuman->load('created_by');
-
+        
         return view('pengumuman.show', compact('pengumuman'));
     }
 

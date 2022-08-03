@@ -60,4 +60,9 @@ class PollingController extends Controller
             'message' => 'Berhasil melakukan poling'
         ]);
     }
+
+    public function show (Polling $polling){
+
+        return view('polling.show', compact('polling'));
+    }
 }
