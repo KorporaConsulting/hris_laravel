@@ -74,7 +74,7 @@
             </div>
 
         <!-- Main Content -->
-            <div class="main-content" style="overflow-x: scroll;">
+            <div class="main-content pageKanban">
                     <section class="section">
                         {{-- <div class="section-header">
                             <h1>{{ $page ?? config('app.name') }}</h1>

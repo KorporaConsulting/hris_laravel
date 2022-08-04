@@ -11,29 +11,29 @@
 		font-weight: bold;
 		}
 		.kanban-item.orange {
-		color: white;
-		background-color: darkorange;
+			color: white;
+			background-color: darkorange;
 		}
 		.kanban-item .item-body img {
-		width: 100%;
+			width: 100%;
 		}
 		.kanban-item .item-body {
-		max-height: 240px;
-		overflow: hidden;
+			max-height: 240px;
+			overflow: hidden;
 		}
 		/* カラムのタイトルの色 */
 		.kanban-board header {
-		color: white;
-		background-color: gray;
+			color: white;
+			background-color: gray;
 		}
 		.kanban-board header.red {
-		background-color: crimson;
+			background-color: crimson;
 		}
 		.kanban-board header.blue {
-		background-color: royalblue;
+			background-color: royalblue;
 		}
 		.kanban-board header.green {
-		background-color: green;
+			background-color: green;
 		}
 	</style>
 @endsection
@@ -44,7 +44,7 @@
 	</div>
 	<div class="mb-3">
 		<button type="button" data-toggle="modal" data-target="#createBoard" class="btn btn-primary">Tambah Board</button>
-		<button type="button" data-toggle="modal" data-target="#createTask" class="btn btn-primary" id="tambah">Tambah Task</button>
+		<button type="button" class="btn btn-primary" id="tambah">Tambah Task</button>
 		@empty($defaultTemplate)
 		<button type="button" class="btn btn-success " id="generateDefault">Generate Default Template</button>
 		@endempty
@@ -61,7 +61,7 @@
 @push('modals')
 	<div class="modal fade" id="createBoard" tabindex="-1" aria-labelledby="createBoardLabel" aria-hidden="true">
 		<div class="modal-dialog">
-			<form action="{{ route('project.task.store', $projectId) }}" method="post">
+			<form action="{{ route('project.board.store', $projectId) }}" method="post" id="#formAddBoard">
 				@csrf
 				<div class="modal-content">
 					<div class="modal-header">
@@ -81,7 +81,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary">Tambah</button>
+						<button type="submit" class="btn btn-primary">Tambah</button>
 					</div>
 				</div>
 			</form>
@@ -92,6 +92,29 @@
 @push('scripts')
 <script src="{{ asset('js/jkanban.min.js') }}"></script>
 <script>
+
+		$('#formAddBoard').submit(function(){
+			event.preventDefault()
+
+			const data  = $(this).serializeArray();
+			data.push({name: '_token', value: '{{ csrf_token() }}', })
+			data.push({name: 'order', value: $('.kanban-board').length + 1, })
+
+			$.ajax({
+				url: $(this).attr('action'),
+				method: 'POST',
+				data,
+				success: function(res){
+					console.log(res);
+					if(res.success){
+						location.reload()
+					}
+				},
+				error: function(err){
+					console.log(err);
+				}
+			})
+		})
 		const splitEnd = function(Data, Separator) {
 			const Array = Data.split(Separator);
 			
@@ -106,6 +129,7 @@
 			method: 'GET',
 			cache: false,
 			success: function(res){
+
 				let dataContent = [];
 
 				res.map((val, i) => {
@@ -131,8 +155,8 @@
 					element: '#kanban-canvas', // カンバンを表示する場所のID
 					boards: dataContent, // カンバンに表示されるカラムやカードのデータ
 					gutter: '16px', // カンバンの余白
-					widthBoard: '500px', // カラムの幅 (responsivePercentageの「true」設定により無視される)
-					// responsivePercentage: true, // trueを選択時はカラム幅は％で指定され、gutterとwidthBoardの設定は不要
+					// widthBoard: '275px', // カラムの幅 (responsivePercentageの「true」設定により無視される)
+					responsivePercentage: true, // trueを選択時はカラム幅は％で指定され、gutterとwidthBoardの設定は不要
 					dragItems: true, // trueを選択時はカードをドラッグ可能
 					dragBoards: true, // カラムをドラッグ可能にするかどうか
 					click : function (el) {}, // callback when any board's item are clicked
@@ -212,6 +236,10 @@
 					buttonClick : function(el, boardId) {}, // callback when the board's button is clicked
 					propagationHandlers: [],
 				});
+
+				$('#addBoard').click(function(){
+					
+				})
 				
 				$('#tambah').click(function(){
 					const index = $($('.kanban-board')[0]).find('.kanban-item').length

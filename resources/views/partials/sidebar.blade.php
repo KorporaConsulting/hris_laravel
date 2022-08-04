@@ -31,10 +31,6 @@
                 </li>
                 @endcan
                 <li class="nav-item {{ request()->routeIs('kehadiran.*') ? 'active' : ''  }}">
-                    <a class="nav-link" href="{{ route('kehadiran.kehadiran-staff') }}"><span> Kehadiran
-                            Staff</span></a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('kehadiran.*') ? 'active' : ''  }}">
                     <a class="nav-link" href="{{ route('kehadiran.kehadiran-saya') }}"><span> Kehadiran Saya</span></a>
                 </li>
             </ul>
@@ -101,13 +97,13 @@
                 <span>Cuti</span></a>
             <ul class="dropdown-menu">
                 {{-- @can ('manage_cuti_manager') --}}
-                <li class="{{ request()->routeIs('cuti.manager') ? 'active' : ''  }}"><a class="nav-link"
-                        href="{{ route('cuti.manager') }}">Cuti Manager</a></li>
+                {{-- <li class="{{ request()->routeIs('cuti.manager') ? 'active' : ''  }}"><a class="nav-link"
+                        href="{{ route('cuti.manager') }}">Cuti Manager</a></li> --}}
                 {{-- @endcan --}}
-                {{-- @can ('manage_cuti_staff') --}}
-                <li class="{{ request()->routeIs('cuti.staff') ? 'active' : ''  }}"><a class="nav-link"
-                        href="{{ route('cuti.staff') }}">Cuti Staff</a></li>
-                {{-- @endcan --}}
+                @can ('cuti.read')
+                <li class="{{ request()->routeIs('cuti.index') ? 'active' : ''  }}"><a class="nav-link"
+                        href="{{ route('cuti.index') }}">Cuti</a></li>
+                @endcan
                 <li class="{{ request()->routeIs('cuti.show') ? 'active' : ''  }}"><a class="nav-link"
                         href="{{ route('cuti.show') }}">Cuti Saya</a></li>
                 <li class="{{ request()->routeIs('cuti.create') ? 'active' : ''  }}"><a class="nav-link"

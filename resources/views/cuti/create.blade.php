@@ -5,7 +5,9 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header"></div>
+    <div class="card-header">
+        <h4>Pengajuann Cuti</h4>
+    </div>
     <div class="card-body">
         <form action="{{ route('cuti.store') }}" method="post">
             @csrf
@@ -76,24 +78,38 @@
 @push('scripts')
 <script>
     
+    function checkedRangeDate(data, separator){
+        const split = data.split(separator);
+        const date_start = moment(split[0]);
+        const date_end = moment(split[1]);
+
+        return [
+            date_start, date_end
+        ];
+    }
     
+
+    let prevLamaCuti = $('#lama_cuti').val();
+    let prevTanggalCuti = $('#tanggal_cuti').val()
 
     $('#tanggal_cuti').change(function(){
         const split = $(this).val().split(' - ');
         const date_start = moment(split[0]);
         const date_end = moment(split[1]);
         const lama_cuti = date_end.diff(date_start, 'days') + 1;
-        const prevLamaCuti = $('#lama_cuti').val()
-        const prevTanggalCuti = $(this).val()
-        console.log(prevTanggalCuti)
 
-
-        $('#lama_cuti').val(lama_cuti)
         if(lama_cuti > $('#sisa_cuti').val()){
             Swal.fire('Pemberitahuan', 'Lama cuti melewati sisa cuti', 'warning');
             $('#lama_cuti').val(prevLamaCuti)
-            $('#tanggal_cuti').val(prevTanggalCuti)
+            const getPrevTanggalCuti = checkedRangeDate(prevTanggalCuti, ' - ');
+            $('#tanggal_cuti').daterangepicker({locale: {format: 'YYYY-MM-DD'}, startDate: getPrevTanggalCuti[0], endDate: getPrevTanggalCuti[1] });
+        }else{
+            $('#lama_cuti').val(lama_cuti)
         }
+
+        prevLamaCuti = $('#lama_cuti').val();
+        
+        prevTanggalCuti = $('#tanggal_cuti').val()
         
     })
     

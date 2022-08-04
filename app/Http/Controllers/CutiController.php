@@ -14,32 +14,19 @@ use Illuminate\Support\Facades\Mail;
 class CutiController extends Controller
 {
 
-    public function staff ()
+    public function index ()
     {
 
-        $divisi_id = DB::table('divisi_user')
-            ->where('user_id', auth()->id())
-            ->first()
-            ->divisi_id;
-    
-        $list_staff = DB::table('divisi_user')
-            ->join('users', 'users.id', '=', 'divisi_user.user_id')
-            ->where('divisi_user.divisi_id', $divisi_id)
-            ->get()
-            ->map(function($item, $key){
-                if($item->status == 'staff'){
-                    return $item->id;
-                }else{
-                    return 0;
-                }
-            });
-          
-        $cuti = Cuti::with('user')
-            ->whereIn('user_id', $list_staff)
-            ->orderBy('status', 'desc')
-            ->get();
+        if (auth()->user()->hasRole('manager')) {
+            $divisi = DB::table('divisi_user')->where('user_id', auth()->id())->first();
+            $users = DB::table('divisi_user')->where('divisi_id', $divisi->divisi_id)->get();
 
+            $cuti = Cuti::with('user')->whereIn('user_id', $users->pluck('user_id'))->get();
+        } else {
+            $cuti = Cuti::with('user')->latest()->get();
+        }
 
+        // return $cuti;
         return view('cuti.index', compact('cuti'));
     }
 
@@ -86,15 +73,11 @@ class CutiController extends Controller
         $split = explode(' - ', request('tanggal_cuti'));
         
 
-        // return $split;
-
-
-
         Cuti::create([
             'user_id' => auth()->id(),
             'jenis_cuti' => request('jenis_cuti'),
             'mulai_tanggal' => $split[0],
-            'sampai_tanggal' => $split[0],
+            'sampai_tanggal' => $split[1],
             'lama_cuti' => request('lama_cuti'),
             'is_approve' => '0',
             'keterangan_cuti' => request('keterangan') 
@@ -104,10 +87,9 @@ class CutiController extends Controller
         // SendEmail::dispatch($user->email, auth()->user()->name .'Mengajukan Cuti');
 
         // Mail::to($user->email)->send(new NotifMail(auth()->user()->name .'Mengajukan Cuti'));
-        // return 'ok';
-        session()->flash('success', 'Berhasil mengajukan cuti');
+        // return 'ok';;
 
-        return redirect()->route('cuti.show');
+        return redirect()->route('cuti.show')->with('success', 'Berhasil mengajukan cuti');
 
     }
 

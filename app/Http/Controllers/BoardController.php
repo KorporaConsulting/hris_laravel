@@ -29,9 +29,22 @@ class BoardController extends Controller
                 'order' => 3,
                 'class' => 'green'
             ]
-        ], ['project_id', 'name', 'green']);
+        ], ['project_id', 'name', 'class']);
 
         return redirect()->route('project.task.index', $projectId)->with('success', 'Berhasil generate template default');
+    }
+
+    public function store ($projectId)
+    {
+        $data = request()->except('_token');
+        $data['project_id'] = $projectId;
+
+        Board::create($data);
+
+        return response()->json([
+            'success' => true,
+        ]);
+
     }
 
     public function update ($projectId, $boardId)

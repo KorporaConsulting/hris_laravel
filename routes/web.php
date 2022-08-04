@@ -3,7 +3,7 @@
 use App\Events\NotificationsEvent;
 use App\Http\Controllers\{AccountController, KehadiranController, AuthController, BoardController, CutiController};
 use App\Http\Controllers\{DashboardController, PengumumanController, PollingController, TaskController};
-use App\Http\Controllers\{DivisiController, KaryawanController, KPIController, UserController, ProjectController};
+use App\Http\Controllers\{DivisiController, KaryawanController, KPIController, UserController, ProjectController, TestController};
 use App\Mail\NotifMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function(){
 
 
     // Cuti 
-    Route::get('/cuti/staff', [CutiController::class, 'staff'])->name('cuti.staff');
+    Route::get('/cuti', [CutiController::class, 'index'])->name('cuti.index');
     Route::get('/cuti/manager', [CutiController::class, 'manager'])->name('cuti.manager');
 
 
@@ -85,7 +85,6 @@ Route::middleware('auth')->group(function(){
 
     // Kehadiran
     Route::get('kehadiran/kehadiran-saya', [KehadiranController::class, 'kehadiranSaya'])->name('kehadiran.kehadiran-saya');
-    Route::get('kehadiran/kehadiran-staff', [KehadiranController::class, 'kehadiranStaff'])->name('kehadiran.kehadiran-staff');
     Route::get('kehadiran/present', [KehadiranController::class, 'present'])->name('kehadiran.present');
     Route::resource('kehadiran', KehadiranController::class);
     Route::resource('divisi', DivisiController::class);
@@ -112,6 +111,7 @@ Route::middleware('auth')->group(function(){
     Route::post('project/store', [ProjectController::class, 'store'])->name('project.store');
 
         // Board
+        Route::post('project/{projectId}/store', [BoardController::class, 'store'])->name('project.board.store');
         Route::post('project/{projectId}/store/default', [BoardController::class, 'storeDefault'])->name('project.board.storeDefault');
         Route::patch('project/{projectId}/board/{boardId}', [BoardController::class, 'update'])->name('project.board.update');
         
@@ -136,3 +136,6 @@ Route::get('/event', function () {
     NotificationsEvent::dispatch('anjay', 17);
     return'ok';
 });
+
+
+Route::get('test', TestController::class);

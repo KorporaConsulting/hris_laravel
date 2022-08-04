@@ -20,11 +20,10 @@
             <div id="map"></div>
         </div>
         <div class="col-12">
-            @if (empty($kehadiran))
-            <div><a href="{{ route('kehadiran.present') }}" class="btn btn-primary">Absen</a></div>
-
+            @if ($absen)
+                <div><a href="{{ route('kehadiran.present') }}" class="btn btn-primary">Absen</a></div>
             @else
-            <div>Anda Telah Absen Hari ini</div>
+                <div>{{ $message }}</div>
             @endif
         </div>
     </div>

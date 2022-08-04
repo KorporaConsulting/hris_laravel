@@ -104,17 +104,6 @@
         
     </div>
 </div>
-<div class="col-12">
-    @if ($user->divisi == 'sales')
-    <div class="alert alert-primary">Utility untuk divisi {{$user->divisi}} masih dikembangkan</div>
-    @elseif ($user->divisi == 'it/online')
-    {{-- <div class="alert alert-primary">Utility untuk divisi {{$user->divisi}} masih dikembangkan</div> --}}
-    <ul>
-        <li><a href="https://www.freepik.com">Freepik</a></li>
-        <li><a href="https://unsplash.com">Unsplash</a></li>
-    </ul>
-    @endif
-</div>
 
 </div>
 @endsection

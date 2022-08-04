@@ -13,6 +13,7 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Waktu Absen</th>
+                                <th>level</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -21,6 +22,9 @@
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ $present->user->name }}</td>
                                 <td>{{ $present->created_at }}</td>
+                                <td>
+                                    {{ ucwords($present->user->getRoleNames()[0]) }}
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

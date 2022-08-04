@@ -8,7 +8,7 @@
         <h4>List Cuti</h4>
     </div>
     <div class="card-body">
-        <div class="table-responsive">
+        <div class="">
             <table class="table datatable table-striped" id="table-1">
                <thead>
                     <tr>
@@ -31,11 +31,14 @@
                             <td>{{ $value->jenis_cuti }}</td>
                             <td>{{  date_format($date, 'Y-m-d') }}</td>
                             <td><span class="text-capitalize badge {{ ($value->status == 'waiting') ? 'badge-warning' : (($value->status == 'accept') ? 'badge-success' :'badge-danger')}}">{{ $value->status }}</span></td>
-                                @if ($value->status == 'waiting')
-                                <td>
-                                    <button class="btn btn-danger" onclick="confirmDelete({{ $value->id }})"><i class="fas fa-trash"></i></button>  
-                                </td>
-                                <form action="{{ route('cuti.destroy', $value->id) }}" method="post" id="delete-cuti{{ $value->id }}">@csrf @method('delete')</form>
+                            @if ($value->status == 'waiting')
+                            <td>
+                                <button class="btn btn-danger" onclick="confirmDelete({{ $value->id }})"><i class="fas fa-trash"></i></button>  
+                            </td>
+                            <form action="{{ route('cuti.destroy', $value->id) }}" method="post" id="delete-cuti{{ $value->id }}">@csrf @method('delete')</form>
+                            @else
+
+                            <td></td>
                             @endif
                         </tr>
                     @endforeach
