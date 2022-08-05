@@ -213,7 +213,7 @@
         const userId = '{{ auth()->id() }}'
         const channel = window.Echo.channel('notifications'+userId);
         
-        channel.listen('NotificationsEvent', function(data) {
+        channel.listen('NotifEvent', function(data) {
             Swal.fire('Message', JSON.stringify(data.message), 'warning');
         });
 

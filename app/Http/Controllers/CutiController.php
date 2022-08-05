@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotifEvent;
 use App\Events\NotificationsEvent;
 use App\Jobs\SendEmail;
 use App\Mail\NotifMail;
@@ -102,14 +103,28 @@ class CutiController extends Controller
             'updated_at' => date('Y-m-d h:i:s')
         ]);
 
-        $message = request('status') == 'accept' ? 'menyetujui' : 'menolak';
+        if(request('status') == 'accept'){
+            NotifEvent::dispatch('Cuti anda disetujui', request('userId'));
+            $data = [
+                'message' => 'Cuti anda disetujui oleh ' . auth()->user()->email
+            ];
+            session()->flash('success', "Berhasil menyetujui cuti");
+        }elseif(request('status') == 'reject'){
+            NotifEvent::dispatch('Cuti anda ditolak', request('userId'));
+            $data = [
+                'message' => 'Cuti anda ditolak oleh' . auth()->user()->email
+            ];
 
-        NotificationsEvent::dispatch('Cuti anda disetujui', request('userId'));
+            session()->flash('success', "Berhasil menolak cuti");
+            
+        }else{
+            
+        }
 
-        session()->flash('success', "Berhasil ".$message." cuti");
-
+        Mail::to(request('userEmail'))->send(new NotifMail($data));
+        
         return response()->json([
-            'success' => true
+            'success' => true, 
         ]);
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\NotifEvent;
 use App\Events\NotificationsEvent;
 use App\Http\Controllers\{AccountController, KehadiranController, AuthController, BoardController, CutiController};
 use App\Http\Controllers\{DashboardController, PengumumanController, PollingController, TaskController};
@@ -133,7 +134,7 @@ Route::get('/', function () {
 });
 
 Route::get('/event', function () {
-    NotificationsEvent::dispatch('anjay', 17);
+    return NotifEvent::dispatch('Pagi bang', 32);
     return'ok';
 });
 

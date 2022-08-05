@@ -16,10 +16,11 @@ class NotifMail extends Mailable
      *
      * @return void
      */
-    public $message;
-    public function __construct($message)
+    public $data;
+    
+    public function __construct($data)
     {
-        $this->message = $message;
+        $this->data = $data;
     }
 
     /**
@@ -29,6 +30,6 @@ class NotifMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('mail.notifmail');
     }
 }

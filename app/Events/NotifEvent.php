@@ -7,10 +7,11 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NotificationsEvent implements ShouldBroadcast
+class NotifEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,15 +20,13 @@ class NotificationsEvent implements ShouldBroadcast
      *
      * @return void
      */
-
     public $message;
     public $channel;
 
     public function __construct($message, $userId)
     {
         $this->message = $message;
-        
-        $this->channel = 'notifications'.$userId;
+        $this->channel = 'notifications' . $userId;
     }
 
     /**

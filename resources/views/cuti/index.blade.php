@@ -34,8 +34,8 @@
                             <td>{{  date_format($date, 'Y-m-d') }}</td>
                             <td><span class="text-capitalize badge {{ ($value->status == 'waiting') ? 'badge-warning' : (($value->status == 'accept') ? 'badge-success' : 'badge-danger')}}">{{ $value->status }}</span>  </td>
                             <td>
-                                <button class="btn btn-primary" onclick="confirmAccept({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}')">Setujui</button>  
-                                <button class="btn btn-danger" onclick="confirmReject({{ $value->id }}, '{{ $value->user->name }}')">Tolak</button>  
+                                <button class="btn btn-primary" onclick="confirmAccept({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}', '{{ $value->user->email }}')">Setujui</button>  
+                                <button class="btn btn-danger" onclick="confirmReject({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}', '{{ $value->user->email }}')">Tolak</button>  
                             </td>
                                 </tr>
                     @endforeach
@@ -49,7 +49,7 @@
 
 @push('scripts')
     <script>
-        confirmAccept = function (id, name, userId){
+        confirmAccept = function (id, name, userId, userEmail){
             let url = '{{ route("cuti.update", ":id") }}'
             Swal.fire({
             title: 'Are you sure?',
@@ -74,14 +74,17 @@
                         _token: '{{ csrf_token() }}',
                         status: 'accept',
                         keterangan: result.value,
-                        userId
+                        userId,
+                        userEmail
                     },
                     success: function (res){
+                        console.log
                         if(res.success){
                             location.reload();
                         }
                     },
                     error: function (err){
+                        console.log(err)
                         Swal.fire('Error', 'err', 'error');
                     }
                 })
@@ -89,7 +92,7 @@
           })
         }
 
-        confirmReject = function (id, name, userId){
+        confirmReject = function (id, name, userId, userEmail){
             let url = '{{ route("cuti.update", ":id") }}'
             Swal.fire({
             title: 'Are you sure?',
@@ -103,7 +106,7 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Setujui!'
+            confirmButtonText: 'Ya, Tolak!'
         }).then((result) => {
             if (result.isConfirmed) {
                 url = url.replace(':id', id)
@@ -114,7 +117,8 @@
                         _token: '{{ csrf_token() }}',
                         status: 'reject',
                         keterangan: result.value,
-                        userId
+                        userId,
+                        userEmail
                     },
                     success: function (res){
                         if(res.success){
@@ -122,6 +126,7 @@
                         }
                     },
                     error: function (err){
+                        console.log(err)
                         Swal.fire('Error', 'err', 'error');
                     }
                 })

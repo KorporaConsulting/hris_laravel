@@ -1,4 +1,4 @@
 <div>
-    anjay
-    {{-- {{$pesan}} --}}
+    {{ $data['message']}}
+    
 </div>
