@@ -63,6 +63,17 @@ class PollingController extends Controller
 
     public function show (Polling $polling){
 
+        $polling->load(['options', 'created_by']);
+
         return view('polling.show', compact('polling'));
     }
+
+    public function destroy ($pollingId)
+    {
+        Polling::whereId($pollingId)->delete();
+        
+        return redirect()->route('polling.index')->with('success', 'Berhasil menghapus Polling');
+    }
+
+    
 }

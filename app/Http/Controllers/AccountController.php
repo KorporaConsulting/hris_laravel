@@ -32,10 +32,10 @@ class AccountController extends Controller
         }
 
         User::where('id', auth()->id())->update([
-            'name' => request('name'),
-            'email' => request('email'),
-            'divisi' => request('divisi'),
-            'img' => $profile
+            'name'      => request('name'),
+            'email'     => request('email'),
+            'divisi'    => request('divisi'),
+            'img'       => $profile
         ]);
 
         Karyawan::where('user_id', auth()->id())->update(request()->only([
@@ -59,8 +59,7 @@ class AccountController extends Controller
     public function store()
     {
 
-
-        // return request()->all();
+        return request()->all();
 
         $user = [
             'name'          => request('name'),

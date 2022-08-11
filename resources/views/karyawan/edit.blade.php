@@ -7,7 +7,7 @@
             <div class="card-header">
                 <h4>Edit Data {{ $user->name }}</h4>
             </div>
-            <form action="{{ route('account.store') }}" method="post">
+            <form action="{{ route('karyawan.update', $user->id) }}" method="post">
                 @csrf
                 @method('patch')
                 <div class="card-body">
@@ -85,10 +85,9 @@
                                 tetap') ? 'selected' : '' }}>Pekerja Tetap</option>
                             <option value="kontrak" {{ strtolower($user->status_pekerja) == strtolower('kontrak') ?
                                 'selected' : '' }}>Kontrak</option>
-                            <option value="probation" {{ strtolower($user->status_pekerja) == strtolower('pekerja
-                                tetap') ? 'selected' : '' }}>Pekerja Tetap</option>
-                            <option value="freelance" {{ strtolower($user->status_pekerja) == strtolower('kontrak') ?
-                                'selected' : '' }}>Kontrak</option>
+                            <option value="probation" {{ strtolower($user->status_pekerja) == strtolower('probation') ? 'selected' : '' }}>Probation</option>
+                            <option value="freelance" {{ strtolower($user->status_pekerja) == strtolower('freelance') ?
+                                'selected' : '' }}>Freelance</option>
                         </select>
                     </div>
                     @if (strtolower($user->status_pekerja) != strtolower('pekerja tetap'))
@@ -116,10 +115,10 @@
                         <label for="level">Pilih Level</label>
                         <select name="level" id="level" class="form-control">
                             <option value="" selected disabled>Pilih Level</option>
-                            <option value="staff">Staff</option>
-                            <option value="manager">Manager</option>
-                            <option value="hrd">HRD</option>
-                            <option value="direktur">Direktur</option>
+                            <option value="staff" {{ $user->role == 'staff' ? 'selected' : ''}} >Staff</option>
+                            <option value="manager" {{ $user->role == 'manager' ? 'selected' : ''}} >Manager</option>
+                            <option value="hrd" {{ $user->role == 'hrd' ? 'selected' : ''}} >HRD</option>
+                            <option value="direktur" {{ $user->role == 'direktur' ? 'selected' : ''}} >Direktur</option>
                         </select>
                     </div>
                     <div class="text-right">

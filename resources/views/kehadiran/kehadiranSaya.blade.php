@@ -14,17 +14,24 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12 mb-3">
-            <div id="demo"></div>
-            <div id="map"></div>
+    <div class="card">
+        <div class="card-header">
+            <h4>Absen</h4>
         </div>
-        <div class="col-12">
-            @if ($absen)
-                <div><a href="{{ route('kehadiran.present') }}" class="btn btn-primary">Absen</a></div>
-            @else
-                <div>{{ $message }}</div>
-            @endif
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <div id="demo"></div>
+                    <div id="map"></div>
+                </div>
+                <div class="col-12">
+                    @if ($absen)
+                    <div><a href="{{ route('kehadiran.present') }}" class="btn btn-primary">Absen</a></div>
+                    @else
+                    <div>{{ $message }}</div>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 </div>

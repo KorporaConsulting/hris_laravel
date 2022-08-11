@@ -26,10 +26,7 @@ class role_permission extends Seeder
         // ], ['name', 'guard_name']);
 
 
-        $role = Role::find(3);
-        $role->givePermissionTo(['cuti.read']);
-        $role = Role::find(4);
-        $role->givePermissionTo(['cuti.read']);
+        
         
         // $role = Role::find(3);
         // $role->givePermissionTo('pengumuman.create');

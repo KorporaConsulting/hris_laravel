@@ -4,7 +4,7 @@ use App\Events\NotifEvent;
 use App\Events\NotificationsEvent;
 use App\Http\Controllers\{AccountController, KehadiranController, AuthController, BoardController, CutiController};
 use App\Http\Controllers\{DashboardController, PengumumanController, PollingController, TaskController};
-use App\Http\Controllers\{DivisiController, KaryawanController, KPIController, UserController, ProjectController, TestController};
+use App\Http\Controllers\{DivisiController, EventController, KaryawanController, KPIController, UserController, ProjectController, TestController};
 use App\Mail\NotifMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -73,9 +73,11 @@ Route::middleware('auth')->group(function(){
     // Route::post('/karyawan', [KaryawanController::class, 'store'])->name('karyawan.store');
 
     Route::get('karyawan', [KaryawanController::class, 'index'])->name('karyawan.index');
+    Route::post('karyawan/csv-store', [KaryawanController::class, 'csvStore'])->name('karyawan.csvStore');
     Route::get('karyawan/{userId}', [KaryawanController::class, 'show'])->name('karyawan.show');
-    Route::get('karyawan/{userId}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
-    
+    Route::get('karyawan/{userId}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit')->middleware('permission:karyawan.update');
+    Route::patch('karyawan/{userId}', [KaryawanController::class, 'update'])->name('karyawan.update');
+    Route::delete('karyawan/{userId}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
 
     
         Route::get('karyawan/{userId}/kpi', [KPIController::class, 'index'])->name('karyawan.kpi.index');
@@ -105,6 +107,7 @@ Route::middleware('auth')->group(function(){
     Route::post('polling/store', [PollingController::class, 'store'])->name('polling.store');
     Route::get('polling/{polling:id}', [PollingController::class, 'show'])->name('polling.show');
     Route::put('polling/vote', [PollingController::class, 'vote'])->name('polling.vote');
+    Route::delete('polling/{pollingId}', [PollingController::class, 'destroy'])->name('polling.destroy');
     
     // Project
     Route::get('project', [ProjectController::class, 'index'])->name('project.index');
@@ -124,19 +127,25 @@ Route::middleware('auth')->group(function(){
     Route::post('task/store', [TaskController::class, 'store'])->name('task.store');
     Route::patch('task/{taskId}/update', [TaskController::class, 'update'])->name('task.update');
 
+    Route::get('event', [EventController::class, 'index'])->name('event.index');
+    Route::post('event/action', [EventController::class, 'action'])->name('event.action');
+    Route::get('event/create', [EventController::class, 'create'])->name('event.create');
+    Route::post('event', [EventController::class, 'store'])->name('event.store');
+    
 });
+
 Route::get('/sendmail', function(){
     Mail::to('ramaramarama009@gmail.com')->send(new NotifMail('test'));
 });
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::redirect('/', 'login');
 
-Route::get('/event', function () {
-    return NotifEvent::dispatch('Pagi bang', 32);
-    return'ok';
-});
+// Route::get('/event', function () {
+//     return NotifEvent::dispatch('Pagi bang', 32);
+//     return'ok';
+// });
 
 
-Route::get('test', TestController::class);
+// Route::get('test', TestController::class);
+
+

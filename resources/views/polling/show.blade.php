@@ -9,7 +9,20 @@
                 <h4>Polling</h4>
             </div>
             <div class="card-body">
-                
+                <div class="form-group">
+                    <label for="">{{ $polling->judul }}</label>
+                </div>
+                <div class="form-group">
+                    <label for="judul" class="form-label">Opsi</label></>
+                    <ul>
+                        @foreach ($polling->options as $option)
+                            <li>{{ $option->opsi }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="form-group">
+                    Created By : {{ $polling->created_by->name }}
+                </div>
             </div>
         </div>
     </div>

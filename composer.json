@@ -11,6 +11,7 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "maatwebsite/excel": "^3.1",
         "pusher/pusher-php-server": "^7.0",
         "spatie/laravel-permission": "^5.5",
         "unsplash/unsplash": "^3.2"

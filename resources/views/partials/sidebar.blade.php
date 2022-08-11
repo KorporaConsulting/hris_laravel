@@ -21,7 +21,7 @@
                     Divisi</span></a>
         </li> --}}
         <li class="menu-header">Kehadiran</li>
-        <li class="dropdown {{ request()->routeIs('cuti.*') ? 'active' : ''  }}">
+        <li class="dropdown {{ request()->routeIs('Kehadiran.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-chalkboard-teacher"></i>
                 <span>Kehadiran</span></a>
             <ul class="dropdown-menu">
@@ -37,7 +37,7 @@
         </li>
         <li class="menu-header">Pengumuman</li>
         @canany(['pengumuman.create', 'pengumuman.update', 'pengumuman.delete'])
-        <li class="dropdown {{ request()->routeIs('cuti.*') ? 'active' : ''  }}">
+        <li class="dropdown {{ request()->routeIs('pengumuman.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-bullhorn"></i>
                 <span>Pengumuman</span></a>
             <ul class="dropdown-menu">
@@ -51,7 +51,7 @@
         </li>
 
         @endcanany
-        <li class="dropdown {{ request()->routeIs('cuti.*') ? 'active' : ''  }}">
+        <li class="dropdown {{ request()->routeIs('project.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-tasks"></i>
                 <span>Task</span></a>
             <ul class="dropdown-menu">
@@ -62,7 +62,7 @@
         </li>
         @canany(['polling.create', 'polling.read', 'polling.update', 'polling.delete'])
 
-        <li class="dropdown {{ request()->routeIs('cuti.*') ? 'active' : ''  }}">
+        <li class="dropdown {{ request()->routeIs('polling.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-table"></i>
                 <span>Polling</span></a>
             <ul class="dropdown-menu">
@@ -79,19 +79,25 @@
             </ul>
         </li>
         @endcanany
-        <li class="menu-header">Karyawan</li>
-        @can('karyawan.read')
-        <li class="nav-item {{ request()->routeIs('karyawan.index') ? 'active' : ''  }}">
-            <a class="nav-link" href="{{ route('karyawan.index') }}"><i class="fas fa-users"></i> <span>List
-                    Karyawan</span></a>
+        {{-- @canany(['polling.create', 'polling.read', 'polling.update', 'polling.delete']) --}}
+
+        <li class="dropdown {{ request()->routeIs('event.*') ? 'active' : ''  }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-calendar-alt"></i>
+                <span>Calendar</span></a>
+            <ul class="dropdown-menu">
+                {{-- @can('event.read') --}}
+                <li class="nav-item {{ request()->routeIs('event.index') ? 'active' : ''  }}">
+                    <a class="nav-link" href="{{ route('event.index') }}"><span> Calendar</span></a>
+                </li>
+                {{-- @endcan --}}
+                {{-- @can('polling.create') --}}
+                <li class="nav-item {{ request()->routeIs('event.create') ? 'active' : ''  }}">
+                    <a class="nav-link" href="{{ route('event.create') }}"><span> Buat Event (Advanced)</span></a>
+                </li>
+                {{-- @endcan --}}
+            </ul>
         </li>
-        @endcan
-        @can('karyawan.create')
-        <li class="nav-item {{ request()->routeIs('karyawan.create') ? 'active' : ''  }}">
-            <a class="nav-link" href="{{ route('karyawan.create') }}"><i class="fas fa-user-plus"></i> <span>Tambah
-                    Karyawan</span></a>
-        </li>
-        @endcan
+        {{-- @endcanany --}}
         <li class="dropdown {{ request()->routeIs('cuti.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
                 <span>Cuti</span></a>
@@ -108,6 +114,23 @@
                         href="{{ route('cuti.show') }}">Cuti Saya</a></li>
                 <li class="{{ request()->routeIs('cuti.create') ? 'active' : ''  }}"><a class="nav-link"
                         href="{{ route('cuti.create') }}">Ajukan Cuti</a></li>
+            </ul>
+        </li>
+        <li class="menu-header">Karyawan</li>
+        <li class="dropdown {{ request()->routeIs('karyawan.*') ? 'active' : ''  }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i>
+                <span>Karyawan</span></a>
+            <ul class="dropdown-menu">
+                {{-- @can ('manage_cuti_manager') --}}
+                {{-- <li class="{{ request()->routeIs('cuti.manager') ? 'active' : ''  }}"><a class="nav-link"
+                        href="{{ route('cuti.manager') }}">Cuti Manager</a></li> --}}
+                {{-- @endcan --}}
+                @can ('cuti.read')
+                <li class="{{ request()->routeIs('karyawan.index') ? 'active' : ''  }}"><a class="nav-link"
+                        href="{{ route('karyawan.index') }}">List Karyawan</a></li>
+                @endcan
+                <li class="{{ request()->routeIs('karyawan.create') ? 'active' : ''  }}"><a class="nav-link"
+                        href="{{ route('karyawan.create') }}">Tambah Karyawan</a></li>
             </ul>
         </li>
         {{-- <li class="dropdown {{ request()->routeIs('kpi.*') ? 'active' : ''  }}">

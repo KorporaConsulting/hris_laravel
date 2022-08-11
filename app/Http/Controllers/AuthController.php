@@ -39,14 +39,20 @@ class AuthController extends Controller
                 if(empty($query)){
                     DB::table('kehadiran')->insert(['user_id' => auth()->id(), 'created_at' => date('Y-m-d H:i:s')]);
                 }
-
             }
+
+            
             return redirect()->intended(route('user.dashboard'));
         }
  
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
+    }
+
+    public function resetPassword()
+    {
+        return view('account.resetPassword');
     }
 
     public function logout () 
