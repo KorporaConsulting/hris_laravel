@@ -90,18 +90,18 @@
                                 'selected' : '' }}>Freelance</option>
                         </select>
                     </div>
-                    @if (strtolower($user->status_pekerja) != strtolower('pekerja tetap'))
-                    <div class="form-group" id="lama_kontrak_group">
+                    {{-- @if (strtolower($user->status_pekerja) != strtolower('pekerja tetap')) --}}
+                    <div class="form-group {{ strtolower($user->status_pekerja) == strtolower('pekerja tetap') ? 'd-none' : '' }}" id="lama_kontrak_group">
                         <label for="lama_kontrak">Lama Kontrak (Bulan)</label>
                         <input type="number" name="lama_kontrak" class="form-control" id="lama_kontrak"
                             value="{{ $user->lama_kontrak }}">
                     </div>
-                    <div class="form-group" id="lama_kontrak_group">
+                    {{-- <div class="form-group d-none" id="lama_kontrak_group">
                         <label for="habis_kontrak">Habis Kontrak</label>
                         <input type="date" name="habis_kontrak" class="form-control" id="habis_kontrak"
                             value="{{ $user->habis_kontrak }}" disabled>
-                    </div>
-                    @endif
+                    </div> --}}
+                    {{-- @endif --}}
                     {{-- <div class="form-group">
                         <label for="divisi">Pilih Divisi</label>
                         <select name="divisi" id="divisi" class="form-control">
@@ -137,7 +137,7 @@
     $(function(){
             
             $('#status_user').change(function(){
-                if($('#status_user').val() != 'pekerja tetap'){
+                if($(this).val() != 'pekerja tetap'){
                     $('#lama_kontrak_group').removeClass('d-none')
                 }else{
                     $('#lama_kontrak_group').addClass('d-none')

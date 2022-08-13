@@ -71,16 +71,17 @@ class KaryawanController extends Controller
             'email' => request('email')
         ];
 
-        $user = User::where('id', $userId)->update($userUpdate);
+        $user = User::find($userId);
+        $user->update($userUpdate);
 
         if (request('level') == 'manager') {
-            $user->assignRole('manager');
+            $user->syncRoles('manager');
         } elseif (request('level') == 'staff') {
-            $user->assignRole('staff');
+            $user->syncRoles('staff');
         } elseif (request('level') == 'hrd') {
-            $user->assignRole('hrd');
+            $user->syncRoles('hrd');
         } elseif (request('level') == 'direktur') {
-            $user->assignRole('direktur');
+            $user->syncRoles('direktur');
         }
 
         $karyawan = [

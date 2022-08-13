@@ -25,4 +25,11 @@ class ProjectController extends Controller
             'success' => true
         ]);
     }
+
+    public function destroy ($projectId)
+    {
+        Project::whereId($projectId)->delete();
+        
+        return redirect()->route('project.index')->with('success', "Berhasil menghapus project");
+    }
 }

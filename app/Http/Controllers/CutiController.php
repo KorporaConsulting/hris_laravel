@@ -96,20 +96,26 @@ class CutiController extends Controller
 
     public function update ($id)
     {
-        Cuti::where('id', $id)->update([
-            'nama_atasan' => auth()->user()->name,
-            'keterangan_atasan' => request('keterangan'),
-            'status' => request('status'),
-            'updated_at' => date('Y-m-d h:i:s')
-        ]);
+        $cuti = Cuti::find($id);
+        
 
         if(request('status') == 'accept'){
             NotifEvent::dispatch('Cuti anda disetujui', request('userId'));
+
+            if ($cuti->status != 'accept') {
+                Karyawan::where('user_id', request('userId'))->decrement('sisa_cuti', $cuti->lama_cuti);
+            }
+            
             $data = [
                 'message' => 'Cuti anda disetujui oleh ' . auth()->user()->email
             ];
             session()->flash('success', "Berhasil menyetujui cuti");
         }elseif(request('status') == 'reject'){
+
+            if($cuti->status == 'accept'){
+                Karyawan::where('user_id', request('userId'))->increment('sisa_cuti', $cuti->lama_cuti);
+            }
+
             NotifEvent::dispatch('Cuti anda ditolak', request('userId'));
             $data = [
                 'message' => 'Cuti anda ditolak oleh' . auth()->user()->email
@@ -117,9 +123,15 @@ class CutiController extends Controller
 
             session()->flash('success', "Berhasil menolak cuti");
             
-        }else{
-            
         }
+
+
+
+        $cuti->update([
+            'nama_atasan' => auth()->user()->name,
+            'keterangan_atasan' => request('keterangan'),
+            'status' => request('status'),
+        ]);
 
         Mail::to(request('userEmail'))->send(new NotifMail($data));
         

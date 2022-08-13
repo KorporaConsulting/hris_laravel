@@ -2,9 +2,9 @@
 
 use App\Events\NotifEvent;
 use App\Events\NotificationsEvent;
-use App\Http\Controllers\{AccountController, KehadiranController, AuthController, BoardController, CutiController};
+use App\Http\Controllers\{AccountController, KehadiranController, AuthController, BoardController, CronController, CutiController};
 use App\Http\Controllers\{DashboardController, PengumumanController, PollingController, TaskController};
-use App\Http\Controllers\{DivisiController, EventController, KaryawanController, KPIController, UserController, ProjectController, TestController};
+use App\Http\Controllers\{DivisiController, EventController, KaryawanController, KPIController, MailController, UserController, ProjectController, TestController};
 use App\Mail\NotifMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -113,31 +113,33 @@ Route::middleware('auth')->group(function(){
     Route::get('project', [ProjectController::class, 'index'])->name('project.index');
     Route::get('project/create', [ProjectController::class, 'create'])->name('project.create');
     Route::post('project/store', [ProjectController::class, 'store'])->name('project.store');
+    Route::delete('project/{projectId}', [ProjectController::class, 'destroy'])->name('project.destroy');
 
         // Board
         Route::post('project/{projectId}/store', [BoardController::class, 'store'])->name('project.board.store');
         Route::post('project/{projectId}/store/default', [BoardController::class, 'storeDefault'])->name('project.board.storeDefault');
         Route::patch('project/{projectId}/board/{boardId}', [BoardController::class, 'update'])->name('project.board.update');
-        
+        Route::delete('project/{projectId}/board/{boardId}', [BoardController::class, 'destroy'])->name('project.board.destroy');
+
         // Task
         Route::get('project/{projectId}/task', [TaskController::class, 'index'])->name('project.task.index');
         Route::get('project/{projectId}/task/create', [TaskController::class, 'create'])->name('project.task.create');
         Route::post('project/{projectId}/task/store', [TaskController::class, 'store'])->name('project.task.store');
 
     Route::post('task/store', [TaskController::class, 'store'])->name('task.store');
-    Route::patch('task/{taskId}/update', [TaskController::class, 'update'])->name('task.update');
+    Route::patch('task/{taskId}', [TaskController::class, 'update'])->name('task.update');
+    Route::delete('task/{taskId}', [TaskController::class, 'destroy'])->name('task.destroy');
 
     Route::get('event', [EventController::class, 'index'])->name('event.index');
     Route::post('event/action', [EventController::class, 'action'])->name('event.action');
     Route::get('event/create', [EventController::class, 'create'])->name('event.create');
     Route::post('event', [EventController::class, 'store'])->name('event.store');
+    Route::patch('event', [EventController::class, 'update'])->name('event.update');
     
 });
 
-Route::get('/sendmail', function(){
-    Mail::to('ramaramarama009@gmail.com')->send(new NotifMail('test'));
-});
-
+Route::get('send-event-today', [CronController::class, 'sendEventToday']);
+Route::get('mail', MailController::class);
 Route::redirect('/', 'login');
 
 // Route::get('/event', function () {

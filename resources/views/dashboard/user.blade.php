@@ -43,7 +43,7 @@
             </div>
         </div>
     </div> --}}
-    <div class="col-6">
+    <div class="col-12 col-lg-6">
         <div class="card">
             <div class="card-header">
                 <h4 id="pengumuman">Pengumuman</h4>
@@ -63,7 +63,7 @@
         @endforelse
         
     </div>
-    <div class="col-6">
+    <div class="col-12 col-lg-6">
         <div class="card">
             <div class="card-header">
                 <h4 id="polling">Polling</h4>

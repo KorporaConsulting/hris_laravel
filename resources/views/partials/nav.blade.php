@@ -15,10 +15,10 @@
           </a>
           {{-- <a href="features-activities.html" class="dropdown-item has-icon">
             <i class="fas fa-bolt"></i> Activities
-          </a>
-          <a href="features-settings.html" class="dropdown-item has-icon">
-            <i class="fas fa-cog"></i> Settings
           </a> --}}
+          <a href="features-settings.html" class="dropdown-item has-icon">
+            <i class="fas fa-cog"></i> Change Password
+          </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item has-icon text-danger" onclick="logout()">
             <i class="fas fa-sign-out-alt"></i> Logout

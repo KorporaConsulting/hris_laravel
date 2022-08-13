@@ -9,7 +9,13 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $with = ['user'];
+
     protected $table = 'task';
 
     protected $guarded = ['id'];
+
+    public function user (){
+        return $this->belongsTo(User::class);
+    }
 }

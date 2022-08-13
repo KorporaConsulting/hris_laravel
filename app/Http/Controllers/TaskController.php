@@ -28,19 +28,29 @@ class TaskController extends Controller
 
     public function store ()
     {
-        Task::create(request()->except('_token'));
+        $task = Task::create(request()->except('_token'));
 
         return response()->json([
-            'success' => 'true'
+            'success' => 'true',
+            'data' => $task
         ]);
 
     }
     public function update($taskId){
         
-        Task::where('id', $taskId)->update(request()->except('_token'));
+        Task::whereId($taskId)->update(request()->except('_token'));
 
         return response()->json([
             'success' => 'true'
+        ]);
+    }
+
+    public function destroy ($taskId){
+
+        Task::where('id', $taskId)->delete();
+
+        return response()->json([
+            'success' => true
         ]);
     }
 }

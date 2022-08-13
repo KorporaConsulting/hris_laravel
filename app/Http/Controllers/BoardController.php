@@ -66,4 +66,21 @@ class BoardController extends Controller
             'success' => true
         ]);
     }
+
+
+    public function destroy($projectId, $boardId){
+
+        $where = [
+            'id'            => $boardId,
+            'project_id'    => $projectId
+        ];
+
+        Board::where($where)->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil mengahpus board'
+        ]);
+
+    }
 }

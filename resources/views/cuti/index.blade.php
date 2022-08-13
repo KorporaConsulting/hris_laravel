@@ -2,7 +2,15 @@
     'page' => 'list cuti ' . auth()->user()->name
 ])
 
+@section('head')
+
+@endsection
+
+
 @section('content')
+<section>
+    
+</section>
 <div class="card">
     <div class="card-header">
         <h4>List Cuti</h4>
@@ -34,8 +42,13 @@
                             <td>{{  date_format($date, 'Y-m-d') }}</td>
                             <td><span class="text-capitalize badge {{ ($value->status == 'waiting') ? 'badge-warning' : (($value->status == 'accept') ? 'badge-success' : 'badge-danger')}}">{{ $value->status }}</span>  </td>
                             <td>
-                                <button class="btn btn-primary" onclick="confirmAccept({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}', '{{ $value->user->email }}')">Setujui</button>  
-                                <button class="btn btn-danger" onclick="confirmReject({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}', '{{ $value->user->email }}')">Tolak</button>  
+                                {{-- Kalo Udah lewat 1 jam gabisa ubah status accept ke reject maupun sebaliknya --}}
+                                @if ($value->created_at != $value->updated_at && date('Y-m-d H:i:s', strtotime('+1hour '.$value->updated_at)) <= date('Y-m-d H:i:s'))
+                                    <button class="btn btn-info" type="button">Info</button>
+                                @else
+                                    <button class="btn btn-primary" onclick="confirmAccept({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}', '{{ $value->user->email }}')">Setujui</button>  
+                                    <button class="btn btn-danger" onclick="confirmReject({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}', '{{ $value->user->email }}')">Tolak</button>           
+                                @endif
                             </td>
                                 </tr>
                     @endforeach
@@ -49,6 +62,13 @@
 
 @push('scripts')
     <script>
+    $.ajaxSetup({
+            beforeSend: function(){
+                $('#preloader').fadeIn();
+                $('#ctn-preloader').addClass('no-scroll-y');
+            }
+        })
+
         confirmAccept = function (id, name, userId, userEmail){
             let url = '{{ route("cuti.update", ":id") }}'
             Swal.fire({

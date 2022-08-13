@@ -125,7 +125,7 @@
                 {{-- <li class="{{ request()->routeIs('cuti.manager') ? 'active' : ''  }}"><a class="nav-link"
                         href="{{ route('cuti.manager') }}">Cuti Manager</a></li> --}}
                 {{-- @endcan --}}
-                @can ('cuti.read')
+                @can ('karyawan.read')
                 <li class="{{ request()->routeIs('karyawan.index') ? 'active' : ''  }}"><a class="nav-link"
                         href="{{ route('karyawan.index') }}">List Karyawan</a></li>
                 @endcan

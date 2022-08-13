@@ -16,7 +16,7 @@ class EventController extends Controller
 
             $data = Event::whereDate('start', '>=', request('start'))
                 ->whereDate('end',   '<=', request('end'))
-                ->get(['id', 'title', 'start', 'end']);
+                ->get(['id', 'user_id', 'title', 'start', 'end', 'description']);
 
             return response()->json($data);
         }
