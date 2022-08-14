@@ -145,7 +145,7 @@
 				success: function(res){
 					console.log(localStorage.getItem('lastElement'))
 					if(res.success){
-						$(JSON.parse(localStorage.getItem('lastElement'))).attr('data-description', $('#detailTask textarea').html())
+						$(JSON.parse(localStorage.getItem('lastElement'))).attr('data-description', $('#detailTask textarea').val())
 						$('#detailTask').modal('hide');
 						toastr.success("Berhasil mengupdate task", 'Success');
 					}
@@ -193,7 +193,7 @@
 			$('#detailTask textarea').prop('readonly', true);
 			$('#detailTask b').html($(el).attr('data-createdBy'));
 			$('#detailTask button[type=submit]').hide()
-			$('#detailTask textarea').html($(el).attr('data-description'))
+			$('#detailTask textarea').val($(el).attr('data-description'))
 			$('#detailTask').modal('show');
 		}
 

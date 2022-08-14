@@ -2,9 +2,10 @@
 
 use App\Events\NotifEvent;
 use App\Events\NotificationsEvent;
-use App\Http\Controllers\{AccountController, KehadiranController, AuthController, BoardController, CronController, CutiController};
-use App\Http\Controllers\{DashboardController, PengumumanController, PollingController, TaskController};
-use App\Http\Controllers\{DivisiController, EventController, KaryawanController, KPIController, MailController, UserController, ProjectController, TestController};
+use App\Http\Controllers\{AccountController, KehadiranController, AuthController, BoardController, CronController};
+use App\Http\Controllers\{DashboardController, PengumumanController, PollingController, TaskController, CutiController};
+use App\Http\Controllers\{DivisiController, EventController, KaryawanController, KPIController};
+use App\Http\Controllers\{MailController, UserController, ProjectController, TestController};
 use App\Mail\NotifMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -20,13 +21,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('tester', function(){
-    return auth()->user();
-});
 
 
 // Authenticate
-
 Route::get('login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('loginPost');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -48,6 +45,8 @@ Route::middleware('auth')->group(function(){
     Route::patch('/account/update', [AccountController::class, 'update'])->name('account.update');
     Route::get('/account/create', [AccountController::class, 'create'])->name('karyawan.create');
     Route::post('/account', [AccountController::class, 'store'])->name('account.store');
+    Route::get('/account/change-password', [AccountController::class, 'changePassword'])->name('account.changePassword');
+    Route::patch('/account/update-password', [AccountController::class, 'updatePassword'])->name('account.updatePassword');
 
 
     // Cuti 
@@ -107,6 +106,8 @@ Route::middleware('auth')->group(function(){
     Route::post('polling/store', [PollingController::class, 'store'])->name('polling.store');
     Route::get('polling/{polling:id}', [PollingController::class, 'show'])->name('polling.show');
     Route::put('polling/vote', [PollingController::class, 'vote'])->name('polling.vote');
+    Route::get('polling/{polling:id}/edit', [PollingController::class, 'edit'])->name('polling.edit');
+    Route::patch('polling/{pollingId}', [PollingController::class, 'update'])->name('polling.update');
     Route::delete('polling/{pollingId}', [PollingController::class, 'destroy'])->name('polling.destroy');
     
     // Project
@@ -134,11 +135,12 @@ Route::middleware('auth')->group(function(){
     Route::post('event/action', [EventController::class, 'action'])->name('event.action');
     Route::get('event/create', [EventController::class, 'create'])->name('event.create');
     Route::post('event', [EventController::class, 'store'])->name('event.store');
-    Route::patch('event', [EventController::class, 'update'])->name('event.update');
+    Route::patch('event/{eventId}', [EventController::class, 'update'])->name('event.update');
     
 });
 
 Route::get('send-event-today', [CronController::class, 'sendEventToday']);
+Route::get('check-alpha', [CronController::class, 'checkAlpha']);
 Route::get('mail', MailController::class);
 Route::redirect('/', 'login');
 
@@ -148,6 +150,6 @@ Route::redirect('/', 'login');
 // });
 
 
-// Route::get('test', TestController::class);
+Route::get('test', TestController::class);
 
 

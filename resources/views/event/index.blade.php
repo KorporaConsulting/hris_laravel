@@ -27,7 +27,7 @@
     <div class="modal fade" id="detailEvent" tabindex="-1" aria-labelledby="detailEventLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('event.update') }}" method="post">
+                <form action="" method="post">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="detailEventLabel"></h5>
@@ -64,6 +64,24 @@
             $('#detailEvent').on('click', 'textarea', function(){
                 console.log($(this).prop('readonly', false));
                 $('#detailEvent button[type=submit]').show()
+            })
+
+            $('#detailEvent form').submit(function(){
+                event.preventDefault()
+                const data  = $(this).serializeArray();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'PATCH',
+                    data,
+                    dataType: 'json',
+                    success: function(res){
+                        if(res.success){
+                            $('#calendar').fullCalendar('refetchEvents')
+                            toastr.success('Berhasil mengupdate event', 'Success');
+                            $('#detailEvent').modal('hide');
+                        }
+                    }
+                })
             })
 
             var calendar = $('#calendar').fullCalendar({
@@ -202,9 +220,14 @@
                         });
                     },
                     eventClick: function (event) {
+                        console.log(event);
+                        let url = "{{ route('event.update', ':id') }}";
+                        url = url.replace(':id', event.id)
                         $('#detailEventLabel').html(event.title);
                         $('#detailEvent b').html(event.user.name);
-                        $('#detailEvent textarea').prop('readonly', true).html(event.description);
+                        $('#detailEvent form').attr('action', url);
+                        $('#detailEvent textarea').prop('readonly', true).val(event.description ?? '-');
+                        $('#detailEvent button[type=submit]').hide();
                         $('#detailEvent').modal('show');
                     }, 
                     // eventRender: function (event, element, view) {

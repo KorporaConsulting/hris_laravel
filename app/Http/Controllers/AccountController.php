@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\{Karyawan, User};
+use App\Rules\CheckOldPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
 {
@@ -56,10 +58,27 @@ class AccountController extends Controller
         ]);
     }
 
+    public function changePassword ()
+    {
+        return view('account.changePassword');
+    }
+
+    public function updatePassword ()
+    {
+        request()->validate([
+            'oldPassword' => ['required', new CheckOldPassword],
+            'newPassword' => ['required', 'confirmed', 'min:8']
+        ]);
+
+        User::whereId(auth()->id())->update(['password' => bcrypt(request('newPassword'))]);
+        
+        return redirect()->route('user.dashboard')->with('success', 'Berhasil mengganti password');
+    }
+
     public function store()
     {
 
-        return request()->all();
+        // return request()->all();
 
         $user = [
             'name'          => request('name'),

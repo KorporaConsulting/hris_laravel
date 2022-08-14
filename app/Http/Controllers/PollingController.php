@@ -61,12 +61,44 @@ class PollingController extends Controller
         ]);
     }
 
-    public function show (Polling $polling){
+    public function show (Polling $polling)
+    {
 
         $polling->load(['options', 'created_by']);
 
         return view('polling.show', compact('polling'));
     }
+
+    public function edit (Polling $polling)
+    {
+        $polling->load('options');
+
+        return view('polling.edit', compact('polling'));
+    }
+
+    public function update ($pollingId)
+    {
+
+        Polling::whereId($pollingId)->update(request(['judul', 'date_start', 'date_end']));
+
+        OpsiPolling::where('polling_id', $pollingId)->delete();
+
+        $option = [];
+
+        foreach (request('opsi') as $value) {
+            $option[] = [
+                'polling_id'    => $pollingId,
+                'opsi'          => $value
+            ];
+        }
+
+        OpsiPolling::upsert($option, [
+            'polling_id', 'opsi'
+        ]);
+
+        return redirect()->route('polling.index')->with('success', 'Berhasil mengupdate polling');
+    }
+
 
     public function destroy ($pollingId)
     {

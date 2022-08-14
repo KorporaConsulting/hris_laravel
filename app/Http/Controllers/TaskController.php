@@ -21,7 +21,7 @@ class TaskController extends Controller
             return response()->json($data);
         }
 
-        $defaultTemplate = Board::where('project_id', $projectId)->get()->count();
+        $defaultTemplate = Board::where('project_id', $projectId)->firstOrFail();
 
         return view('task.index', compact('projectId', 'defaultTemplate'));
     }

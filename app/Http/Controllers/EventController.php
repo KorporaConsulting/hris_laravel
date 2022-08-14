@@ -111,4 +111,13 @@ class EventController extends Controller
         // return request()->all();
         return redirect()->route('event.index')->with('success', 'Berhasil membuat event');
     }
+
+    public function update ($eventId)
+    {
+        Event::whereId($eventId)->update(request()->except('_token'));
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
 }

@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-12">
                     @if ($absen)
-                    <div><a href="{{ route('kehadiran.present') }}" class="btn btn-primary">Absen</a></div>
+                    <div><a href="{{ route('kehadiran.present') }}" class="btn btn-primary" id="absen">Absen</a></div>
                     @else
                     <div>{{ $message }}</div>
                     @endif
@@ -74,7 +74,7 @@
             contains: function (latLng) {
             return this.getLatLng().distanceTo(latLng) < this.getRadius(); } }); 
             var circle=L.circle([-6.315699800864124, 106.79691298625411],
-                250).addTo(map); 
+                100).addTo(map); 
                 map.fitBounds(circle.getBounds()); 
                 // map.on('click', function (e) {
                     // console.log
@@ -86,6 +86,7 @@
                         
                     }else{
                         Swal.fire('Pemberitahuan', 'Anda berada diluar jangkauan', 'warning');
+                        $('#absen').addClass('disabled');
                     }
                 // }); 
               

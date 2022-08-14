@@ -12,4 +12,6 @@ class OpsiPolling extends Model
     protected $table = 'opsi_polling';
 
     protected $guarded = ['id'];
+
+    public $timestamps = false;
 }

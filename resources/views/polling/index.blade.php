@@ -23,6 +23,7 @@
                     <td>{{ $polling->created_by->name }}</td>
                     <td>
                         <a href="{{ route('polling.show', $polling->id) }}" class="btn btn-primary">Detail</a>
+                        <a href="{{ route('polling.edit', $polling->id) }}" class="btn btn-success">Edit</a>
                         <button class="btn btn-danger" type="button" onclick="destroy('{{ $polling->id }}')">Delete</button>
                         <form action="{{ route('polling.destroy', $polling->id) }}" method="post" id="form-{{$polling->id}}">
                             @csrf
