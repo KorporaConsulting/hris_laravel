@@ -16,7 +16,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->exec('curl http://localhost:8000/check-alpha')->everyMinute();
+        $schedule->exec('curl http://localhost:8000/check-alpha')->weekdays()->at('17:00');
+        $schedule->exec('curl http://localhost:8000/cuti-bulanan')->monthly();
     }
 
     /**

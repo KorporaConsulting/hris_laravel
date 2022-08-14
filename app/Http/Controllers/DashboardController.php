@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Karyawan;
+use App\Models\Kehadiran;
 use App\Models\Pengumuman;
 use App\Models\Polling;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ class DashboardController extends Controller
 {
     public function user ()
     {
+
         $user = User::where('users.id', auth()->id())
             ->select('users.name', 'divisi.divisi', 'karyawan.status_pekerja', 'karyawan.no_hp')
             ->leftJoin('karyawan', 'karyawan.user_id', '=', 'users.id')
@@ -34,7 +36,9 @@ class DashboardController extends Controller
             ->withCount('answers')
             ->get();
 
-        
-        return view('dashboard.user', compact('user', 'announcements', 'pollings'));
+
+        $presents = Kehadiran::where('user_id', auth()->id())->get()->groupBy('type');
+
+        return view('dashboard.user', compact('user', 'announcements','pollings', 'presents'));
     }
 }

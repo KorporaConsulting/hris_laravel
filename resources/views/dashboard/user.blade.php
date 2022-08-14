@@ -10,7 +10,7 @@
                 <div class="row">
                     <div class="col-12">
                         <h3 class="mb-3">Selamat Datang {{ auth()->user()->name }} ({{ auth()->user()->getRoleNames()[0] }})</h3>
-
+                        
                         <ul>
                             <li><a href="#pengumuman">Pengumuman</a></li>
                             <li><a href="#polling">Polling</a></li>
@@ -20,29 +20,17 @@
             </div>
         </div>
     </div>
-    {{-- <div class="col-6">
+    <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
-                <h4>Task</h4>
+                <h4>Absensi</h4>
             </div>
             <div class="card-body">
-                <div class="alert alert-primary">Menghitung Nilai</div>
-                <div class="alert alert-primary">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis molestias maxime alias dicta atque dolorum nam, autem doloremque cupiditate recusandae temporibus neque deleniti, tenetur praesentium debitis quo unde impedit. Ab.</div>
-                <div class="alert alert-primary">Menghitung Nilai</div>
-                <div class="alert alert-primary">Menghitung Nilai</div>
+            <canvas id="absensiChart" width="400" height="400"></canvas>
             </div>
         </div>
     </div>
-    <div class="col-6">
-        <div class="card">
-            <div class="card-header">
-                <h4>Utility</h4>
-            </div>
-            <div class="card-body">
-                <h3>Selamat Datang {{ auth()->user()->name }}</h3>
-            </div>
-        </div>
-    </div> --}}
+    <div class="col-lg-8"></div>
     <div class="col-12 col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -144,6 +132,37 @@
                 }
             })
         })
+
+        // let obj = new Obj({!! $presents !!});
+
+        let absensiData = {!! $presents !!};
+
+        const labels = ['hadir', 'cuti', 'alpha', 'telat'];
+
+        const data = [];
+
+        labels.forEach(e => {
+            data.push(absensiData[e]?.length ?? 0);
+        })
+
+        const ctx = document.getElementById('absensiChart');
+        const absensiChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'My First Dataset',
+                    data,
+                    backgroundColor: [
+                        'rgb(54, 162, 235)',
+                        'rgb(85, 239, 196)',
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 205, 86)'
+                    ],
+                    hoverOffset: 4
+                }]
+            }
+        });
     </script>
 @endpush
 

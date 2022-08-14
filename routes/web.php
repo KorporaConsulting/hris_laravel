@@ -141,6 +141,7 @@ Route::middleware('auth')->group(function(){
 
 Route::get('send-event-today', [CronController::class, 'sendEventToday']);
 Route::get('check-alpha', [CronController::class, 'checkAlpha']);
+Route::get('cuti-bulanan', [CronController::class, 'cutiBulanan']);
 Route::get('mail', MailController::class);
 Route::redirect('/', 'login');
 

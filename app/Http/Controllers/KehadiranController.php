@@ -67,7 +67,7 @@ class KehadiranController extends Controller
                 $holiday = collect($response->data->holiday->data);
                 $hasHoliday = $holiday->where('day', date('d'));
 
-                if ($hasHoliday->isNotEmpty()) {
+                if ($hasHoliday->isNotEmpty() || (strtolower(date('l')) == 'saturday' || strtolower(date('l')) == 'sunday')) {
                     $absen = false;
                     $message = 'Hari libur, tidak bisa absensi';
                 }
