@@ -125,4 +125,28 @@ class KaryawanController extends Controller
         return redirect()->route('karyawan.index')->with('success', 'Berhasil');
         
     }
+
+    public function trash()
+    {
+        return view('karyawan.trash', [
+            'employees' => User::with('karyawan')->onlyTrashed()->get()
+        ]);
+    }
+
+
+    public function restore ($userId)
+    {
+        User::withTrashed()->find($userId)->restore();
+        Karyawan::withTrashed()->where('user_id', $userId)->restore();
+
+        return redirect()->route('trash.karyawan')->with('success', 'Berhasil mengembalikan data karyawan');
+    }
+
+    public function restoreAll ()
+    {
+        User::onlyTrashed()->restore();
+        Karyawan::onlyTrashed()->restore();
+
+        return redirect()->route('trash.karyawan')->with('success', 'Berhasil mengembalikan data karyawan');
+    }
 }

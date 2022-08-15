@@ -14,4 +14,10 @@ class OpsiPolling extends Model
     protected $guarded = ['id'];
 
     public $timestamps = false;
+
+
+    public function answers ()
+    {
+        return $this->hasMany(JawabanPolling::class, 'opsi_id', 'id');
+    }
 }

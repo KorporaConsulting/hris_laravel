@@ -79,10 +79,17 @@ class KehadiranController extends Controller
 
     public function present()
     {
+        $kehadiran = [
+            'user_id' => auth()->id(),
+        ];
 
-        Kehadiran::create([
-            'user_id' => auth()->id()
-        ]);
+        if(strtotime(date('H:i')) > strtotime('08:00')){
+            $kehadiran['type'] = 'telat';
+        }else{
+            $kehadiran['type'] = 'hadir';
+        }
+
+        Kehadiran::create($kehadiran);
 
         return redirect()->route('kehadiran.kehadiran-saya')->with('success', "Berhasil Absensi");
     }

@@ -64,7 +64,9 @@ class PollingController extends Controller
     public function show (Polling $polling)
     {
 
-        $polling->load(['options', 'created_by']);
+        $polling->load(['created_by', 'options' => function ($q) {
+            $q->with('answers');  
+        }]);
 
         return view('polling.show', compact('polling'));
     }

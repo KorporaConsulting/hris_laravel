@@ -11,15 +11,19 @@
             <a class="nav-link" href="{{ route('user.dashboard') }}"><i class="fas fa-home"></i>
                 <span>Dashboard</span></a>
         </li>
-        {{-- <li class="menu-header">Account</li>
-        <li class="nav-item {{ request()->routeIs('account.*') ? 'active' : ''  }}">
-            <a class="nav-link" href="{{ route('account.index') }}"><i class="fas fa-user"></i> <span>Account</span></a>
-        </li> --}}
-        {{-- <li class="menu-header">Divisi</li>
-        <li class="nav-item {{ request()->routeIs('divisi.*') ? 'active' : ''  }}">
-            <a class="nav-link" href="{{ route('divisi.index') }}"><i class="fas fa-users"></i> <span>List
-                    Divisi</span></a>
-        </li> --}}
+        <li class="menu-header">Karyawan</li>
+        <li class="dropdown {{ request()->routeIs('karyawan.*') ? 'active' : ''  }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i>
+                <span>Karyawan</span></a>
+            <ul class="dropdown-menu">
+                @can ('karyawan.read')
+                <li class="{{ request()->routeIs('karyawan.index') ? 'active' : ''  }}"><a class="nav-link"
+                        href="{{ route('karyawan.index') }}">List Karyawan</a></li>
+                @endcan
+                <li class="{{ request()->routeIs('karyawan.create') ? 'active' : ''  }}"><a class="nav-link"
+                        href="{{ route('karyawan.create') }}">Tambah Karyawan</a></li>
+            </ul>
+        </li>
         <li class="menu-header">Kehadiran</li>
         <li class="dropdown {{ request()->routeIs('Kehadiran.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-chalkboard-teacher"></i>
@@ -35,7 +39,7 @@
                 </li>
             </ul>
         </li>
-        <li class="menu-header">Pengumuman</li>
+        <li class="menu-header">Utility</li>
         @canany(['pengumuman.create', 'pengumuman.update', 'pengumuman.delete'])
         <li class="dropdown {{ request()->routeIs('pengumuman.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-bullhorn"></i>
@@ -115,35 +119,17 @@
                 <li class="{{ request()->routeIs('cuti.create') ? 'active' : ''  }}"><a class="nav-link"
                         href="{{ route('cuti.create') }}">Ajukan Cuti</a></li>
             </ul>
+            @can('restore')
+                <li class="dropdown {{ request()->routeIs('trash.*') ? 'active' : ''  }}">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-trash"></i>
+                        <span>Recycle Bin</span></a>
+                    <ul class="dropdown-menu">
+                        <li class="{{ request()->routeIs('trash.karyawan') ? 'active' : ''  }}"><a class="nav-link"
+                                href="{{ route('trash.karyawan') }}">Karyawan</a></li>
+                    
+                    </ul>
+                </li>
+            @endcan
         </li>
-        <li class="menu-header">Karyawan</li>
-        <li class="dropdown {{ request()->routeIs('karyawan.*') ? 'active' : ''  }}">
-            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i>
-                <span>Karyawan</span></a>
-            <ul class="dropdown-menu">
-                {{-- @can ('manage_cuti_manager') --}}
-                {{-- <li class="{{ request()->routeIs('cuti.manager') ? 'active' : ''  }}"><a class="nav-link"
-                        href="{{ route('cuti.manager') }}">Cuti Manager</a></li> --}}
-                {{-- @endcan --}}
-                @can ('karyawan.read')
-                <li class="{{ request()->routeIs('karyawan.index') ? 'active' : ''  }}"><a class="nav-link"
-                        href="{{ route('karyawan.index') }}">List Karyawan</a></li>
-                @endcan
-                <li class="{{ request()->routeIs('karyawan.create') ? 'active' : ''  }}"><a class="nav-link"
-                        href="{{ route('karyawan.create') }}">Tambah Karyawan</a></li>
-            </ul>
-        </li>
-        {{-- <li class="dropdown {{ request()->routeIs('kpi.*') ? 'active' : ''  }}">
-            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-chart-line"></i></i>
-                <span>KPI</span></a>
-            <ul class="dropdown-menu">
-                @can ('manage_kpi')
-                <li class="{{ request()->routeIs('kpi.index') ? 'active' : ''  }}"><a class="nav-link"
-                        href="{{ route('kpi.index') }}">List KPI Karyawan</a></li>
-                @endcan
-                <li class="{{ request()->routeIs('kpi.mykpi') ? 'active' : ''  }}"><a class="nav-link"
-                        href="{{ route('kpi.mykpi') }}">KPI Saya</a></li>
-            </ul>
-        </li> --}}
     </ul>
 </aside>

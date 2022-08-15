@@ -82,7 +82,14 @@
 						</div>
 						<div class="form-group">
 							<label for="class">Warna</label>
-							<input type="text" name="class" id="class" placeholder="Warna Board" class="form-control">
+							<select name="class" id="class" class="form-control">
+								<option value="" selected disabled>Pilih Warna Board</option>
+								<option value="red">Red</option>
+								<option value="blue">Blue</option>
+								<option value="green">Green</option>
+								<option value="gray">Gray</option>
+							</select>
+							{{-- <input type="text" name="class" id="class" placeholder="Warna Board" class="form-control"> --}}
 						</div>
 					</div>
 					<div class="modal-footer">

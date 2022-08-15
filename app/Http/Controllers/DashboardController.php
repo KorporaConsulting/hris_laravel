@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Karyawan;
 use App\Models\Kehadiran;
 use App\Models\Pengumuman;
@@ -37,8 +38,19 @@ class DashboardController extends Controller
             ->get();
 
 
-        $presents = Kehadiran::where('user_id', auth()->id())->get()->groupBy('type');
+        $presents = Kehadiran::where('user_id', auth()->id())->get();
 
-        return view('dashboard.user', compact('user', 'announcements','pollings', 'presents'));
+        // Hitung total kehadiran semua type
+        $countAllPresents = $presents->count();
+        
+        $presents = $presents->groupBy('type');
+        
+        // Hitung Hadir Saja
+        $countPresents = count($presents['hadir'] ?? []);
+        
+        $events = Event::with('user')->whereDate('start', date("Y-m-d"))->get();
+
+        return view('dashboard.user', 
+            compact('user', 'announcements','pollings', 'presents', 'countPresents', 'countAllPresents', 'events'));
     }
 }

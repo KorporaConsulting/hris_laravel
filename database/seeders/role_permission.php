@@ -16,20 +16,13 @@ class role_permission extends Seeder
      */
     public function run()
     {
+        Permission::create([
+            'name' => 'restore',
+            'guard_name' => 'web'
+        ]);
 
-        // $permission = Permission::upsert([
-        //     [
-        //         'name' => 'cuti.read',
-        //         'guard_name' => 'web',
-        //     ],
+       Role::find(1)->givePermissionTo('restore');
 
-        // ], ['name', 'guard_name']);
-
-
-        
-        
-        // $role = Role::find(3);
-        // $role->givePermissionTo('pengumuman.create');
 
     }
 }

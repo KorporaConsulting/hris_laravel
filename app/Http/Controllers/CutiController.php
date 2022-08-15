@@ -7,7 +7,8 @@ use App\Events\NotificationsEvent;
 use App\Jobs\SendEmail;
 use App\Mail\NotifMail;
 use Illuminate\Http\Request;
-use App\Models\{Cuti, Karyawan, User};
+use App\Models\{Cuti, Karyawan, Kehadiran, User};
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -75,13 +76,13 @@ class CutiController extends Controller
         
 
         Cuti::create([
-            'user_id' => auth()->id(),
-            'jenis_cuti' => request('jenis_cuti'),
-            'mulai_tanggal' => $split[0],
-            'sampai_tanggal' => $split[1],
-            'lama_cuti' => request('lama_cuti'),
-            'is_approve' => '0',
-            'keterangan_cuti' => request('keterangan') 
+            'user_id'           => auth()->id(),
+            'jenis_cuti'        => request('jenis_cuti'),
+            'mulai_tanggal'     => $split[0],
+            'sampai_tanggal'    => $split[1],
+            'lama_cuti'         => request('lama_cuti'),
+            'is_approve'        => '0',
+            'keterangan_cuti'   => request('keterangan') 
         ]);
         
         // $user = User::find(auth()->user()->parent_id);
@@ -104,6 +105,23 @@ class CutiController extends Controller
 
             if ($cuti->status != 'accept') {
                 Karyawan::where('user_id', request('userId'))->decrement('sisa_cuti', $cuti->lama_cuti);
+
+                $kehadiran = [];
+
+                $date = Carbon::create($cuti->mulai_tanggal);
+                
+                while($cuti->sampai_tanggal > $date){
+
+                    $kehadiran[] = [
+                        'user_id'       =>  request('userId'),
+                        'type'          =>  'cuti',
+                        'created_at'    => $date
+                    ];
+
+                    $date = Carbon::create($date->addDays(1));
+                }
+
+                Kehadiran::upsert($kehadiran,['user_id', 'type']);
             }
             
             $data = [
@@ -114,6 +132,10 @@ class CutiController extends Controller
 
             if($cuti->status == 'accept'){
                 Karyawan::where('user_id', request('userId'))->increment('sisa_cuti', $cuti->lama_cuti);
+
+                Kehadiran::whereDate('created_at', '>=', $cuti->mulai_tanggal)
+                    ->whereDate('created_at', '<=', $cuti->sampai_tanggal)
+                    ->delete();
             }
 
             NotifEvent::dispatch('Cuti anda ditolak', request('userId'));
@@ -128,9 +150,9 @@ class CutiController extends Controller
 
 
         $cuti->update([
-            'nama_atasan' => auth()->user()->name,
+            'nama_atasan'       => auth()->user()->name,
             'keterangan_atasan' => request('keterangan'),
-            'status' => request('status'),
+            'status'            => request('status'),
         ]);
 
         Mail::to(request('userEmail'))->send(new NotifMail($data));

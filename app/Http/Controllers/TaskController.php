@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Board;
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -21,8 +22,9 @@ class TaskController extends Controller
             return response()->json($data);
         }
 
-        $defaultTemplate = Board::where('project_id', $projectId)->firstOrFail();
-
+        $defaultTemplate = Project::with('board')->whereId($projectId)->firstOrFail();
+        $defaultTemplate = $defaultTemplate->board;
+        
         return view('task.index', compact('projectId', 'defaultTemplate'));
     }
 

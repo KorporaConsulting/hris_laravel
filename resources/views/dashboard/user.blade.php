@@ -9,8 +9,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h3 class="mb-3">Selamat Datang {{ auth()->user()->name }} ({{ auth()->user()->getRoleNames()[0] }})</h3>
-                        
+                        <h4 class="mb-3">Selamat Datang <br class="d-block d-lg-none"> {{ auth()->user()->name }} ({{ auth()->user()->getRoleNames()[0] }})</h4>
                         <ul>
                             <li><a href="#pengumuman">Pengumuman</a></li>
                             <li><a href="#polling">Polling</a></li>
@@ -20,17 +19,39 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-12 col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h4>Absensi</h4>
             </div>
             <div class="card-body">
-            <canvas id="absensiChart" width="400" height="400"></canvas>
+                <canvas id="absensiChart" width="400" height="400" class="mb-4"></canvas>
+                <div>
+                    Persentase Ketepatan Hadir : <b>{{ ($countPresents / 5) * 100 }}%</b>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-8"></div>
+    <div class="col-12 col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Event Hari Ini</h4>
+            </div>
+            <div class="card-body">
+                <div height="400" style="overflow-y: scroll">
+                    <div class="list-group">
+                        <ul>
+                            @forelse ($events as $event)
+                                <li>{{ $event->title }}</li>
+                            @empty
+                                
+                            @endforelse
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-12 col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -120,11 +141,7 @@
                 success: function(res){
                     if(res.success){
                         console.log('success');
-                        iziToast.success({
-                            title: 'success',
-                            message: res.message,
-                            position: 'topRight'
-                        });
+                        toastr.success('Berhasil melakukan polling', 'Success');
                     }
                 },
                 error: function(err){

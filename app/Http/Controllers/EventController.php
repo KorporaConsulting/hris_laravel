@@ -31,7 +31,7 @@ class EventController extends Controller
 
     public function action()
     {
-
+        
         switch (request('type')) {
             case 'add':
                 $event = Event::create([
@@ -45,6 +45,7 @@ class EventController extends Controller
                 break;
 
             case 'update':
+
                 $event = Event::find(request()->id)->update([
                     'title' => request('title'),
                     'start' => request('start'),
@@ -55,6 +56,7 @@ class EventController extends Controller
                 break;
 
             case 'delete':
+
                 $event = Event::find(request()->id)->delete();
 
                 return response()->json($event);

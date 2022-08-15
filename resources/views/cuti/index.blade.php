@@ -62,6 +62,7 @@
 
 @push('scripts')
     <script>
+        
     $.ajaxSetup({
             beforeSend: function(){
                 $('#preloader').fadeIn();

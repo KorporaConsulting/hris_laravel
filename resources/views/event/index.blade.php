@@ -27,7 +27,7 @@
     <div class="modal fade" id="detailEvent" tabindex="-1" aria-labelledby="detailEventLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="" method="post">
+                <form action=" " method="post">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="detailEventLabel"></h5>
@@ -46,7 +46,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        @can('event.update')
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        @endcan
                     </div>
                 </form>
             </div>
@@ -96,31 +98,36 @@
                     // return false;
                     // },
                     eventRightclick: function(event, jsEvent, view) {
-                        Swal.fire({
-							title: 'Are you sure?',
-							text: "You won't be able to revert this!",
-							icon: 'warning',
-							showCancelButton: true,
-							confirmButtonColor: '#3085d6',
-							cancelButtonColor: '#d33',
-							confirmButtonText: 'Yes, delete it!'
-						}).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    type: "POST",
-                                    url: "{{ route('event.action')  }}",
-                                    data: {
-                                            _token: '{{ csrf_token() }}',
-                                            id: event.id,
-                                            type: 'delete'
-                                    },
-                                    success: function (response) {
-                                        calendar.fullCalendar('removeEvents', event.id);
-                                        displayMessage("Event Deleted Successfully");
-                                    }
-                                });
-                            }
-                        })
+                        @if (auth()->user()->can("event.delete"))
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: "You won't be able to revert this!",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "{{ route('event.action')  }}",
+                                        data: {
+                                                _token: '{{ csrf_token() }}',
+                                                id: event.id,
+                                                type: 'delete'
+                                        },
+                                        success: function (response) {
+                                            calendar.fullCalendar('removeEvents', event.id);
+                                            displayMessage("Event Deleted Successfully");
+                                        },
+                                        error: function(err){
+                                            toastr.error('Tidak dapat menghapus event', "Failed")
+                                        }
+                                    });
+                                }
+                            })
+                        @endif
                         return false;
                     },
                     // dayPopoverFormat: 't',
@@ -141,7 +148,7 @@
                                 event.allDay = false;
                         }
                     },
-                    selectable: true,
+                    selectable: '{{ auth()->user()->can("event.create") }}',
                     selectHelper: true,
                     select: function (start, end, allDay) {
                         
@@ -215,6 +222,7 @@
                             },
                             error: function(err){
                                 console.log(err);
+                                toastr.error('Tidak dapat mengupdate event', "Failed")
                             }
 
                         });

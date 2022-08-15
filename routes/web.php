@@ -77,6 +77,8 @@ Route::middleware('auth')->group(function(){
     Route::get('karyawan/{userId}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit')->middleware('permission:karyawan.update');
     Route::patch('karyawan/{userId}', [KaryawanController::class, 'update'])->name('karyawan.update');
     Route::delete('karyawan/{userId}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
+    Route::patch('karyawan/{userId}/restore', [KaryawanController::class, 'restore'])->name('karyawan.restore');
+    Route::patch('karyawan/restore-all', [KaryawanController::class, 'restoreAll'])->name('karyawan.restoreAll');
 
     
         Route::get('karyawan/{userId}/kpi', [KPIController::class, 'index'])->name('karyawan.kpi.index');
@@ -133,10 +135,14 @@ Route::middleware('auth')->group(function(){
 
     Route::get('event', [EventController::class, 'index'])->name('event.index');
     Route::post('event/action', [EventController::class, 'action'])->name('event.action');
-    Route::get('event/create', [EventController::class, 'create'])->name('event.create');
+    Route::get('event/create', [EventController::class, 'create'])->name('event.create')->middleware('permission:event.create');
     Route::post('event', [EventController::class, 'store'])->name('event.store');
-    Route::patch('event/{eventId}', [EventController::class, 'update'])->name('event.update');
+    Route::patch('event/{eventId}', [EventController::class, 'update'])->name('event.update')->middleware('permission:event.update');
     
+});
+
+Route::prefix('trash')->group(function(){
+    Route::get('karyawan', [KaryawanController::class, 'trash'])->name('trash.karyawan');
 });
 
 Route::get('send-event-today', [CronController::class, 'sendEventToday']);
