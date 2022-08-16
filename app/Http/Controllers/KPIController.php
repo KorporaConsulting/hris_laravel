@@ -13,7 +13,7 @@ class KPIController extends Controller
     public function index($userId)
     {
         return view('kpi.index', [
-            'user' => User::with(['kpi'])->where('id', $userId)->first()
+            'user' => User::with(['kpi'])->where('id', $userId)->firstOrFail()
         ]);
     }
 

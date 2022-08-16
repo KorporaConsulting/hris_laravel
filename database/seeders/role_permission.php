@@ -16,12 +16,14 @@ class role_permission extends Seeder
      */
     public function run()
     {
-        Permission::create([
-            'name' => 'restore',
-            'guard_name' => 'web'
-        ]);
 
-       Role::find(1)->givePermissionTo('restore');
+        User::find(38)->syncRoles('Super Admin');
+    //     Permission::create([
+    //         'name' => 'restore',
+    //         'guard_name' => 'web'
+    //     ]);
+
+    //    Role::find(1)->givePermissionTo('restore');
 
 
     }

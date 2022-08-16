@@ -84,7 +84,8 @@ class PollingController extends Controller
         Polling::whereId($pollingId)->update(request(['judul', 'date_start', 'date_end']));
 
         OpsiPolling::where('polling_id', $pollingId)->delete();
-
+        JawabanPolling::where('polling_id', $pollingId)->delete();
+        
         $option = [];
 
         foreach (request('opsi') as $value) {
