@@ -78,7 +78,9 @@ class AccountController extends Controller
     public function store()
     {
 
-        // return request()->all();
+        request()->validate([
+            'email' => 'required|unique:users'
+        ]);
 
         $user = [
             'name'          => request('name'),
@@ -121,11 +123,11 @@ class AccountController extends Controller
             $karyawan['habis_kontrak'] = date('Y-m-d', strtotime($add));
         }
 
-        Karyawan::create($karyawan);
-
         if (!empty(request('divisi'))) {
-            $user->divisions()->attach(request('divisi'));
+            $karyawan['divisi_id'] = request('divisi');
         }
+
+        Karyawan::create($karyawan);
 
         return back()->with('success', 'Berhasil menambahkan Karyawan');
     }

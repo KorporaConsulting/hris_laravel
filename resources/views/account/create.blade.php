@@ -12,62 +12,67 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="nip">NIP</label>
-                        <input type="text" name="nip" class="form-control" id="nip" required>
+                        <input type="text" name="nip" class="form-control" id="nip" value="{{ old('nip') ?? '' }}" value="{{ old('nip') ?? '' }}" required>
                     </div>
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" name="name" class="form-control" id="name" required>
+                        <input type="text" name="name" class="form-control" id="name" value="{{ old('name') ?? '' }}" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" name="email" class="form-control" id="email" required>
+                        <input type="email" name="email" class="form-control  @error('email') is-invalid @enderror" id="email" value="{{ old('email') ?? '' }}" required>
+                        @error('email')
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                        @enderror
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" name="password" class="form-control" id="password" required>
+                        <input type="password" name="password" class="form-control" id="password" value="{{ old('password') ?? '' }}" required>
                     </div>
                     <div class="form-group">
                         <label for="jabatan">Jabatan</label>
-                        <input type="text" name="jabatan" class="form-control" id="jabatan" required>
+                        <input type="text" name="jabatan" class="form-control" id="jabatan" value="{{ old('jabatan') ?? '' }}" required>
                     </div>
                     <div class="form-group">
                         <label for="mulai_kerja">Mulai Kerja</label>
-                        <input type="date" name="mulai_kerja" class="form-control" id="mulai_kerja" required>
+                        <input type="date" name="mulai_kerja" class="form-control" id="mulai_kerja" value="{{ old('mulai_kerja') ?? '' }}" required>
                     </div>
                     <div class="form-group">
                         <label for="tmpt_lahir">Tempat Lahir</label>
-                        <input type="text" name="tmpt_lahir" class="form-control" id="tmpt_lahir" required>
+                        <input type="text" name="tmpt_lahir" class="form-control" id="tmpt_lahir" value="{{ old('tmpt_lahir') ?? '' }}" required>
                     </div>
                     <div class="form-group">
                         <label for="tgl_lahir">Tanggal Lahir</label>
-                        <input type="date" name="tgl_lahir" class="form-control" id="tgl_lahir" required>
+                        <input type="date" name="tgl_lahir" class="form-control" id="tgl_lahir" value="{{ old('tgl_lahir') ?? '' }}" required>
                     </div>
                     <div class="form-group">
                         <label for="alamat_ktp">Alamat KTP</label>
                         <textarea name="alamat_ktp" id="alamat_ktp" cols="30" rows="4" class="form-control"
-                            style="height: 100px;" required></textarea>
+                            style="height: 100px;"  required >{{ old('alamat_ktp') }}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="alamat_domisili">Alamat Domisili</label>
                         <textarea name="alamat_domisili" id="alamat_domisili" cols="30" rows="4" class="form-control"
-                            style="height: 100px;" required></textarea>
+                            style="height: 100px;" required>{{ old('alamat_domisili') }}</textarea>
                     </div>
                     <div>
                         <div class="form-group">
                             <label for="no_hp">Nomor Handphone</label>
-                            <input type="number" name="no_hp" class="form-control" id="no_hp" required>
+                            <input type="number" name="no_hp" class="form-control" id="no_hp" value="{{ old('no_hp') ?? '' }}" required>
                         </div>
                     </div>
                     <div>
                         <div class="form-group">
                             <label for="no_hp_darurat">Nomor Handphone Darurat</label>
-                            <input type="number" name="no_hp_darurat" class="form-control" id="no_hp_darurat">
+                            <input type="number" name="no_hp_darurat" class="form-control" id="no_hp_darurat" value="{{ old('no_hp_darurat') ?? '' }}">
                         </div>
                     </div>
                     <div>
                         <div class="form-group">
                             <label for="gaji">Gaji</label>
-                            <input type="text" name="gaji" class="form-control" id="gaji" oninput="currencyInput()">
+                            <input type="text" name="gaji" class="form-control" id="gaji" oninput="currencyInput()" value="{{ old('gaji') ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -97,7 +102,7 @@
                     <div class="form-group" id="level-wrap">
                         <label for="level">Pilih Level</label>
                         <select name="level" id="level" class="form-control">
-                            <option value="" selected disabled>Pilih Level</option>
+                            <option value=""  selected disabled>Pilih Level</option>
                             <option value="staff">Staff</option>
                             <option value="manager">Manager</option>
                             <option value="hrd">HRD</option>

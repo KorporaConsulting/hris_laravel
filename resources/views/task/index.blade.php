@@ -50,7 +50,7 @@
 	<div class="mb-3">
 		<button type="button" data-toggle="modal" data-target="#createBoard" class="btn btn-primary">Tambah Board</button>
 		<button type="button" class="btn btn-primary" id="tambah">Tambah Task</button>
-		@empty($defaultTemplate)
+		@empty($defaultTemplate->board)
 		<button type="button" class="btn btn-success " id="generateDefault">Generate Default Template</button>
 		@endempty
 		<form action="{{ route('project.board.storeDefault', $projectId) }}" method="post" id="generateDefaultForm">

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\KehadiranExport;
 use App\Models\Kehadiran;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KehadiranController extends Controller
 {
@@ -15,12 +17,16 @@ class KehadiranController extends Controller
 
     public function index()
     {
+        
         if (auth()->user()->hasRole('manager')) {
-            $divisi = DB::table('divisi_user')->where('user_id', auth()->id())->first();
-            $users = DB::table('divisi_user')->where('divisi_id', $divisi->divisi_id)->get();
+            $presents = Kehadiran::whereHas('user', function($q){
+                $q->where('divisi_id', auth()->user()->divisi_id);
+            })
+            ->with('user')
+            ->latest()
+            ->get();
 
-            $presents = Kehadiran::with('user')->whereIn('user_id', $users->pluck('user_id'))->get();
-        } else {
+        }else{
             $presents = Kehadiran::with('user')->latest()->get();
         }
 
@@ -31,8 +37,8 @@ class KehadiranController extends Controller
     // {
 
     //     if (auth()->user()->hasRole('manager')) {
-    //         $divisi = DB::table('divisi_user')->where('user_id', auth()->id())->first();
-    //         $users = DB::table('divisi_user')->where('divisi_id', $divisi->divisi_id)->get();
+    //         $divisi = DB::table('')->where('user_id', auth()->id())->first();
+    //         $users = DB::table('')->where('divisi_id', $divisi->divisi_id)->get();
 
     //         $presents = Kehadiran::with('user')->whereIn('user_id', $users->pluck('user_id'))->get();
     //     } else {
@@ -92,5 +98,10 @@ class KehadiranController extends Controller
         Kehadiran::create($kehadiran);
 
         return redirect()->route('kehadiran.kehadiran-saya')->with('success', "Berhasil Absensi");
+    }
+
+    public function report ()
+    {
+        return Excel::download(new KehadiranExport, 'KehadiranReport.xlsx');
     }
 }

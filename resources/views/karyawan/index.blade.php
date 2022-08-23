@@ -31,6 +31,7 @@
                             <th>Nama</th>
                             <th>Status Pekerja</th>
                             <th>Jabatan</th>
+                            <th>Divisi</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -47,11 +48,18 @@
                                 @endif
                             </td>
                             <td>{{ $user->karyawan->jabatan}}</td>
+                            <td>{{ $user->divisi->divisi ?? '-'}}</td>
                             <td>
-                                <a href="{{ route('karyawan.edit', $user->id) }}" class="btn btn-success">Edit</a>
+                                @can('karyawan.edit')
+                                    <a href="{{ route('karyawan.edit', $user->id) }}" class="btn btn-success">Edit</a>
+                                @endcan
                                 <a href="{{ route('karyawan.kpi.index', $user->id) }}" class="btn btn-primary">Lihat
                                     KPI</a>
-                                <button class="btn btn-danger" type="button" onclick="destroy({{$user->id}})">Delete</button>
+                                <a href="{{ route('project.index', ['user_id' => $user->id]) }}" class="btn btn-primary">Lihat
+                                        Task</a>
+                                @can('karyawan.delete')
+                                    <button class="btn btn-danger" type="button" onclick="destroy({{$user->id}})">Delete</button>
+                                @endcan
                                 <form action="{{ route('karyawan.destroy', $user->id) }}" method="post" id="form-{{$user->id}}">
                                     @csrf
                                     @method('delete')
@@ -101,7 +109,19 @@
 
 <script>
     function destroy (id){
-        $('#form-'+id).submit();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $('#form-'+id).submit();
+            }
+        })
     }
 </script>
 {{-- <script>

@@ -72,5 +72,12 @@ class User extends Authenticatable
         return $this->hasMany(Kehadiran::class);
     }
 
+    public function divisi (){
+        return $this->belongsTo(Divisi::class);
+    }
+    public function cuti (){
+        return $this->hasMany(Cuti::class);
+    }
+
 
 }

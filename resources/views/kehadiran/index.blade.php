@@ -3,7 +3,11 @@
 
 @section('content')
 <div class="card">
+    <div class="card-header">
+        <h4>List Data Kehadiran</h4>
+    </div>
     <div class="card-body">
+        <a href="{{ route('kehadiran.report') }}" class="mb-3 btn btn-primary">Report</a>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">

@@ -35,7 +35,19 @@
 @push('scripts')
     <script>
         function revert(id){
-            $('#form-'+id).submit();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "data yang terhapus akan di kembalikan",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Revert it!'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#form-'+id).submit();
+                }
+            })
         }
     </script>
 @endpush

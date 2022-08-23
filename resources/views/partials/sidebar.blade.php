@@ -11,6 +11,14 @@
             <a class="nav-link" href="{{ route('user.dashboard') }}"><i class="fas fa-home"></i>
                 <span>Dashboard</span></a>
         </li>
+        {{-- @canany(['karyawan.read', 'karyawan.create']) --}}
+        {{-- <li class="menu-header">Divisi</li>
+        <li class="nav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('user.dashboard') }}"><i class="fas fa-users"></i>
+                <span>List Anggota</span></a>
+        </li> --}}
+        {{-- @endcanany --}}
+        @canany(['karyawan.read', 'karyawan.create'])
         <li class="menu-header">Karyawan</li>
         <li class="dropdown {{ request()->routeIs('karyawan.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i>
@@ -20,10 +28,13 @@
                 <li class="{{ request()->routeIs('karyawan.index') ? 'active' : ''  }}"><a class="nav-link"
                         href="{{ route('karyawan.index') }}">List Karyawan</a></li>
                 @endcan
+                @can('karyawan.create')
                 <li class="{{ request()->routeIs('karyawan.create') ? 'active' : ''  }}"><a class="nav-link"
                         href="{{ route('karyawan.create') }}">Tambah Karyawan</a></li>
+                @endcan
             </ul>
         </li>
+        @endcanany
         <li class="menu-header">Kehadiran</li>
         <li class="dropdown {{ request()->routeIs('Kehadiran.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-chalkboard-teacher"></i>
@@ -94,11 +105,11 @@
                     <a class="nav-link" href="{{ route('event.index') }}"><span> Calendar</span></a>
                 </li>
                 {{-- @endcan --}}
-                {{-- @can('polling.create') --}}
+                @can('event.create')
                 <li class="nav-item {{ request()->routeIs('event.create') ? 'active' : ''  }}">
                     <a class="nav-link" href="{{ route('event.create') }}"><span> Buat Event (Advanced)</span></a>
                 </li>
-                {{-- @endcan --}}
+                @endcan
             </ul>
         </li>
         {{-- @endcanany --}}

@@ -9,7 +9,8 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <h4 class="mb-3">Selamat Datang <br class="d-block d-lg-none"> {{ auth()->user()->name }} ({{ auth()->user()->getRoleNames()[0] }})</h4>
+                        <h4 class="mb-3">Selamat Datang <br class="d-block d-lg-none"> {{ auth()->user()->name }} ({{
+                            auth()->user()->getRoleNames()[0] }})</h4>
                         <ul>
                             <li><a href="#pengumuman">Pengumuman</a></li>
                             <li><a href="#polling">Polling</a></li>
@@ -38,27 +39,23 @@
                 <h4>Event Hari Ini</h4>
             </div>
             <div class="card-body">
-                <div height="400" style="overflow-y: scroll">
-                    <div class="list-group">
-                        <ul>
-                            @forelse ($events as $event)
-                                <li>{{ $event->title }}</li>
-                            @empty
-                                
-                            @endforelse
-                        </ul>
-                    </div>
+                <ul>
+                    @foreach ($events as $event)
+                        <li>{{ $event->title }}</li>
+                    @endforeach
+                </ul>
+                @if($events->isEmpty())
+                    <div class="alert alert-primary">Tidak ada event hari ini</div>
+                @endif
+            </div>
+        </div>
+        <div class="mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 id="pengumuman">Pengumuman</h4>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="col-12 col-lg-6">
-        <div class="card">
-            <div class="card-header">
-                <h4 id="pengumuman">Pengumuman</h4>
-            </div>
-        </div>
-        @forelse ($announcements as $announcement)
+            @forelse ($announcements as $announcement)
             <div class="card">
                 <div class="card-body">
                     <h4>{{ $announcement->created_by->name }}</h4>
@@ -67,18 +64,18 @@
                     </p>
                 </div>
             </div>
-        @empty
-            
-        @endforelse
-        
-    </div>
-    <div class="col-12 col-lg-6">
-        <div class="card">
-            <div class="card-header">
-                <h4 id="polling">Polling</h4>
-            </div>
+            @empty
+            <div class="alert alert-primary">Tidak ada pengumuman</div>
+            @endforelse
+
         </div>
-        @forelse ($pollings as $polling)
+        <div class="mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 id="polling">Polling</h4>
+                </div>
+            </div>
+            @forelse ($pollings as $polling)
             <div class="card">
                 <div class="card-body">
                     <h4>{{ $polling->created_by->name }}</h4>
@@ -87,30 +84,37 @@
                     </p>
                     <div class="options">
                         @foreach ($polling->options as $key => $option)
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"
-                                    aria-describedby="button-addon2" value="{{ $option->opsi }}" disabled>
-                                <div class="input-group-append">
-                                    @if (!empty($polling->answer))
-                                        @if ($polling->answer->opsi_id === $option->id)
-                                            <button class="btn btn-success opsi-polling opsi-polling{{$polling->id}}" type="button" data-polling="{{$polling->id}}" data-opsi="{{ $option->id }}">Selected</button>
-                                        @else
-                                            <button class="btn btn-secondary opsi-polling opsi-polling{{$polling->id}}" type="button" data-polling="{{ $polling->id }}" data-opsi="{{ $option->id }}">Vote</button>
-                                        @endif    
-                                    @else
-                                    <button class="btn btn-secondary opsi-polling opsi-polling{{$polling->id}}" type="button" data-polling="{{$polling->id}}" data-opsi="{{ $option->id }}">Vote</button>
-                                    @endif
-                                </div>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Recipient's username"
+                                aria-label="Recipient's username" aria-describedby="button-addon2"
+                                value="{{ $option->opsi }}" disabled>
+                            <div class="input-group-append">
+                                @if (!empty($polling->answer))
+                                @if ($polling->answer->opsi_id === $option->id)
+                                <button class="btn btn-success opsi-polling opsi-polling{{$polling->id}}" type="button"
+                                    data-polling="{{$polling->id}}" data-opsi="{{ $option->id }}">Selected</button>
+                                @else
+                                <button class="btn btn-secondary opsi-polling opsi-polling{{$polling->id}}"
+                                    type="button" data-polling="{{ $polling->id }}"
+                                    data-opsi="{{ $option->id }}">Vote</button>
+                                @endif
+                                @else
+                                <button class="btn btn-secondary opsi-polling opsi-polling{{$polling->id}}"
+                                    type="button" data-polling="{{$polling->id}}"
+                                    data-opsi="{{ $option->id }}">Vote</button>
+                                @endif
                             </div>
+                        </div>
                         @endforeach
-                    <div class="text-right"><small>{{ $polling->answers_count }} Orang Telah Vote</small></div>
+                        <div class="text-right"><small>{{ $polling->answers_count }} Orang Telah Vote</small></div>
                     </div>
                 </div>
             </div>
-        @empty
-            
-        @endforelse
-        
+            @empty
+            <div class="alert alert-primary">Tidak ada polling</div>
+            @endforelse
+
+        </div>
     </div>
 </div>
 
@@ -119,9 +123,8 @@
 
 
 @push('scripts')
-    <script>
-        
-        $('.opsi-polling').click(function(e){
+<script>
+    $('.opsi-polling').click(function(e){
             $('.opsi-polling'+$(this).data('polling')).html('Vote');
             $('.opsi-polling'+$(this).data('polling')).removeClass('btn-success');
             $('.opsi-polling'+$(this).data('polling')).addClass('btn-secondary');
@@ -180,7 +183,7 @@
                 }]
             }
         });
-    </script>
+</script>
 @endpush
 
 {{-- @push('scripts')

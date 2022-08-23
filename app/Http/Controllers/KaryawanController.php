@@ -11,18 +11,16 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class KaryawanController extends Controller
 {
-    private $excel;
-
-    public function __construct(Excel $excel)
-    {
-        $this->excel = $excel;
-    }
-
+    
     public function index (){
-        
-        return view('karyawan.index', [
-            'users' => User::with('karyawan')->get()
-        ]);
+
+        $users = User::with(['karyawan', 'divisi'])->get();
+
+        if(auth()->user()->hasRole('manager')){
+            $users = $users->where('divisi_id', auth()->user()->divisi_id);
+        }
+
+        return view('karyawan.index', compact('users'));
     }
 
     public function show ($userId)
@@ -36,24 +34,25 @@ class KaryawanController extends Controller
 
         Excel::import(new UsersImport, request()->file('file')); //only allows for one model
         
-        return request()->all();
+        return back()->with('success', 'Berhasil mengimport karyawan');
     }
 
     public function edit($userId)
     {
-        $user = User::where('users.id', $userId)
-            ->select('*', 'users.id', 'users.name', 'roles.name as role')
-            ->leftJoin('karyawan', 'karyawan.user_id', '=', 'users.id')
-            ->leftJoin('divisi_user', 'divisi_user.user_id', '=', 'users.id')
-            ->leftJoin('divisi', 'divisi_user.divisi_id', '=', 'divisi.id')
-            ->leftJoin('model_has_roles', function ($join) {
-                $join->on('users.id', '=', 'model_has_roles.model_id')
-                ->where('model_has_roles.model_type', User::class);
-            })
-            ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->first();
+        // $user = User::where('users.id', $userId)
+        //     ->select('*', 'users.id', 'users.name', 'roles.name as role')
+        //     ->leftJoin('karyawan', 'karyawan.user_id', '=', 'users.id')
+        //     ->leftJoin('', 'divisi_user.user_id', '=', 'users.id')
+        //     ->leftJoin('divisi', 'divisi_user.divisi_id', '=', 'divisi.id')
+        //     ->leftJoin('model_has_roles', function ($join) {
+        //         $join->on('users.id', '=', 'model_has_roles.model_id')
+        //         ->where('model_has_roles.model_type', User::class);
+        //     })
+        //     ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+        //     ->first();
 
-        // return $user;
+        $user = User::with(['karyawan', 'divisi', 'roles'])->whereId($userId)->first();
+        
         // return $user;
 
         // $divisi = DB::table('divisi_user')->where('divisi_user.user_id', $userId)->first();
@@ -65,7 +64,6 @@ class KaryawanController extends Controller
 
     public function update ($userId)
     {
-        // return request()->all();
         $userUpdate = [
             'name'  => request('name'),
             'email' => request('email')
@@ -110,6 +108,10 @@ class KaryawanController extends Controller
             $user->divisions()->attach(request('divisi'));
         }
 
+        Karyawan::whereId($userId)->update($karyawan);
+
+
+
         return back()->with('success', 'Berhasil mengupdate Karyawan');
 
     }
@@ -122,7 +124,7 @@ class KaryawanController extends Controller
         $user->delete();
         Karyawan::where('user_id', $userId)->delete();
         
-        return redirect()->route('karyawan.index')->with('success', 'Berhasil');
+        return redirect()->route('karyawan.index')->with('success', 'Berhasil menghapus karyawan');
         
     }
 
@@ -148,5 +150,10 @@ class KaryawanController extends Controller
         Karyawan::onlyTrashed()->restore();
 
         return redirect()->route('trash.karyawan')->with('success', 'Berhasil mengembalikan data karyawan');
+    }
+
+    public function report ()
+    {
+        
     }
 }

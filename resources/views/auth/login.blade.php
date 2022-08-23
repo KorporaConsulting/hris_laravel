@@ -24,8 +24,13 @@
         <div class="col-lg-4 col-md-6 col-12 order-lg-1 min-vh-100 order-2 bg-white">
           <div class="p-4 m-3">
             <img src="/icons/korpora.png" alt="logo" width="200" class="shadow-light mb-5 mt-2">
-            <h4 class="text-dark font-weight-normal">Welcome to <span class="font-weight-bold">Korpora HRIS</span></h4>
-            <p class="text-muted">Before you get started, you must login or register if you don't already have an account.</p>
+            <h4 class="text-dark font-weight-normal mb-4">Welcome to <span class="font-weight-bold">Korpora HRIS</span></h4>
+            @error('email')
+              <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+            @if(session()->has('status'))
+              <div class="alert alert-primary">{{ session('status') }}</div>
+            @endif
             <form method="POST" action="{{ route('loginPost') }}" class="needs-validation">
                 @csrf
               <div class="form-group">
@@ -46,7 +51,7 @@
                 </div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group mb-4">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
                   <label class="custom-control-label" for="remember-me">Remember Me</label>
@@ -54,26 +59,19 @@
               </div>
 
               <div class="form-group text-right">
-                <a href="auth-forgot-password.html" class="float-left mt-3">
+                <a href="{{ route('password.request') }}" class="float-left mt-3">
                   Forgot Password?
                 </a>
-                <button type="submit" class="btn btn-primary btn-lg btn-icon icon-right" tabindex="4">
+                <button type="submit" class="btn btn-primary btn-lg btn-icon icon-right mb-4" tabindex="4">
                   Login
                 </button>
               </div>
 
-              <div class="mt-5 text-center">
-                Don't have an account? <a href="auth-register.html">Create new one</a>
-              </div>
+              
             </form>
 
             <div class="text-center mt-5 text-small">
               Copyright &copy; Korpora Consulting 2022. Made with 💙 by Stisla
-              <div class="mt-2">
-                <a href="#">Privacy Policy</a>
-                <div class="bullet"></div>
-                <a href="#">Terms of Service</a>
-              </div>
             </div>
           </div>
         </div>

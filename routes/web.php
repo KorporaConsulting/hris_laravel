@@ -7,7 +7,12 @@ use App\Http\Controllers\{DashboardController, PengumumanController, PollingCont
 use App\Http\Controllers\{DivisiController, EventController, KaryawanController, KPIController};
 use App\Http\Controllers\{MailController, UserController, ProjectController, TestController};
 use App\Mail\NotifMail;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +32,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'loginPost'])->name('loginPost');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/forgot-password', [AuthController::class, 'passwordRequest'])->middleware('guest')->name('password.request');
+ 
+Route::post('/forgot-password', [AuthController::class, 'passwordEmail'])->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', [AuthController::class, 'passwordReset'])->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', [AuthController::class, 'passwordUpdate'])->middleware('guest')->name('password.update');
+
 
 
 Route::middleware('auth')->group(function(){
@@ -90,6 +103,7 @@ Route::middleware('auth')->group(function(){
     // Kehadiran
     Route::get('kehadiran/kehadiran-saya', [KehadiranController::class, 'kehadiranSaya'])->name('kehadiran.kehadiran-saya');
     Route::get('kehadiran/present', [KehadiranController::class, 'present'])->name('kehadiran.present');
+    Route::get('kehadiran/report', [KehadiranController::class, 'report'])->name('kehadiran.report');
     Route::resource('kehadiran', KehadiranController::class);
     Route::resource('divisi', DivisiController::class);
 
@@ -157,6 +171,30 @@ Route::redirect('/', 'login');
 // });
 
 
-Route::get('test', TestController::class);
+Route::get('test', function(){
+    return User::with(['kehadiran' => function($q){
+            $q->select('user_id', DB::raw('count(type) as total, type'));
+            $q->groupBy('type');
+        }])
+        ->select('id', 'name')
+        ->get()
+        ->map(function($value, $key){
+            $value['hadir'] = 0;
+            $value['telat'] = 0;
+            $value['alpha'] = 0; 
+            $value['cuti'] = 0;
+
+            foreach ($value->kehadiran as $k => $v) {
+                $value[$v->type] = $v->total;
+            }
+
+            unset($value['kehadiran']);
+
+            return $value;
+        });
+});
+// Route::get('test', function(){
+    
+// });
 
 

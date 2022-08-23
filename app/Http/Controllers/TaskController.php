@@ -22,8 +22,8 @@ class TaskController extends Controller
             return response()->json($data);
         }
 
-        $defaultTemplate = Project::with('board')->whereId($projectId)->firstOrFail();
-        $defaultTemplate = $defaultTemplate->board;
+        $defaultTemplate = Project::whereId($projectId)->firstOrFail();
+        $defaultTemplate->load('board');
         
         return view('task.index', compact('projectId', 'defaultTemplate'));
     }

@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->exec('curl http://localhost:8000/check-alpha')->weekdays()->at('17:00');
         $schedule->exec('curl http://localhost:8000/cuti-bulanan')->monthly();
+        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
     }
 
     /**

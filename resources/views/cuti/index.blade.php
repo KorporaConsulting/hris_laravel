@@ -44,13 +44,34 @@
                             <td>
                                 {{-- Kalo Udah lewat 1 jam gabisa ubah status accept ke reject maupun sebaliknya --}}
                                 @if ($value->created_at != $value->updated_at && date('Y-m-d H:i:s', strtotime('+1hour '.$value->updated_at)) <= date('Y-m-d H:i:s'))
-                                    <button class="btn btn-info" type="button">Info</button>
+                                    <button class="btn btn-info" data-toggle="modal" data-target="#infoModal{{$value->id}}" type="button">Info</button>
                                 @else
                                     <button class="btn btn-primary" onclick="confirmAccept({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}', '{{ $value->user->email }}')">Setujui</button>  
                                     <button class="btn btn-danger" onclick="confirmReject({{ $value->id }}, '{{ $value->user->name }}', '{{ $value->user->id }}', '{{ $value->user->email }}')">Tolak</button>           
                                 @endif
                             </td>
-                                </tr>
+                        </tr>
+                        @push('modals')
+                            <div class="modal fade" id="infoModal{{$value->id}}" tabindex="-1" aria-labelledby="infoModal{{$value->id}}Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="infoModal{{$value->id}}Label">Modal title</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endpush
                     @endforeach
                 </tbody>
             </table>

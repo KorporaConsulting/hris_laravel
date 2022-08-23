@@ -14,12 +14,7 @@ class DashboardController extends Controller
     public function user ()
     {
 
-        $user = User::where('users.id', auth()->id())
-            ->select('users.name', 'divisi.divisi', 'karyawan.status_pekerja', 'karyawan.no_hp')
-            ->leftJoin('karyawan', 'karyawan.user_id', '=', 'users.id')
-            ->leftJoin('divisi_user', 'divisi_user.user_id', '=', 'users.id')
-            ->leftJoin('divisi', 'divisi.id', '=', 'divisi_user.divisi_id')
-            ->first();
+        $user = User::where('users.id', auth()->id())->first();
             
         $announcements = User::with(['announcements' => function($q){
                 $q->with('created_by');

@@ -26,24 +26,25 @@ class UsersImport implements ToCollection
 
 
         $message = [
-            'required' => 'The :attribute field is required.',
-            'unique' => 'The Email field is unique.',
+            'required'  => 'The :attribute field is required.',
+            'unique'    => 'The Email field is unique.',
         ];
 
         for ($i = 0; $i < count($rows); $i++) {
             if($i == 0){
                 continue;
             }
+
             $validator = Validator::make($rows->toArray(), [
-                '*.1' => 'unique:users,email',
-                '*.2' => 'required',
-                '*.3' => 'required',
-            ], $message)->validate();
+                $i.'.1'     => 'required|email|unique:users,email',
+                $i.'.2'     => 'required',
+            ])->validate();
+
 
             $userInsert = [
-                'name' => $rows[$i][0],
-                'email' => $rows[$i][1],
-                'password' => bcrypt($rows[$i][2]),
+                'name'      => $rows[$i][0],
+                'email'     => $rows[$i][1],
+                'password'  => bcrypt($rows[$i][2]),
             ];
 
             if(!empty($rows[$i][3])){
@@ -67,8 +68,8 @@ class UsersImport implements ToCollection
                 'lama_kontrak'      => $rows[$i][15],
                 'gaji'              => str_replace('.', '', $rows[$i][16]),
                 'sisa_cuti'         => 0,
-                'is_active'         => $rows[$i][18],
-                'created_at'         => date('Y-m-d H:i:s'),
+                'is_active'         => $rows[$i][17],
+                'created_at'        => date('Y-m-d H:i:s'),
             ];
 
             if(strtolower($rows[$i][14]) != strtolower('pekerja tetap')){
@@ -80,5 +81,8 @@ class UsersImport implements ToCollection
 
         Karyawan::insert($karyawanBatch);
     }
+
+    
+    
 
 }

@@ -18,39 +18,34 @@ class CutiController extends Controller
 
     public function index ()
     {
-
+        
         if (auth()->user()->hasRole('manager')) {
-            $divisi = DB::table('divisi_user')->where('user_id', auth()->id())->first();
-            $users = DB::table('divisi_user')->where('divisi_id', $divisi->divisi_id)->get();
+            $cuti = Cuti::whereHas('user', function($q){
+                    $q->where('divisi_id', auth()->user()->divisi_id);
+                })
+                ->with('user')
+                ->latest()
+                ->get();
 
-            $cuti = Cuti::with('user')->whereIn('user_id', $users->pluck('user_id'))->get();
-        } else {
-            $cuti = Cuti::with('user')->latest()->get();
+        }else{
+            $cuti = Cuti::with('user')
+                ->latest()
+                ->get();
         }
 
-        // return $cuti;
         return view('cuti.index', compact('cuti'));
     }
 
     public function manager ()
     {
-    
-        $list_staff = DB::table('divisi_user')
-            ->join('users', 'users.id', '=', 'divisi_user.user_id')
-            ->get()
-            ->map(function($item, $key){
-                if($item->status == 'manager'){
-                    return $item->id;
-                }else{
-                    return 0;
-                }
-            });
           
-        $cuti = Cuti::with('user')
-            ->whereIn('user_id', $list_staff)
+        $cuti = Cuti::whereHas('user', function($q){
+                $q->where('divisi_id', auth()->user()->divisi_id);
+            })
+            ->with('user')
             ->orderBy('status', 'desc')
             ->get();
-
+        
         return view('cuti.index', compact('cuti'));
     }
  
@@ -84,12 +79,6 @@ class CutiController extends Controller
             'is_approve'        => '0',
             'keterangan_cuti'   => request('keterangan') 
         ]);
-        
-        // $user = User::find(auth()->user()->parent_id);
-        // SendEmail::dispatch($user->email, auth()->user()->name .'Mengajukan Cuti');
-
-        // Mail::to($user->email)->send(new NotifMail(auth()->user()->name .'Mengajukan Cuti'));
-        // return 'ok';;
 
         return redirect()->route('cuti.show')->with('success', 'Berhasil mengajukan cuti');
 
@@ -128,6 +117,7 @@ class CutiController extends Controller
                 'message' => 'Cuti anda disetujui oleh ' . auth()->user()->email
             ];
             session()->flash('success', "Berhasil menyetujui cuti");
+
         }elseif(request('status') == 'reject'){
 
             if($cuti->status == 'accept'){
@@ -139,6 +129,7 @@ class CutiController extends Controller
             }
 
             NotifEvent::dispatch('Cuti anda ditolak', request('userId'));
+
             $data = [
                 'message' => 'Cuti anda ditolak oleh' . auth()->user()->email
             ];
