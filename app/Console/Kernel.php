@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->exec('curl https://hris.korporaconsulting.com/cron/check-alpha')->weekdays()->at('17:00');
-        $schedule->exec('curl https://hris.korporaconsulting.com/cron/cuti-bulanan')->everyMinute();
+        $schedule->exec('curl https://hris.korporaconsulting.com/cron/cuti-bulanan')->monthly();
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
     }
 
