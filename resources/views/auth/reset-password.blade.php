@@ -52,7 +52,7 @@
                                             required autofocus>
                                     </div>
                                     <div class="form-group">
-                                        <label for="email">Password</label>
+                                        <label for="email">Password Confimation</label>
                                         <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" tabindex="1"
                                             required autofocus>
                                     </div>
