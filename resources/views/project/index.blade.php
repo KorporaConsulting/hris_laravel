@@ -23,7 +23,9 @@
                             <td>{{ $project->name }}</td>
                             <td>
                                 <a href="{{ route('project.task.index', $project->id) }}" class="btn btn-primary">Task</a>
-                                <button class="btn btn-danger" type="button" onclick="destroy('{{ $project->id }}')">Delete</button>
+                                @if ($delete)
+                                    <button class="btn btn-danger" type="button" onclick="destroy('{{ $project->id }}')">Delete</button>
+                                @endif
                                 <form action="{{ route("project.destroy", $project->id) }}" method="post" id="form-{{$project->id}}">
                                     @csrf
                                     @method('delete')

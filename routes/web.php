@@ -168,14 +168,6 @@ Route::prefix('cron')->group(function(){
     Route::get('cuti-bulanan', [CronController::class, 'cutiBulanan']);
 });
 
-
-Route::get('symlink', function(){
-    $target  = '/home/korpora2018/public_html/hris/storage/app/public';
-    $link    = '/home/korpora2018/public_html/hris/public';
-
-    symlink($target, $link);
-});
-
 Route::get('mail', MailController::class);
 Route::redirect('/', 'login');
 

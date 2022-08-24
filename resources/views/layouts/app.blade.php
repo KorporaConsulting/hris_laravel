@@ -65,6 +65,10 @@
         .position-absolute {
             position: absolute;
         }
+        
+        .no-scroll-y {
+        overflow-y: hidden;
+        }
     </style>
     @yield('head')
 </head>

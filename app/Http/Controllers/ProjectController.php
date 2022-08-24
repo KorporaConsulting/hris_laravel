@@ -11,14 +11,16 @@ class ProjectController extends Controller
     public function index ()
     {
         $user_id = auth()->id();
+        $delete = true;
 
         if (request()->has('user_id')) {
             $user_id = request('user_id');
+            $delete = false;
         }
         
         $projects = Project::where('user_id', $user_id)->get();
 
-        return view('project.index', compact('projects'));
+        return view('project.index', compact('projects', 'delete'));
     }
 
     public function store ()
