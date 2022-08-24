@@ -161,12 +161,21 @@ Route::prefix('trash')->group(function(){
     Route::get('karyawan', [KaryawanController::class, 'trash'])->name('trash.karyawan');
 });
 
-Route::get('send-event-today', [CronController::class, 'sendEventToday']);
+// Route::get('send-event-today', [CronController::class, 'sendEventToday']);
 
 Route::prefix('cron')->group(function(){
     Route::get('check-alpha', [CronController::class, 'checkAlpha']);
     Route::get('cuti-bulanan', [CronController::class, 'cutiBulanan']);
 });
+
+
+Route::get('symlink', function(){
+    $target  = '/home/korpora2018/public_html/hris/storage/app/public';
+    $link    = '/home/korpora2018/public_html/hris/public';
+
+    symlink($target, $link);
+});
+
 Route::get('mail', MailController::class);
 Route::redirect('/', 'login');
 

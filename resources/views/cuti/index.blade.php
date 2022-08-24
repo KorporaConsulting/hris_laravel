@@ -69,6 +69,7 @@
                                                 </div>
                                             </p>
                                             <p>
+                                                
                                                 <b><small>{{ $value->created_at }}</small></b>
                                             </p>
                                         </div>
