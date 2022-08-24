@@ -95,6 +95,10 @@
                         <label for="file" class="form-label">File (CSV)</label>
                         <input type="file" name="file" id="csv" class="form-control-file">
                     </div>
+                    <div class="form-group">
+                        <label for="file" class="form-label">Template</label>
+                        <div><a href="{{ asset('template_bulk_insert.csv') }}" class="btn btn-primary">Download</a></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
