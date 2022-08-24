@@ -7,6 +7,7 @@ use App\Rules\CheckOldPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AccountController extends Controller
 {
@@ -27,8 +28,18 @@ class AccountController extends Controller
 
     public function update()
     {
-        if (request()->has('profile')) {
-            $profile = request('profile')->store('profiles');
+        
+        if (request('newProfile') != "") {
+            $folderPath = "profiles/";
+            $base64Image = explode(";base64,", request('newProfile'));
+            $explodeImage = explode("image/", $base64Image[0]);
+            $imageType = $explodeImage[1];
+            $image_base64 = base64_decode($base64Image[1]);
+            $file = $folderPath . uniqid() . '. ' . $imageType;
+
+            Storage::put($file, $image_base64);
+
+            $profile = $file;
         } else {
             $profile = auth()->user()->img;
         }
@@ -36,11 +47,11 @@ class AccountController extends Controller
         User::where('id', auth()->id())->update([
             'name'      => request('name'),
             'email'     => request('email'),
-            'divisi'    => request('divisi'),
+            'divisi_id'    => request('divisi'),
             'img'       => $profile
         ]);
 
-        Karyawan::where('user_id', auth()->id())->update(request()->only([
+        Karyawan::where('user_id', auth()->id())->update(request([
             'jabatan', 'alamat_ktp', 'alamat_domisili', 'no_hp', 'no_hp_darurat'
         ]));
 

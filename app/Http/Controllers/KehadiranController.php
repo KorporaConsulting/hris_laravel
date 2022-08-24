@@ -27,28 +27,11 @@ class KehadiranController extends Controller
             ->get();
 
         }else{
-            $presents = Kehadiran::with('user')->latest()->get();
+            $presents = Kehadiran::whereHas('user')->with('user')->latest()->get();
         }
 
         return view('kehadiran.index', compact('presents'));
     }
-
-    // public function index()
-    // {
-
-    //     if (auth()->user()->hasRole('manager')) {
-    //         $divisi = DB::table('')->where('user_id', auth()->id())->first();
-    //         $users = DB::table('')->where('divisi_id', $divisi->divisi_id)->get();
-
-    //         $presents = Kehadiran::with('user')->whereIn('user_id', $users->pluck('user_id'))->get();
-    //     } else {
-    //         $presents = Kehadiran::with('user')->latest()->get();
-    //     }
-
-    //     return view('kehadiran.kehadiranStaff', compact('presents'));
-    // }
-
-
 
     public function kehadiranSaya()
     {

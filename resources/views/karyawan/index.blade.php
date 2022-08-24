@@ -50,20 +50,21 @@
                             <td>{{ $user->karyawan->jabatan}}</td>
                             <td>{{ $user->divisi->divisi ?? '-'}}</td>
                             <td>
-                                @can('karyawan.edit')
+                                @can('karyawan.update')
                                     <a href="{{ route('karyawan.edit', $user->id) }}" class="btn btn-success">Edit</a>
                                 @endcan
                                 <a href="{{ route('karyawan.kpi.index', $user->id) }}" class="btn btn-primary">Lihat
                                     KPI</a>
-                                <a href="{{ route('project.index', ['user_id' => $user->id]) }}" class="btn btn-primary">Lihat
-                                        Task</a>
+                                <a href="{{ route('karyawan.changeStatus', [$user->id, 'status' => $user->karyawan->is_active]) }}" class="btn btn-warning" title="Ubah Status Keaktifan"><i class="fas fa-sync-alt"></i></a>
+                                <a href="{{ route('project.index', ['user_id' => $user->id]) }}" class="btn btn-primary" title="Lihat Task"><i class="fas fa-tasks"></i></a>
                                 @can('karyawan.delete')
-                                    <button class="btn btn-danger" type="button" onclick="destroy({{$user->id}})">Delete</button>
+                                    <button class="btn btn-danger" type="button" onclick="destroy({{$user->id}})" title="Hapus Karyawan"><i class="fas fa-trash-alt"></i></button>
                                 @endcan
                                 <form action="{{ route('karyawan.destroy', $user->id) }}" method="post" id="form-{{$user->id}}">
                                     @csrf
                                     @method('delete')
                                 </form>
+                                
                             </td>
                         </tr>
                         @endforeach

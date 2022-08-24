@@ -27,7 +27,7 @@
                                 <td>{{ $present->user->name }}</td>
                                 <td>{{ $present->created_at }}</td>
                                 <td>
-                                    {{ ucwords($present->user->getRoleNames()[0]) ?? '' }}
+                                    {{ ucwords($present->user->getRoleNames()[0] ?? '') }}
                                 </td>
                             </tr>
                             @endforeach

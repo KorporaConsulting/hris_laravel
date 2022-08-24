@@ -45,7 +45,7 @@ class CutiController extends Controller
             ->with('user')
             ->orderBy('status', 'desc')
             ->get();
-        
+         
         return view('cuti.index', compact('cuti'));
     }
  

@@ -90,6 +90,7 @@ Route::middleware('auth')->group(function(){
     Route::get('karyawan/{userId}', [KaryawanController::class, 'show'])->name('karyawan.show');
     Route::get('karyawan/{userId}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit')->middleware('permission:karyawan.update');
     Route::patch('karyawan/{userId}', [KaryawanController::class, 'update'])->name('karyawan.update');
+    Route::get('karyawan/{userId}/change-status', [KaryawanController::class, 'changeStatus'])->name('karyawan.changeStatus');
     Route::delete('karyawan/{userId}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
     Route::patch('karyawan/{userId}/restore', [KaryawanController::class, 'restore'])->name('karyawan.restore');
     Route::patch('karyawan/restore-all', [KaryawanController::class, 'restoreAll'])->name('karyawan.restoreAll');

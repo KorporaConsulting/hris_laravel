@@ -120,7 +120,7 @@ class KaryawanController extends Controller
     {
         
         $user = User::find($userId);
-        $user->roles()->detach();
+        // $user->roles()->detach();
         $user->delete();
         Karyawan::where('user_id', $userId)->delete();
         
@@ -133,6 +133,18 @@ class KaryawanController extends Controller
         return view('karyawan.trash', [
             'employees' => User::with('karyawan')->onlyTrashed()->get()
         ]);
+    }
+
+    public function changeStatus($userId){
+        if(request('status') > 0){
+            $data = ['is_active' => 0];
+        }else{
+            $data = ['is_active' => 1];
+        }
+
+        Karyawan::whereUserId($userId)->update($data);
+
+        return redirect()->route('karyawan.index')->with('success', 'Berhasil mengubah status karyawan');
     }
 
 
@@ -150,6 +162,17 @@ class KaryawanController extends Controller
         Karyawan::onlyTrashed()->restore();
 
         return redirect()->route('trash.karyawan')->with('success', 'Berhasil mengembalikan data karyawan');
+    }
+
+    public function forceDestroy ($userId)
+    {
+        $user = User::withTrashed()->find($userId);
+        $user->roles()->detach();
+        $user->forceDelete();
+         
+        Karyawan::withTrashed()->where('user_id', $userId)->forceDelete();
+
+        return redirect()->route('karyawan.index')->with('success', 'Berhasil menghapus karyawan');
     }
 
     public function report ()
