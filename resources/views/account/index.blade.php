@@ -39,10 +39,6 @@
                         <div class="col-9">: {{ $user->no_hp_darurat }}</div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-3">Divisi</div>
-                        <div class="col-9">: {{ auth()->user()->divisi }}</div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-3">Jabatan</div>
                         <div class="col-9">: {{ $user->jabatan }}</div>
                     </div>
