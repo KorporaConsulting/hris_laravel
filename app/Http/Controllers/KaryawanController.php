@@ -92,7 +92,7 @@ class KaryawanController extends Controller
             'mulai_kerja'       => request('mulai_kerja'),
             'tmpt_lahir'        => request('tmpt_lahir'),
             'tgl_lahir'         => request('tgl_lahir'),
-            'sisa_cuti'         => 0,
+            'sisa_cuti'         => request('sisa_cuti'),
             'is_active'         => 1,
             'no_hp'             => request('no_hp'),
             'no_hp_darurat'     => request('no_hp_darurat')
@@ -108,7 +108,7 @@ class KaryawanController extends Controller
             $user->divisions()->attach(request('divisi'));
         }
 
-        Karyawan::whereId($userId)->update($karyawan);
+        Karyawan::whereUserId($userId)->update($karyawan);
 
 
 

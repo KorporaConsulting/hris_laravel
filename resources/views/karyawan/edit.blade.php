@@ -117,6 +117,15 @@
                             <option value="direktur" {{ in_array('direktur', $user->roles->pluck('name')->toArray()) ? 'selected' : ''}} >Direktur</option>
                         </select>
                     </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label for="sisa_cuti">Cuti</label>
+                            <input type="number" name="sisa_cuti" class="form-control" id="sisa_cuti"
+                                value="{{ $user->karyawan->sisa_cuti }}">
+                        </div>
+                    </div>
+
                     <div class="text-right">
                         <button type="submit" class="btn btn-success">Update</a>
                     </div>
