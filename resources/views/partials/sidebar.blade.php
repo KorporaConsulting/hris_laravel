@@ -50,7 +50,20 @@
                 </li>
             </ul>
         </li>
+
         <li class="menu-header">Utility</li>
+        <li class="dropdown {{ request()->routeIs('divisi.*') ? 'active' : ''  }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-solid fa-cube"></i>
+                <span>Divisi</span></a>
+            <ul class="dropdown-menu">
+                {{-- @can('event.read') --}}
+                <li class="nav-item {{ request()->routeIs('divisi.index') ? 'active' : ''  }}">
+                    <a class="nav-link" href="{{ route('divisi.index') }}"><span> Divisi</span></a>
+                </li>
+                <li class="{{ request()->routeIs('divisi.create') ? 'active' : ''  }}"><a class="nav-link"
+                    href="{{ route('divisi.create') }}">Buat Divisi</a></li>
+            </ul>
+        </li>
         @canany(['pengumuman.create', 'pengumuman.update', 'pengumuman.delete'])
         <li class="dropdown {{ request()->routeIs('pengumuman.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-bullhorn"></i>

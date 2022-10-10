@@ -19,10 +19,49 @@ class DivisiController extends Controller
 
     public function show ($id)
     {
+        $user = User::where('divisi_id', $id)->get();
 
-        $divisions =  Divisi::with('users')->where('id', $id)->firstOrFail();
+        // $divisions =  Divisi::with('users')->where('id', $id)->firstOrFail();
 
         // return $divisions;
-        return view('divisi.show', compact('divisions'));
+        return view('divisi.show', compact('user'));
+    }
+
+    public function create()
+    {
+        return view('divisi.create', [
+            'users' => Divisi::get()
+        ]);
+    }
+
+    public function store()
+    {
+        $divisi = Divisi::create([
+            'divisi'    => request('divisi')
+        ]);
+
+        $divisi->users()->attach(request('to'));
+        return redirect()->route('divisi.index')->with('success', 'Berhasil membuat divisi');
+    }
+
+    public function edit($id)
+    {
+        $data = Divisi::find($id);
+        return view('divisi.edit', compact('data'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = Divisi::find($id);
+        $data->divisi = $request->input('divisi');
+        $data->update();
+
+        return redirect()->route('divisi.index')->with('success', 'Berhasil mengedit divisi');
+    }
+
+    public function destroy ($divisi_id)
+    {
+        User::whereId($divisi_id)->delete();
+        return redirect()->route('divisi.index')->with('success', 'Berhasil menghapus anggota');
     }
 }

@@ -74,8 +74,18 @@ Route::middleware('auth')->group(function(){
     Route::patch('/cuti/{cutiId}', [CutiController::class, 'update'])->name('cuti.update');
     Route::delete('/cuti/{cutiId}', [CutiController::class, 'destroy'])->name('cuti.destroy');
 
-    // KPI
 
+    // Divisi
+    Route::resource('divisi', DivisiController::class);
+    Route::get('divisi', [DivisiController::class, 'index'])->name('divisi.index');
+    Route::get('divisi/create', [DivisiController::class, 'create'])->name('divisi.create');
+    Route::get('divisi/{divisi:id}', [DivisiController::class, 'show'])->name('divisi.show');
+    Route::post('divisi/store', [DivisiController::class, 'store'])->name('divisi.store');
+    Route::get('divisi/{divisi:id}/edit', [DivisiController::class, 'edit'])->name('divisi.edit');
+    Route::post('divisi/{divisi:id}', [DivisiController::class, 'update'])->name('divisi.update');
+    Route::delete('divisi/{divisi:id}', [DivisiController::class, 'destroy'])->name('divisi.destroy');
+
+    // KPI
     Route::get('/kpi/kpi-saya', [KPIController::class, 'myKPI'])->name('kpi.mykpi');
     Route::get('/kpi/create/{userId}', [KPIController::class, 'create'])->name('kpi.create');
     Route::resource('/kpi', KPIController::class)->except('create');

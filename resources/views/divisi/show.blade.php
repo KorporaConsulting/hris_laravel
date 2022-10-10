@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('content')
 <div class="row">
@@ -32,4 +32,66 @@
         </div>
     </div>
 </div>
+@endsection --}}
+
+
+@extends('layouts.app')
+
+@section('content')
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table class="table datatable">
+                    <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Nama User</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $angka=1
+                        @endphp
+                        @foreach ($user as $user)
+                        <tr>
+                            <td>{{ $angka++ }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>
+                                <button class="btn btn-danger" type="button" onclick="destroy('{{ $user->id }}')">Delete</button>
+                                <form action="{{ route('divisi.destroy', $user->id) }}" method="post" id="form-{{$user->id}}">
+                                @csrf
+                                @method('delete')
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+
+<script>
+    function destroy (id){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $('#form-'+id).submit();
+            }
+        })
+    }
+</script>
+@endpush
