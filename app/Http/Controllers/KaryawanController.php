@@ -91,6 +91,7 @@ class KaryawanController extends Controller
             'alamat_domisili'   => request('alamat_domisili'),
             'mulai_kerja'       => request('mulai_kerja'),
             'tmpt_lahir'        => request('tmpt_lahir'),
+            'status_perkawinan' => request('status_perkawinan'),
             'tgl_lahir'         => request('tgl_lahir'),
             'sisa_cuti'         => request('sisa_cuti'),
             'is_active'         => 1,

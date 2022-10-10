@@ -43,6 +43,19 @@
                         <input type="date" name="tgl_lahir" class="form-control" id="tgl_lahir"
                             value="{{ $user->karyawan->tgl_lahir }}">
                     </div>
+
+                    <div class="form-group">
+                        <label for="status_perkawinan">Status Perkawinan</label>
+                        <select name="status_perkawinan" class="form-control">
+                            <option value="tidak kawin" {{ strtolower($user->karyawan->status_perkawinan) == strtolower('tidak kawin') ? 'selected' : '' }}>Tidak Kawin</option>
+                            <option value="menikah" {{ strtolower($user->karyawan->status_perkawinan) == strtolower('menikah') ?
+                                'selected' : '' }}>Menikah (tanpa anak)</option>
+                            <option value="anak 1" {{ strtolower($user->karyawan->status_perkawinan) == strtolower('anak 1') ? 'selected' : '' }}>Anak 1</option>
+                            <option value="anak 2" {{ strtolower($user->karyawan->status_perkawinan) == strtolower('anak 2') ?
+                                'selected' : '' }}>Anak 2</option>
+                        </select>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="alamat_ktp">Alamat KTP</label>
                         <textarea name="alamat_ktp" id="alamat_ktp" cols="30" rows="4" class="form-control"
