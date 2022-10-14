@@ -84,7 +84,7 @@ Route::middleware('auth')->group(function(){
     Route::get('divisi/{divisi:id}/edit', [DivisiController::class, 'edit'])->name('divisi.edit');
     Route::post('divisi/{divisi:id}', [DivisiController::class, 'update'])->name('divisi.update');
     Route::delete('divisi/{divisi:id}', [DivisiController::class, 'destroy'])->name('divisi.destroy');
-
+    
     // KPI
     Route::get('/kpi/kpi-saya', [KPIController::class, 'myKPI'])->name('kpi.mykpi');
     Route::get('/kpi/create/{userId}', [KPIController::class, 'create'])->name('kpi.create');

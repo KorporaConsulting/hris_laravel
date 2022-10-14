@@ -16,8 +16,10 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Waktu Absen</th>
-                                <th>level</th>
+                                <th>Jabatan</th>
+                                <th>Tanggal</th>
+                                <th>Waktu</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,10 +27,12 @@
                             <tr>
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ $present->user->name }}</td>
-                                <td>{{ $present->created_at }}</td>
                                 <td>
                                     {{ ucwords($present->user->getRoleNames()[0] ?? '') }}
                                 </td>
+                                <td>{{ $present->created_at->format(' d F Y') }}</td>
+                                <td>{{ $present->created_at->format(' H:i ') }}</td>
+                                <td>{{ $present->type }}</td>
                             </tr>
                             @endforeach
                         </tbody>

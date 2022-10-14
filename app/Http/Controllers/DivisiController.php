@@ -20,11 +20,12 @@ class DivisiController extends Controller
     public function show ($id)
     {
         $user = User::where('divisi_id', $id)->get();
+        $level = User::where('level', $id)->get();
 
         // $divisions =  Divisi::with('users')->where('id', $id)->firstOrFail();
 
         // return $divisions;
-        return view('divisi.show', compact('user'));
+        return view('divisi.show', compact('user', 'level'));
     }
 
     public function create()

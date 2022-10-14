@@ -47,7 +47,8 @@
                         <tr>
                             <th scope="col">No</th>
                             <th scope="col">Nama User</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Jabatan</th>
+                            {{-- <th scope="col">Action</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -58,13 +59,14 @@
                         <tr>
                             <td>{{ $angka++ }}</td>
                             <td>{{ $user->name }}</td>
-                            <td>
+                            {{-- <td>
                                 <button class="btn btn-danger" type="button" onclick="destroy('{{ $user->id }}')">Delete</button>
                                 <form action="{{ route('divisi.destroy', $user->id) }}" method="post" id="form-{{$user->id}}">
                                 @csrf
                                 @method('delete')
                                 </form>
-                            </td>
+                            </td> --}}
+                            <td>{{ $user->karyawan->jabatan }}</td>
                         </tr>
                         @endforeach
                     </tbody>
