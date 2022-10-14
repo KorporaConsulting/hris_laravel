@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJawabanPollingTable extends Migration
+class CreateKpiTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateJawabanPollingTable extends Migration
      */
     public function up()
     {
-        Schema::create('jawaban_polling', function (Blueprint $table) {
+        Schema::create('kpi', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('polling_id');
-            $table->integer('opsi_id')->index();
-            $table->unsignedBigInteger('user_id')->index();
+            $table->bigInteger('user_id')->index();
+            $table->string('type');
+            $table->bigInteger('role_id')->index();
+            $table->json('data_kpi');
+            $table->date('tanggal');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateJawabanPollingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jawaban_polling');
+        Schema::dropIfExists('kpi');
     }
 }
