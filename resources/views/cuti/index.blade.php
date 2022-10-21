@@ -37,7 +37,7 @@
                         @endphp
                         <tr>
                             <td>{{ $key+1 }}</td>
-                            <td>{{ $value->nama }}</td>
+                            <td>{{ $value->user->name }}</td>
                             <td>{{ $value->jenis_cuti }}</td>
                             <td>{{  date_format($date, 'Y-m-d') }}</td>
                             <td><span class="text-capitalize badge {{ ($value->status == 'waiting') ? 'badge-warning' : (($value->status == 'accept') ? 'badge-success' : 'badge-danger')}}">{{ $value->status }}</span>  </td>
