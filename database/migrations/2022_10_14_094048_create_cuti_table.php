@@ -20,11 +20,12 @@ class CreateCutiTable extends Migration
             $table->string('lokasi_cuti');
             $table->integer('lama_cuti');
             $table->integer('sisa_cuti');
-            $table->integer('awal_cuti');
+            $table->integer('cuti_awal');
             $table->date('mulai_tanggal');
             $table->date('sampai_tanggal');
             $table->text('keterangan_cuti');
             $table->string('nama_atasan');
+            $table->text('keterangan_atasan');
             $table->enum('status', ['waiting', 'reject', 'accept']);
             $table->timestamps();
         });

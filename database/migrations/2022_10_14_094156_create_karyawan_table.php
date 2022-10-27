@@ -32,9 +32,9 @@ class CreateKaryawanTable extends Migration
             $table->bigInteger('gaji');
             $table->integer('sisa_cuti');
             $table->integer('is_active');
-            // $table->timestamps('tanggal_keluar');
-            $table->timestamp('deleted_at');
+            $table->timestamp('tanggal_keluar');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
