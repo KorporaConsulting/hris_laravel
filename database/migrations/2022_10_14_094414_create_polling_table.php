@@ -17,7 +17,7 @@ class CreatePollingTable extends Migration
             $table->increments('id');
             $table->bigInteger('user_id')->index();
             $table->string('judul');
-            $table->text('deskripsi');
+            $table->text('deskripsi')->nullable();
             $table->date('date_start');
             $table->date('date_end');
             $table->timestamps();

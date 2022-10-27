@@ -17,7 +17,7 @@ class CreateProjectTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('user_id')->index();
             $table->string('name');
-            $table->text('deskripsi');
+            $table->text('deskripsi')->nullable();
             $table->integer('status');
             $table->timestamps();
         });

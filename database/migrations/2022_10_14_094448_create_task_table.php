@@ -18,7 +18,7 @@ class CreateTaskTable extends Migration
             $table->integer('user_id')->index();
             $table->integer('board_id')->index();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamp('deleted_at');
             $table->timestamps();
         });

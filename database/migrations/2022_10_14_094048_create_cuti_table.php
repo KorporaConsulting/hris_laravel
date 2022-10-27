@@ -16,16 +16,16 @@ class CreateCutiTable extends Migration
         Schema::create('cuti', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger('user_id')->index();
-            $table->string('jenis_cuti');
-            $table->string('lokasi_cuti');
-            $table->integer('lama_cuti');
-            $table->integer('sisa_cuti');
-            $table->integer('cuti_awal');
-            $table->date('mulai_tanggal');
-            $table->date('sampai_tanggal');
-            $table->text('keterangan_cuti');
-            $table->string('nama_atasan');
-            $table->text('keterangan_atasan');
+            $table->string('jenis_cuti')->nullable();
+            $table->string('lokasi_cuti')->nullable();
+            $table->integer('lama_cuti')->nullable();
+            $table->integer('sisa_cuti')->nullable();
+            $table->integer('cuti_awal')->nullable();
+            $table->date('mulai_tanggal')->nullable();
+            $table->date('sampai_tanggal')->nullable();
+            $table->text('keterangan_cuti')->nullable();
+            $table->string('nama_atasan')->nullable();
+            $table->text('keterangan_atasan')->nullable();
             $table->enum('status', ['waiting', 'reject', 'accept']);
             $table->timestamps();
         });
