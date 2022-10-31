@@ -52,6 +52,27 @@
         </li>
 
         <li class="menu-header">Utility</li>
+
+        {{-- sidebar divisi --}}
+        @canany(['divisi.read', 'divisi.create'])
+        <li class="dropdown {{ request()->routeIs('divisi.*') ? 'active' : ''  }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-solid fa-cube"></i>
+                <span>Divisi</span></a>
+            <ul class="dropdown-menu">
+                @can('divisi.read')
+                <li class="nav-item {{ request()->routeIs('divisi.index') ? 'active' : ''  }}">
+                    <a class="nav-link" href="{{ route('divisi.index') }}"><span> Divisi</span></a>
+                </li>
+                @endcan
+                @can('divisi.create')
+                <li class="{{ request()->routeIs('divisi.create') ? 'active' : ''  }}"><a class="nav-link"
+                    href="{{ route('divisi.create') }}">Buat Divisi</a>
+                </li>
+                @endcan
+            </ul>
+        </li>
+        @endcanany
+
         @canany(['pengumuman.create', 'pengumuman.update', 'pengumuman.delete'])
         <li class="dropdown {{ request()->routeIs('pengumuman.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-bullhorn"></i>
@@ -65,8 +86,8 @@
                 </li>
             </ul>
         </li>
-
         @endcanany
+
         <li class="dropdown {{ request()->routeIs('project.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-tasks"></i>
                 <span>Task</span></a>
@@ -76,8 +97,8 @@
                 </li>
             </ul>
         </li>
+        
         @canany(['polling.create', 'polling.read', 'polling.update', 'polling.delete'])
-
         <li class="dropdown {{ request()->routeIs('polling.*') ? 'active' : ''  }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-table"></i>
                 <span>Polling</span></a>

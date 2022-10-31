@@ -15,7 +15,7 @@ class KehadiranController extends Controller
 {
 
 
-    public function index()
+    public function index(Request $request)
     {
         
         if (auth()->user()->hasRole('manager')) {
@@ -27,7 +27,18 @@ class KehadiranController extends Controller
             ->get();
 
         }else{
-            $presents = Kehadiran::whereHas('user')->with('user')->latest()->get();
+            // $presents = Kehadiran::whereHas('user')->with('user')->latest()->get();
+            if (isset($request->tgl_awal)) {
+                $presents = Kehadiran::whereDate('created_at', '>=',$request->tgl_awal)
+                ->whereDate('created_at', '<=',$request->tgl_akhir)
+                ->whereHas('user')->with('user')->latest()->get();
+            }else{
+                $presents = Kehadiran::whereHas('user')->with('user')->latest()->get();
+            }
+        }
+
+        if (isset($request->export)) {
+            return $this->report($presents);
         }
 
         return view('kehadiran.index', compact('presents'));
@@ -83,8 +94,8 @@ class KehadiranController extends Controller
         return redirect()->route('kehadiran.kehadiran-saya')->with('success', "Berhasil Absensi");
     }
 
-    public function report ()
-    {
-        return Excel::download(new KehadiranExport, 'KehadiranReport.xlsx');
+    public function report($data)
+    {   
+        return Excel::download(new KehadiranExport($data), 'KehadiranReport.xlsx');
     }
 }
