@@ -63,18 +63,29 @@
                                         <div class="modal-body">
                                             <p> 
                                                 <div class="form-group">
+                                                    <label for="">Nama</label>
+                                                    <div>{{$value->user->name}}</div>
+                                                </div>
+                                            </p>
+                                            <p> 
+                                                <div class="form-group">
                                                     <label for="">Keterangan</label>
                                                     <div>{{$value->keterangan_cuti ?? 'Tidak ada keterangan'}}</div>
                                                 </div>
                                             </p>
-                                            <p>
-                                                
-                                                <b><small>{{ $value->created_at }}</small></b>
+                                            <p> 
+                                                <div class="form-group">
+                                                    <label for="">Mulai Cuti</label>
+                                                    <div>{{ date("d F Y", strtotime($value->mulai_tanggal)) }}</div>
+                                                </div>
+                                            </p>
+                                            <p> 
+                                                <div class="form-group">
+                                                    <label for="">Akhir Cuti</label>
+                                                    <div>{{ date("d F Y", strtotime($value->sampai_tanggal)) }}</div>
+                                                </div>
                                             </p>
                                         </div>
-                                        {{-- <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
