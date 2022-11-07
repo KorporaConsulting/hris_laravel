@@ -27,7 +27,9 @@
                 <a href="{{ route('kehadiran.report') }}" class="mb-3 btn btn-primary">Report</a>
             </div> --}}
         </div>
-        
+
+        {{-- report kehadiran --}}
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
