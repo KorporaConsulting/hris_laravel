@@ -10,26 +10,26 @@ use Illuminate\Support\Facades\DB;
 
 class CronController extends Controller
 {
-    public function checkAlpha(){
-        
+    public function checkAlpha()
+    {
+
         $kehadiran  = [];
 
-        $users = User::with(['kehadiran' => function($q){
-                $q->whereDate('created_at', date('Y-m-d'));
-            }])
+        $users = User::with(['kehadiran' => function ($q) {
+            $q->whereDate('created_at', date('Y-m-d'));
+        }])
             ->get()
-            ->filter(function($value, $key){
+            ->filter(function ($value, $key) {
 
-                if($value->kehadiran->isEmpty()){
+                if ($value->kehadiran->isEmpty()) {
                     return $value;
                 }
-
             });
-            
-        foreach($users as $user){
+
+        foreach ($users as $user) {
             $kehadiran[] = [
                 'user_id' => $user->id,
-                'type'    => 'alpha'
+                'type'    => 'tidak absen'
             ];
         }
 
@@ -42,10 +42,10 @@ class CronController extends Controller
         ], 200);
     }
 
-    public function cutiBulanan ()
+    public function cutiBulanan()
     {
         DB::table('karyawan')->where('id', '>', 0)->increment('sisa_cuti', 1);
-        
+
         return response()->json([
             'success' => true
         ], 200);
