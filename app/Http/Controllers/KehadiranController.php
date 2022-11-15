@@ -17,22 +17,21 @@ class KehadiranController extends Controller
 
     public function index(Request $request)
     {
-        
+
         if (auth()->user()->hasRole('manager')) {
-            $presents = Kehadiran::whereHas('user', function($q){
+            $presents = Kehadiran::whereHas('user', function ($q) {
                 $q->where('divisi_id', auth()->user()->divisi_id);
             })
-            ->with('user')
-            ->latest()
-            ->get();
-
-        }else{
+                ->with('user')
+                ->latest()
+                ->get();
+        } else {
             // $presents = Kehadiran::whereHas('user')->with('user')->latest()->get();
             if (isset($request->tgl_awal)) {
-                $presents = Kehadiran::whereDate('created_at', '>=',$request->tgl_awal)
-                ->whereDate('created_at', '<=',$request->tgl_akhir)
-                ->whereHas('user')->with('user')->latest()->get();
-            }else{
+                $presents = Kehadiran::whereDate('created_at', '>=', $request->tgl_awal)
+                    ->whereDate('created_at', '<=', $request->tgl_akhir)
+                    ->whereHas('user')->with('user')->latest()->get();
+            } else {
                 $presents = Kehadiran::whereHas('user')->with('user')->latest()->get();
             }
         }
@@ -83,9 +82,9 @@ class KehadiranController extends Controller
             'user_id' => auth()->id(),
         ];
 
-        if(strtotime(date('H:i')) > strtotime('08:00')){
+        if (strtotime(date('H:i')) > strtotime('08:00')) {
             $kehadiran['type'] = 'telat';
-        }else{
+        } else {
             $kehadiran['type'] = 'hadir';
         }
 
@@ -95,7 +94,24 @@ class KehadiranController extends Controller
     }
 
     public function report($data)
-    {   
+    {
         return Excel::download(new KehadiranExport($data), 'KehadiranReport.xlsx');
+    }
+
+    public function edit($id)
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $kehadiran = DB::table('kehadiran')->where('id', $id)->first();
+        return  response()->json($kehadiran);
+    }
+
+    public function perbarui(Request $request)
+    {
+        DB::table('kehadiran')
+            ->where('id', $request->id)
+            ->update(['type' => $request->type]);
+
+        return redirect()->back();
     }
 }
