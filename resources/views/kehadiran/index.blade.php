@@ -13,14 +13,15 @@
             <div class="row mb-4">
                 <div class="col-lg-12">
                     <form class="form-inline" method="GET" action="{{ route('kehadiran.index') }}">
-                        @csrf
                         <div class="form-group mb-2">
                             <label for="tgl_awal" class="sr-only">Tanggal Awal</label>
-                            <input type="date" class="form-control" name="tgl_awal">
+                            <input type="date" class="form-control" name="tgl_awal"
+                                value="{{ $_GET['tgl_awal'] ?? date('Y-m-d') }}">
                         </div>
                         <div class="form-group mx-sm-3 mb-2">
                             <label for="tgl_akhir" class="sr-only">Tanggal AKhir</label>
-                            <input type="date" class="form-control" name="tgl_akhir" id="tgl_akhir">
+                            <input type="date" class="form-control" name="tgl_akhir" id="tgl_akhir"
+                                value="{{ $_GET['tgl_akhir'] ?? date('Y-m-d') }}">
                         </div>
                         <button type="submit" name="search" value="search" class="btn btn-success mb-2">Search</button>
                         <button type="submit" name="export" value="export"

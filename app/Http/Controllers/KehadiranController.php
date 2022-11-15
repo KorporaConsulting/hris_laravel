@@ -15,21 +15,32 @@ class KehadiranController extends Controller
 {
 
 
-    public function index(Request $request)
+    public function index()
     {
 
         if (auth()->user()->hasRole('manager')) {
-            $presents = Kehadiran::whereHas('user', function ($q) {
-                $q->where('divisi_id', auth()->user()->divisi_id);
-            })
-                ->with('user')
-                ->latest()
-                ->get();
+
+            if (isset($_GET['tgl_awal'])) {
+                $presents = Kehadiran::whereHas('user', function ($q) {
+                    $q->where('divisi_id', auth()->user()->divisi_id);
+                })->whereDate('created_at', '>=', $_GET['tgl_awal'])
+                    ->whereDate('created_at', '<=', $_GET['tgl_akhir'])
+                    ->with('user')
+                    ->latest()
+                    ->get();
+            } else {
+                $presents = Kehadiran::whereHas('user', function ($q) {
+                    $q->where('divisi_id', auth()->user()->divisi_id);
+                })
+                    ->with('user')
+                    ->latest()
+                    ->get();
+            }
         } else {
             // $presents = Kehadiran::whereHas('user')->with('user')->latest()->get();
-            if (isset($request->tgl_awal)) {
-                $presents = Kehadiran::whereDate('created_at', '>=', $request->tgl_awal)
-                    ->whereDate('created_at', '<=', $request->tgl_akhir)
+            if (isset($_GET['tgl_awal'])) {
+                $presents = Kehadiran::whereDate('created_at', '>=', $_GET['tgl_awal'])
+                    ->whereDate('created_at', '<=', $_GET['tgl_akhir'])
                     ->whereHas('user')->with('user')->latest()->get();
             } else {
                 $presents = Kehadiran::whereHas('user')->with('user')->latest()->get();
