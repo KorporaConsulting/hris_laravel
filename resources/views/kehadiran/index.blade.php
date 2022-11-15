@@ -98,6 +98,8 @@
                             <option value="telat">telat</option>
                             <option value="hadir">hadir</option>
                             <option value="sakit">sakit</option>
+                            <option value="tidak absen">tidak absen</option>
+                            <option value="wfh">wfh</option>
                         </select>
                     </div>
                     <div class="modal-footer bg-whitesmoke br">

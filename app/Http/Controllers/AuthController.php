@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    public function login ()
+    public function login()
     {
         return view('auth.login');
     }
@@ -25,23 +25,27 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if(request()->has('remember')){
+        if (request()->has('remember')) {
             $remember = true;
-        }else{
+        } else {
             $remember = false;
         }
 
         if (auth()->attempt($credentials, $remember)) {
             request()->session()->regenerate();
 
-            if(strtolower(auth()->user()->wfh_day) == strtolower(date('l'))){
+            if (strtolower(auth()->user()->wfh_day) == strtolower(date('l'))) {
                 $query = DB::table('kehadiran')
                     ->where('user_id', auth()->id())
                     ->whereDate('created_at', date('Y-m-d'))
                     ->first();
 
-                if(empty($query)){
-                    DB::table('kehadiran')->insert(['user_id' => auth()->id(), 'created_at' => date('Y-m-d H:i:s')]);
+                if (empty($query)) {
+                    DB::table('kehadiran')->insert([
+                        'user_id' => auth()->id(),
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'type' => 'wfh'
+                    ]);
                 }
             }
 
@@ -58,7 +62,7 @@ class AuthController extends Controller
         return view('account.resetPassword');
     }
 
-    public function passwordRequest ()
+    public function passwordRequest()
     {
         return view('auth.forgot-password');
     }
@@ -81,7 +85,8 @@ class AuthController extends Controller
         return view('auth.reset-password', ['token' => $token, 'email' => request('email')]);
     }
 
-    public function passwordUpdate (Request $request) {
+    public function passwordUpdate(Request $request)
+    {
 
         $request->validate([
             'token' => 'required',
@@ -107,7 +112,7 @@ class AuthController extends Controller
             : back()->withErrors(['email' => [__($status)]]);
     }
 
-    public function logout ()
+    public function logout()
     {
         Auth::logout();
 
@@ -117,5 +122,4 @@ class AuthController extends Controller
 
         return redirect()->route('login');
     }
-
 }
