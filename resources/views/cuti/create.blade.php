@@ -22,6 +22,7 @@
                                         <option selected disabled>Pilh Jenis Cuti</option>
                                         <option value="Cuti Sakit">Cuti Sakit</option>
                                         <option value="Cuti Tahunan">Cuti Tahunan</option>
+                                        <option value="Cuti Menikah">Cuti Menikah</option>
                                         <option value="Cuti Haid">Cuti Haid</option>
                                         <option value="Cuti Bersalin">Cuti Bersalin</option>
                                         <option value="Cuti Besar">Cuti Besar</option>
@@ -73,7 +74,7 @@
             @else
                 <div class="alert alert-success">Jatah Cuti Habis</div>
             @endif
-            
+
         </form>
     </div>
 </div>
@@ -82,7 +83,7 @@
 
 @push('scripts')
 <script>
-    
+
     function checkedRangeDate(data, separator){
         const split = data.split(separator);
         const date_start = moment(split[0]);
@@ -92,7 +93,7 @@
             date_start, date_end
         ];
     }
-    
+
 
     let prevLamaCuti = $('#lama_cuti').val();
     let prevTanggalCuti = $('#tanggal_cuti').val()
@@ -113,18 +114,18 @@
         }
 
         prevLamaCuti = $('#lama_cuti').val();
-        
+
         prevTanggalCuti = $('#tanggal_cuti').val()
-        
+
     })
-    
+
     $('.daterange-cus').daterangepicker({
         locale: {format: 'YYYY-MM-DD'},
         drops: 'down',
         opens: 'right'
     });
-        
 
-    
+
+
 </script>
 @endpush
