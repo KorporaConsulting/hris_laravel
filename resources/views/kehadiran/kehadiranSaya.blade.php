@@ -111,5 +111,13 @@
             // });
 
         }
+
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(this.showPosition)
+        } else {
+            // I believe it may also mean geolocation isn't supported
+            alert('Anda Belum Mengizinkan Akses Lokasi')
+        }
     </script>
 @endpush
