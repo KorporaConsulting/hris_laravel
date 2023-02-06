@@ -4,9 +4,10 @@ use App\Events\NotifEvent;
 use App\Events\NotificationsEvent;
 use App\Http\Controllers\{AccountController, KehadiranController, AuthController, BoardController, CronController};
 use App\Http\Controllers\{DashboardController, PengumumanController, PollingController, TaskController, CutiController};
-use App\Http\Controllers\{DivisiController, EventController, KaryawanController, KPIController};
+use App\Http\Controllers\{DivisiController, EventController, KaryawanController, KPIController, PenukaranPointController, PointSalesController};
 use App\Http\Controllers\{MailController, UserController, ProjectController, TestController};
 use App\Mail\NotifMail;
+use App\Models\Penukaran_point;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -111,7 +112,6 @@ Route::middleware('auth')->group(function () {
     Route::get('karyawan/{userId}/kpi/{kpiId}', [KPIController::class, 'show'])->name('karyawan.kpi.show');
 
 
-
     // Kehadiran
     Route::get('kehadiran/kehadiran-saya', [KehadiranController::class, 'kehadiranSaya'])->name('kehadiran.kehadiran-saya');
     Route::get('kehadiran/present', [KehadiranController::class, 'present'])->name('kehadiran.present');
@@ -168,6 +168,14 @@ Route::middleware('auth')->group(function () {
     Route::get('event/create', [EventController::class, 'create'])->name('event.create')->middleware('permission:event.create');
     Route::post('event', [EventController::class, 'store'])->name('event.store');
     Route::patch('event/{eventId}', [EventController::class, 'update'])->name('event.update')->middleware('permission:event.update');
+
+    Route::controller(PenukaranPointController::class)->prefix('point-sales/')->name('point-sales.')->group(function () {
+        Route::get('/','index')->name('index');
+    });
+
+    Route::controller(PointSalesController::class)->prefix('penukaran-point/')->name('penukaran-point.')->group(function () {
+        Route::get('/','index')->name('index');
+    });
 });
 
 Route::prefix('trash')->group(function () {

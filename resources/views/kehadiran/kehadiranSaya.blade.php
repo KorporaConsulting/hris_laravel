@@ -119,5 +119,6 @@
             // I believe it may also mean geolocation isn't supported
             alert('Anda Belum Mengizinkan Akses Lokasi')
         }
+        $('#konten').show();
     </script>
 @endpush
