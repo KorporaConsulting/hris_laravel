@@ -130,13 +130,20 @@
                         <div class="gambar-point row" style="display: none;">
 
                         </div>
-
+                        @hasanyrole('manager|hrd')
+                            <input type="hidden" name="approved_by" value="{{ auth()->user()->id }}">
+                            <input type="hidden" name="tanggal_approve" value="{{ date('Y-m-d') }}">
+                            <div class="form-group">
+                                <label for="">Poin</label>
+                                <input type="number" name="point" class="form-control">
+                            </div>
+                        @endhasanyrole
                     </div>
                     @hasanyrole('manager|hrd')
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                            <input type="submit" value="Tolak" class="btn btn-danger">
-                            <input type="submit" value="Setujui"class="btn btn-success">
+                            <input type="submit" name="status" value="Tolak" class="btn btn-danger">
+                            <input type="submit" name="status" value="Setujui"class="btn btn-success">
                         </div>
                     @endhasanyrole
                 </form>
@@ -159,6 +166,10 @@
             $(".add-point-modal").modal('show');
         });
 
+        $('.detail-point-modal .gambar-toggle').on('click', function() {
+            $('.detail-point-modal .gambar-point').toggle(300);
+        });
+
         $(".detail-point-button").on('click', function() {
             $.ajaxSetup({
                 headers: {
@@ -177,12 +188,10 @@
                 success: function(res) {
                     var files = JSON.parse(res.files);
                     $('.detail-point-modal').modal('show');
-                    $('.detail-point-modal #nama').html(res.user.nama);
+                    $('.detail-point-modal #nama').html(res.user.name);
                     $('.detail-point-modal #deskripsi').html(res.deskripsi);
                     $('.detail-point-modal .gambar-point').html('');
-                    $('.detail-point-modal .gambar-toggle').on('click', function() {
-                        $('.detail-point-modal .gambar-point').toggle(300);
-                    });
+
                     $.each(files.path, function(key, val) {
                         var imgsrc = "{{ asset('storage') }}" + '/' + val;
                         var CurrentImgSrc = imgsrc;
@@ -190,6 +199,8 @@
                         img.attr('src', CurrentImgSrc);
                         $('.detail-point-modal .gambar-point').append(img);
                     });
+
+                    $('.detail-point-modal input[name=id]').html(res.id);
                 }
             });
         });
