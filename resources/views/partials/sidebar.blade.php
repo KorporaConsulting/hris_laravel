@@ -196,13 +196,13 @@
             </a>
             <ul class="dropdown-menu">
 
-                @role('staff')
+                @hasanyrole('staff|manager|hrd')
                     <li class="nav-item {{ request()->routeIs('point-sales.index') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('point-sales.index') }}"><span>Point Saya</span></a>
                     </li>
                 @endrole
 
-                @role('manager')
+                @hasanyrole('manager|hrd')
                     <li class="nav-item {{ request()->routeIs('penukaran-point.index') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('penukaran-point.index') }}"><span>Penukaran Point</span></a>
                     </li>

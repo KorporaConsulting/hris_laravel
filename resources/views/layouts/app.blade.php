@@ -3,13 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>{{ $title ?? 'Korpora - HRIS' }}</title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.min.css')}}" integrity="" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.min.css') }}" integrity=""
+        crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/responsive.bootstrap4.min.css') }}">
@@ -65,9 +67,9 @@
         .position-absolute {
             position: absolute;
         }
-        
+
         .no-scroll-y {
-        overflow-y: hidden;
+            overflow-y: hidden;
         }
     </style>
     @yield('head')
@@ -223,39 +225,37 @@
     {{-- <script src="{{ asset('js/page/index-0.js') }}"></script> --}}
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session()->has('success'))
-    <script>
-        Swal.fire('Berhasil', '{{ session("success") }}', 'success');
-    </script>
+        <script>
+            Swal.fire('Berhasil', '{{ session('success') }}', 'success');
+        </script>
     @endif
     <script>
         const currencyInput = function() {
             const value = event.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
             event.target.value = numeral(value).format('0,0');
-        }    
+        }
         const userId = '{{ auth()->id() }}'
-        const channel = window.Echo.channel('notifications'+userId);
-        
+        const channel = window.Echo.channel('notifications' + userId);
+
         channel.listen('NotifEvent', function(data) {
             Swal.fire('Message', JSON.stringify(data.message), 'warning');
         });
 
-        const logout = function (){
+        const logout = function() {
             document.getElementById('form-logout').submit()
         }
 
         $(document).ready(function() {
             $('#preloader').fadeOut();
             $('body').removeClass('no-scroll-y');
-            $('.datatable').DataTable( {
+            $('.datatable').DataTable({
                 responsive: true
             });
             $('.select2').select2();
 
         });
     </script>
-    <script>
-
-    </script>
+    <script></script>
     @stack('scripts')
 </body>
 

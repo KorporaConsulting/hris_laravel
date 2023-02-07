@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class ProjectController extends Controller
 {
 
-    public function index ()
+    public function index()
     {
         $user_id = auth()->id();
         $delete = true;
@@ -17,13 +17,13 @@ class ProjectController extends Controller
             $user_id = request('user_id');
             $delete = false;
         }
-        
+
         $projects = Project::where('user_id', $user_id)->get();
 
         return view('project.index', compact('projects', 'delete'));
     }
 
-    public function store ()
+    public function store()
     {
         $data               = request()->except('_token');
         $data['user_id']    = auth()->id();
@@ -36,10 +36,10 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function destroy ($projectId)
+    public function destroy($projectId)
     {
         Project::whereId($projectId)->delete();
-        
+
         return redirect()->route('project.index')->with('success', "Berhasil menghapus project");
     }
 }

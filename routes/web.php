@@ -172,6 +172,8 @@ Route::middleware('auth')->group(function () {
     Route::controller(PointSalesController::class)->prefix('point-sales/')->name('point-sales.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/', 'store')->name('store');
+        Route::post('/edit', 'edit')->name('edit');
+        Route::put('/', 'update')->name('update');
     });
 
     Route::controller(PenukaranPointController::class)->prefix('penukaran-point/')->name('penukaran-point.')->group(function () {

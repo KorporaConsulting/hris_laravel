@@ -29,10 +29,10 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('id');
 
         Blade::directive('tanggal', function ($timestamp) {
-            $dt =  Carbon::parse($timestamp);
-            $datetime = $dt->format("d M Y - h:i A");
+            $unixtime =  strtotime($timestamp);
+            $datetime = date("d M Y - h:i A", $unixtime);
 
-            $day = $dt->format("D");
+            $day = date("D", $unixtime);
 
             switch ($day) {
                 case "Mon":

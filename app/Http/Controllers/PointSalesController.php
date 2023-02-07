@@ -12,10 +12,14 @@ class PointSalesController extends Controller
     public function index()
     {
         if (auth()->user()->hasRole('staff')) {
+            $points = Sales_point::where('user_id', auth()->user()->id)->get();
+        }
+
+        if (auth()->user()->hasRole('hrd')) {
             $points = Sales_point::all();
         }
 
-        if (auth()->user()->hasRole('HRD')) {
+        if (auth()->user()->hasRole('manager')) {
             $points = Sales_point::all();
         }
 
@@ -50,25 +54,15 @@ class PointSalesController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $sales_point = Sales_point::with('user')->findOrFail($request->id);
+        return response()->json($sales_point);
     }
 
     /**
