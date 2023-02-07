@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Sales_point extends Model
 {
@@ -11,16 +12,8 @@ class Sales_point extends Model
 
     protected $guarded = [];
 
-    public static function totalUserPoint($user_id)
+    public function user()
     {
-        $data = Sales_point::where('user_id', $user_id)->get();
-
-        $point = [];
-
-        foreach ($data as $value) {
-            $point[] = $value->point();
-        }
-
-        return count($point);
+        return $this->belongsTo(User::class);
     }
 }

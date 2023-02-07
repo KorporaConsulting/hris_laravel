@@ -14,16 +14,6 @@ class PenukaranPointController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->hasRole('staff')) {
-            $point = Sales_point::where('user_id', auth()->user()->id)->get();
-            $total_point = Sales_point::totalUserPoint(auth()->user()->id);
-        }
-
-        if (auth()->user()->hasRole('HRD')) {
-            $point = Sales_point::all();
-        }
-
-        dd($point);
     }
 
     /**

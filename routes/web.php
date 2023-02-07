@@ -169,12 +169,13 @@ Route::middleware('auth')->group(function () {
     Route::post('event', [EventController::class, 'store'])->name('event.store');
     Route::patch('event/{eventId}', [EventController::class, 'update'])->name('event.update')->middleware('permission:event.update');
 
-    Route::controller(PenukaranPointController::class)->prefix('point-sales/')->name('point-sales.')->group(function () {
-        Route::get('/','index')->name('index');
+    Route::controller(PointSalesController::class)->prefix('point-sales/')->name('point-sales.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
     });
 
-    Route::controller(PointSalesController::class)->prefix('penukaran-point/')->name('penukaran-point.')->group(function () {
-        Route::get('/','index')->name('index');
+    Route::controller(PenukaranPointController::class)->prefix('penukaran-point/')->name('penukaran-point.')->group(function () {
+        Route::get('/', 'index')->name('index');
     });
 });
 

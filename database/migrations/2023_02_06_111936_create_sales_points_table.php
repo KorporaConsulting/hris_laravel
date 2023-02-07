@@ -18,7 +18,7 @@ class CreateSalesPointsTable extends Migration
             $table->string('deskripsi');
             $table->json('files');
             $table->integer('user_id');
-            $table->integer('point');
+            $table->integer('point')->nullable();
             $table->integer('is_approved')->nullable()->comment('1 untuk approved, 0 untuk tidak approved');
             $table->integer('approved_by')->nullable();
             $table->integer('tanggal_approve')->nullable();

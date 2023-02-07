@@ -174,36 +174,39 @@
                 </li>
             </ul>
             @can('restore')
-                <li class="dropdown {{ request()->routeIs('trash.*') ? 'active' : '' }}">
-                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
-                        <i class="fas fa-trash"></i>
-                        <span>Recycle Bin</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="{{ request()->routeIs('trash.karyawan') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('trash.karyawan') }}">Karyawan</a>
-                        </li>
-                    </ul>
-                </li>
-            @endcan
+            <li class="dropdown {{ request()->routeIs('trash.*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-trash"></i>
+                    <span>Recycle Bin</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="{{ request()->routeIs('trash.karyawan') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('trash.karyawan') }}">Karyawan</a>
+                    </li>
+                </ul>
+            </li>
+        @endcan
         </li>
 
-        <li class="dropdown {{ request()->routeIs('event.*') ? 'active' : '' }}">
+        <li
+            class="dropdown {{ request()->routeIs('point-sales.*') || request()->routeIs('penukaran-point.*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown">
                 <i class="fas fa-calendar-alt"></i>
                 <span>Sistem Point</span>
             </a>
             <ul class="dropdown-menu">
 
-                <li class="nav-item {{ request()->routeIs('point-sales.index') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('point-sales.index') }}"><span>Point Saya</span></a>
-                </li>
-
-                @can('event.create')
-                    <li class="nav-item {{ request()->routeIs('event.create') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('event.create') }}"><span>Buat Event (Advanced)</span></a>
+                @role('staff')
+                    <li class="nav-item {{ request()->routeIs('point-sales.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('point-sales.index') }}"><span>Point Saya</span></a>
                     </li>
-                @endcan
+                @endrole
+
+                @role('manager')
+                    <li class="nav-item {{ request()->routeIs('penukaran-point.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('penukaran-point.index') }}"><span>Penukaran Point</span></a>
+                    </li>
+                @endrole
             </ul>
         </li>
     </ul>
