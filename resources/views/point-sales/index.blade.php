@@ -16,7 +16,7 @@
                     <button class="btn btn-primary add-point-button mb-3">
                         Ajukan Point
                     </button>
-                    <h5>Sisa Poin Anda : {{ $total_point }}</h5>
+                    <h5>Sisa Poin Anda : {{ $sisa_point }}</h5>
                 @endrole
 
 
@@ -64,6 +64,8 @@
                                 <td>
                                     <button class="btn btn-sm btn-primary detail-point-button"
                                         data-id="{{ $data->id }}">Detail</button>
+                                    <button class="btn btn-sm btn-danger delete-point-button"
+                                        data-id="{{ $data->id }}">Delete</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -219,5 +221,42 @@
                 }
             });
         });
+
+        $('.delete-point-button').on('click', function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var id = $(this).attr("data-id");
+            Swal.fire({
+                title: 'Apakah Anda Yakin?',
+                text: "Anda tidak akan bisa mengembalikan ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "{{ route('point-sales.destroy') }}",
+                        dataType: "JSON",
+                        data: {
+                            id: id
+                        },
+                        success: function() {
+                            location.reload();
+                        },
+                        error: function() {
+                            Swal.fire(
+                                'Server Error', '', 'error'
+                            );
+                        }
+                    })
+                }
+            })
+        })
     </script>
 @endpush

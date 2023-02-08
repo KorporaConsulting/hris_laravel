@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sales_point;
+use App\Models\Penukaran_point;
 use Illuminate\Support\Facades\DB;
 
 class PointSalesController extends Controller
@@ -12,6 +13,7 @@ class PointSalesController extends Controller
     public function index()
     {
         $total_point = [];
+        $total_penukaran = [];
 
         if (auth()->user()->hasRole('staff')) {
             $points = Sales_point::where('user_id', auth()->user()->id)
@@ -19,6 +21,10 @@ class PointSalesController extends Controller
                 ->get();
             foreach ($points as $value) {
                 array_push($total_point, $value->point);
+            }
+            $penukaran = Penukaran_point::where('user_id', auth()->user()->id)->get();
+            foreach ($penukaran as $value) {
+                array_push($total_penukaran, $value->pengurangan_point);
             }
         }
 
@@ -36,8 +42,8 @@ class PointSalesController extends Controller
                 ->get();
         }
 
-        $total_point = array_sum($total_point);
-        return view('point-sales/index', compact('points', 'total_point'));
+        $sisa_point = array_sum($total_point) - array_sum($total_penukaran);
+        return view('point-sales.index', compact('points', 'sisa_point'));
     }
 
     /**
@@ -107,8 +113,33 @@ class PointSalesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $Sales_point = Sales_point::findOrFail($request->id);
+
+        $Sales_point->delete();
+        return response()->json(['success' => true]);
+    }
+
+    public function sisa(Request $request)
+    {
+        $total_point = [];
+        $total_penukaran = [];
+
+        $points = Sales_point::where('user_id', $request->id)->get();
+        foreach ($points as $value) {
+            array_push($total_point, $value->point);
+        }
+
+        $penukaran = Penukaran_point::where('user_id', $request->id)->get();
+        foreach ($penukaran as $value) {
+            array_push($total_penukaran, $value->pengurangan_point);
+        }
+
+        $sisa = array_sum($total_point) - array_sum($total_penukaran);
+
+        return response()->json([
+            'sisa' => $sisa
+        ]);
     }
 }

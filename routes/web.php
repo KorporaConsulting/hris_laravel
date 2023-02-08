@@ -174,11 +174,19 @@ Route::middleware('auth')->group(function () {
         Route::post('/', 'store')->name('store');
         Route::post('/edit', 'edit')->name('edit');
         Route::put('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
+        Route::post('/sisa-poin', 'sisa')->name('sisa-poin');
     });
 
     Route::controller(PenukaranPointController::class)->prefix('penukaran-point/')->name('penukaran-point.')->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::post('/edit', 'edit')->name('edit');
+        Route::put('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
     });
+
+    Route::post('get-list-user', [UserController::class, 'getListUser'])->name('get-list-user');
 });
 
 Route::prefix('trash')->group(function () {

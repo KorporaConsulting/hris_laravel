@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sales_point;
 use Illuminate\Http\Request;
+use App\Models\Penukaran_point;
 
 class PenukaranPointController extends Controller
 {
@@ -14,16 +14,8 @@ class PenukaranPointController extends Controller
      */
     public function index()
     {
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $penukaran_points = Penukaran_point::all();
+        return view('penukaran-points.index', compact('penukaran_points'));
     }
 
     /**
@@ -34,18 +26,17 @@ class PenukaranPointController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $penukaran_point = new Penukaran_point;
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $penukaran_point->pengurangan_point = $request->pengurangan_point;
+        $penukaran_point->reward = $request->reward;
+        $penukaran_point->tanggal_penukaran = $request->tanggal_penukaran;
+        $penukaran_point->user_id = $request->user_id;
+        $penukaran_point->approved_by = $request->approved_by;
+
+        $penukaran_point->save();
+
+        return redirect()->back();
     }
 
     /**
@@ -54,9 +45,11 @@ class PenukaranPointController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $penukaran_points = Penukaran_point::with('user')->findOrFail($request->id);
+
+        return response()->json($penukaran_points);
     }
 
     /**
@@ -68,7 +61,6 @@ class PenukaranPointController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
     }
 
     /**
@@ -77,8 +69,11 @@ class PenukaranPointController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $penukaran_points = Penukaran_point::findOrFail($request->id);
+
+        $penukaran_points->delete();
+        return response()->json(['success' => true]);
     }
 }
