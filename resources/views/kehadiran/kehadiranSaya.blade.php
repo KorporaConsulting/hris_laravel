@@ -49,25 +49,25 @@
 
         var x = document.getElementById("demo");
 
-        navigator.permissions && navigator.permissions.query({
-                name: 'geolocation'
-            })
-            .then(function(PermissionStatus) {
-                if (PermissionStatus.state == 'granted') {
-                    $('#konten').show();
-                } else if (PermissionStatus.state == 'prompt') {
-                    console.log()
-                    $('#konten').hide();
-                    $('#kontenan').html(
-                        "<h4>Harap izinkan akses lokasi</h4>"
-                    );
-                } else {
-                    $('#konten').hide();
-                    $('#kontenan').html(
-                        "<h4>Harap izinkan akses lokasi di browser anda</h4>"
-                    );
-                }
-            })
+        // navigator.permissions && navigator.permissions.query({
+        //         name: 'geolocation'
+        //     })
+        //     .then(function(PermissionStatus) {
+        //         if (PermissionStatus.state == 'granted') {
+        //             $('#konten').show();
+        //         } else if (PermissionStatus.state == 'prompt') {
+        //             console.log()
+        //             $('#konten').hide();
+        //             $('#kontenan').html(
+        //                 "<h4>Harap izinkan akses lokasi</h4>"
+        //             );
+        //         } else {
+        //             $('#konten').hide();
+        //             $('#kontenan').html(
+        //                 "<h4>Harap izinkan akses lokasi di browser anda</h4>"
+        //             );
+        //         }
+        //     })
 
 
         function showPosition(position) {
@@ -106,7 +106,7 @@
 
             } else {
                 Swal.fire('Pemberitahuan', 'Anda berada diluar jangkauan', 'warning');
-                $('#absen').addClass('disabled');
+                // $('#absen').addClass('disabled');
             }
             // });
 
