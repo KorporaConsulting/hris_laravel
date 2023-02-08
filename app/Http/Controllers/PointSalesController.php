@@ -11,8 +11,15 @@ class PointSalesController extends Controller
 
     public function index()
     {
+        $total_point = [];
+
         if (auth()->user()->hasRole('staff')) {
-            $points = Sales_point::where('user_id', auth()->user()->id)->get();
+            $points = Sales_point::where('user_id', auth()->user()->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            foreach ($points as $value) {
+                array_push($total_point, $value->point);
+            }
         }
 
         if (auth()->user()->hasRole('hrd')) {
@@ -20,10 +27,17 @@ class PointSalesController extends Controller
         }
 
         if (auth()->user()->hasRole('manager')) {
-            $points = Sales_point::all();
+            $divisi_id = auth()->user()->divisi_id;
+            $points = Sales_point::with('user')
+                ->whereHas('user', function ($q) use ($divisi_id) {
+                    $q->where('divisi_id', '=', $divisi_id);
+                })
+                ->orderBy('created_at', 'desc')
+                ->get();
         }
 
-        return view('point-sales/index', compact('points'));
+        $total_point = array_sum($total_point);
+        return view('point-sales/index', compact('points', 'total_point'));
     }
 
     /**
@@ -47,10 +61,7 @@ class PointSalesController extends Controller
 
         $sales_point->save();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Berhasil Mengajukan',
-        ]);
+        return redirect()->back();
     }
 
     /**
@@ -74,7 +85,20 @@ class PointSalesController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        $sales_point = Sales_point::findOrFail($request->id);
+
+        if ($request->status == 'Setujui') {
+            $sales_point->is_approved = 1;
+            $sales_point->point = $request->point;
+        } else if ($request->status == 'Tolak') {
+            $sales_point->is_approved = 0;
+            $sales_point->point = 0;
+        }
+        $sales_point->approved_by = $request->approved_by;
+        $sales_point->tanggal_approve = $request->tanggal_approve;
+
+        $sales_point->update();
+        return redirect()->back();
     }
 
     /**

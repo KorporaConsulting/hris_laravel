@@ -16,7 +16,9 @@
                     <button class="btn btn-primary add-point-button mb-3">
                         Ajukan Point
                     </button>
+                    <h5>Sisa Poin Anda : {{ $total_point }}</h5>
                 @endrole
+
 
                 <table class="table table-striped">
                     <thead>
@@ -48,7 +50,13 @@
                                     {{ $data->point }}
                                 </td>
                                 <td>
-                                    {{ $data->approved != 0 ? 'Disetujui' : 'Belum Disetujui' }}
+                                    @if ($data->is_approved == '1')
+                                        <button class="btn btn-sm btn-success btn-block disabled">Disetujui</button>
+                                    @elseif($data->is_approved == '0')
+                                        <button class="btn btn-sm btn-danger btn-block disabled">Ditolak</button>
+                                    @else
+                                        <button class="btn btn-sm btn-secondary btn-block disabled">Belum</button>
+                                    @endif
                                 </td>
                                 <td>
                                     @tanggal($data->created_at)
@@ -112,6 +120,7 @@
                 <form action="{{ route('point-sales.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" name="id">
                     <div class="modal-body">
                         <table class="h6">
                             <tr>
@@ -186,12 +195,19 @@
                 },
                 dataType: 'json',
                 success: function(res) {
-                    var files = JSON.parse(res.files);
+
+
                     $('.detail-point-modal').modal('show');
+                    if (res.is_approved != null) {
+                        $('.detail-point-modal .modal-footer').hide();
+                        $('.detail-point-modal .form-group').hide();
+                    }
+                    $('.detail-point-modal input[name=id]').val(res.id);
                     $('.detail-point-modal #nama').html(res.user.name);
                     $('.detail-point-modal #deskripsi').html(res.deskripsi);
                     $('.detail-point-modal .gambar-point').html('');
 
+                    var files = JSON.parse(res.files);
                     $.each(files.path, function(key, val) {
                         var imgsrc = "{{ asset('storage') }}" + '/' + val;
                         var CurrentImgSrc = imgsrc;
@@ -200,7 +216,6 @@
                         $('.detail-point-modal .gambar-point').append(img);
                     });
 
-                    $('.detail-point-modal input[name=id]').html(res.id);
                 }
             });
         });

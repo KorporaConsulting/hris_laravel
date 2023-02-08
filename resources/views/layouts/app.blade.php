@@ -254,6 +254,25 @@
             $('.select2').select2();
 
         });
+        $('.form-reload').submit(function(e) {
+            event.preventDefault();
+
+            const data = $(this).serialize();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                method: 'post',
+                data,
+                success: function(res) {
+                    location.reload();
+                },
+                error: function() {
+                    Swal.fire(
+                        'Server Error', '', 'error'
+                    );
+                }
+            })
+        })
     </script>
     <script></script>
     @stack('scripts')
